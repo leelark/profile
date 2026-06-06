@@ -147,6 +147,38 @@ const categoryOrder: Record<ProjectCategory, number> = {
   Accelerators: 40
 };
 
+const publicProjectTitles: Record<string, string> = {
+  "ebrd-asb-modernization": "Advisor Services Platform Modernization",
+  "rapid2-hsbc-horizon-scanning": "Regulatory Horizon Scanning Platform",
+  "invesco-aml-change-management": "Investment Management AML and Change Management",
+  "invesco-reconciliation-system": "Investment Operations Reconciliation System",
+  "carlyle-bridge-module": "Finance Document Bridge Module"
+};
+
+const publicTextReplacements: Array<[RegExp, string]> = [
+  [/\bEuropean Bank for Reconstruction and Development\b/g, "regional development finance institution"],
+  [/\bEBRD's\b/g, "the development finance institution's"],
+  [/\bEBRD\b/g, "development finance institution"],
+  [/\bRAPID2\b/g, "regulatory horizon-scanning platform"],
+  [/\bRapid2\b/g, "regulatory horizon-scanning platform"],
+  [/\bHSBC's\b/g, "the global banking client's"],
+  [/\bHSBC\b/g, "global banking client"],
+  [/\bInvesco\b/g, "investment management client"],
+  [/\bCarlyle\b/g, "major investment firm"],
+  [/\bASB\b/g, "advisor-services platform"],
+  [/\bMonarch\b/g, "external enterprise system"],
+  [/\bREGMAP\b/g, "regulatory mapping integration"],
+  [/\blegacy EGP and BAS Appian applications\b/g, "legacy advisor-service Appian applications"],
+  [/\bEGP and BAS\b/g, "legacy advisory applications"],
+  [/\bEGP\/BAS\b/g, "legacy advisory applications"],
+  [/\bEGP\b/g, "legacy advisory application"],
+  [/\bBAS\b/g, "legacy advisory application"]
+];
+
+function publicText(value: string) {
+  return publicTextReplacements.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), value);
+}
+
 function headingSection(source: string, heading: string) {
   const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const match = source.match(new RegExp(`(?:^|\\n)## ${escaped}\\s*\\n([\\s\\S]*?)(?=\\n## |$)`));
@@ -155,11 +187,12 @@ function headingSection(source: string, heading: string) {
 
 function allSections(source: string) {
   const matches = [...source.matchAll(/(?:^|\n)##\s+(.+)\s*\n([\s\S]*?)(?=\n##\s+|$)/g)];
+  const skippedPublicSections = new Set(["Evidence Basis", "Confirmation Needed"]);
   return matches.map((match) => ({
     title: match[1].trim(),
-    body: match[2].trim(),
-    html: renderMarkdown(match[2])
-  }));
+    body: publicText(match[2]).trim(),
+    html: renderMarkdown(publicText(match[2]))
+  })).filter((section) => !skippedPublicSections.has(section.title));
 }
 
 function firstHeading(source: string) {
@@ -227,20 +260,20 @@ function tagsFor(project: {
 }
 
 function parseProject(path: string, raw: string): ProjectDetail {
-  const title = firstHeading(raw);
   const slug = slugFromPath(path);
+  const title = publicProjectTitles[slug] ?? publicText(firstHeading(raw));
   const category = (field(raw, "Primary Category") as ProjectCategory) || categoryFromPath(path);
   const secondaryCategories = splitBullets(
-    raw.match(/^Secondary Categories:\s*\n([\s\S]*?)(?=^Evidence Status:)/m)?.[1] ?? ""
+    publicText(raw.match(/^Secondary Categories:\s*\n([\s\S]*?)(?=^Evidence Status:)/m)?.[1] ?? "")
   );
   const evidenceStatus = ((field(raw, "Evidence Status") || "Needs Confirmation") as EvidenceStatus);
   const evidenceBasis = field(raw, "Evidence Basis");
-  const heroSummary = headingSection(raw, "Hero Summary") || headingSection(raw, "Final Portfolio Copy");
-  const finalPortfolioCopy = headingSection(raw, "Final Portfolio Copy") || heroSummary;
-  const keyFeatures = splitBullets(headingSection(raw, "Key Features"));
-  const businessValue = splitBullets(headingSection(raw, "Business Value"));
-  const technologies = splitBullets(headingSection(raw, "Technologies and Appian Capabilities"));
-  const confirmationNeeded = splitBullets(headingSection(raw, "Confirmation Needed"));
+  const heroSummary = publicText(headingSection(raw, "Hero Summary") || headingSection(raw, "Final Portfolio Copy"));
+  const finalPortfolioCopy = publicText(headingSection(raw, "Final Portfolio Copy") || heroSummary);
+  const keyFeatures = splitBullets(publicText(headingSection(raw, "Key Features")));
+  const businessValue = splitBullets(publicText(headingSection(raw, "Business Value")));
+  const technologies = splitBullets(publicText(headingSection(raw, "Technologies and Appian Capabilities")));
+  const confirmationNeeded = splitBullets(publicText(headingSection(raw, "Confirmation Needed")));
   const projectSeed = { category, slug, title, secondaryCategories };
   const role = roleFor(projectSeed);
   const domain = domainFor(projectSeed);
