@@ -371,6 +371,7 @@ export const publication = {
   title: field(headingSection(expertiseRaw, "Research Publication"), "Title"),
   publication: field(headingSection(expertiseRaw, "Research Publication"), "Publication"),
   websiteCopy: labelBlock(headingSection(expertiseRaw, "Research Publication"), "Website Copy"),
+  publicNote: "Published research foundation in web application security; formal citation details are being verified before adding a source link.",
   detailsNeeded: splitBullets(headingSection(headingSection(expertiseRaw, "Research Publication"), "Publication Details Needed Before Website Launch"))
 };
 
