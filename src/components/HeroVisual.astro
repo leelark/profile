@@ -29,7 +29,19 @@ const plates = [
 
       <div class="grid min-h-[420px] gap-4">
         <div class="relative overflow-hidden rounded-portfolio border border-border bg-canvas/60">
-          <ArchitectScene client:load />
+          <div class="architecture-fallback" aria-hidden="true">
+            <span class="architecture-line architecture-line-1"></span>
+            <span class="architecture-line architecture-line-2"></span>
+            <span class="architecture-line architecture-line-3"></span>
+            <span class="architecture-node architecture-node-1"></span>
+            <span class="architecture-node architecture-node-2"></span>
+            <span class="architecture-node architecture-node-3"></span>
+            <span class="architecture-node architecture-node-4"></span>
+            <span class="architecture-node architecture-node-5"></span>
+          </div>
+          <div class="absolute inset-0">
+            <ArchitectScene client:idle />
+          </div>
           <div class="pointer-events-none absolute left-4 top-4 rounded-portfolio border border-border bg-surface/78 px-3 py-2 text-xs font-bold uppercase text-muted backdrop-blur">
             Appian + AI architecture
           </div>
