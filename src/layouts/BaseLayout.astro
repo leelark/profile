@@ -30,8 +30,6 @@ const navLinks = [
   { path: "/", label: "Home" },
   { path: "/work", label: "Work" },
   { path: "/expertise", label: "Expertise" },
-  { path: "/plugins-and-accelerators", label: "Plugins" },
-  { path: "/about", label: "About" },
   { path: "/resume", label: "Resume" },
   { path: "/contact", label: "Contact" }
 ].map((link) => ({
@@ -60,7 +58,7 @@ const navLinks = [
     <meta property="og:image:alt" content="Leelark Saxena portfolio preview with enterprise Appian, AI workflow, plugin, and accelerator positioning." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={socialImage} />
-    <meta name="theme-color" content="#090a0e" />
+    <meta name="theme-color" content="#341539" />
     <script is:inline>
       const savedTheme = window.localStorage.getItem("theme");
       document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dark";
@@ -71,7 +69,7 @@ const navLinks = [
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="sticky top-0 z-40 border-b border-border bg-canvas/88 backdrop-blur">
+    <header class="sticky top-0 z-40 border-b border-border bg-canvas/82 backdrop-blur">
       <div class="shell flex min-h-[72px] items-center justify-between gap-4">
         <a class="flex min-w-0 flex-col" href={withBase("/")}>
           <span class="text-sm font-bold text-text">Leelark Saxena</span>
@@ -81,8 +79,8 @@ const navLinks = [
           {navLinks.map((link) => (
             <a
               class:list={[
-                "rounded-portfolio px-3 py-2 text-sm font-semibold text-muted transition hover:bg-elevated hover:text-text",
-                link.current && "bg-elevated text-text"
+                "relative rounded-portfolio px-3 py-2 text-sm font-semibold text-muted transition hover:bg-elevated hover:text-text",
+                link.current && "bg-accentSoft text-text"
               ]}
               href={link.href}
               aria-current={link.current ? "page" : undefined}
@@ -101,7 +99,7 @@ const navLinks = [
 
     <footer class="border-t border-border py-10">
       <div class="shell flex flex-col gap-4 text-sm text-muted md:flex-row md:items-center md:justify-between">
-        <p>Leelark Saxena - Enterprise Appian architecture, AI workflows, plugins, and accelerators.</p>
+        <p>Leelark Saxena - Appian Solution Architect and Developer.</p>
         <div class="flex flex-wrap gap-3">
           <a class="hover:text-text" href={withBase("/work")}>Work</a>
           <a class="hover:text-text" href={withBase("/contact")}>Contact</a>

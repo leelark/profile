@@ -2,19 +2,52 @@
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { expertiseAreas, skills } from "@/lib/content";
+
+const lifecycle = [
+  ["Discover", "process pain points, users, systems, documents"],
+  ["Architect", "records, process models, integrations, data"],
+  ["Design UX", "SAIL interfaces, grids, reviews, dashboards"],
+  ["Build", "Appian objects, plugins, AI skills, APIs"],
+  ["Validate", "testing, security, performance, accessibility"],
+  ["Scale", "governance, monitoring, accelerators, optimization"]
+];
+const skillGroups = [
+  ["Appian", skills.primary.slice(0, 10)],
+  ["Engineering", skills.secondary.slice(0, 6)],
+  ["Integration", skills.integrationAndAutomation.slice(0, 7)]
+];
 ---
 
-<BaseLayout title="Expertise" description="Appian architecture, AI solution design, workflow automation, plugin development, enterprise UX, performance, and governance expertise." path="/expertise">
+<BaseLayout title="Expertise" description="Appian solution design, AI workflow automation, plugin development, enterprise UX, and platform governance expertise." path="/expertise">
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Expertise" title="Enterprise Appian depth across architecture, AI, workflows, plugins, UX, and platform health." />
-      <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {expertiseAreas.map((area) => (
-          <article class="rounded-portfolio border border-border bg-surface p-6">
-            <h2 class="text-xl font-semibold text-text">{area.title}</h2>
+      <SectionHeader as="h1" eyebrow="Expertise" title="Solution design across the complete Appian delivery lifecycle." copy="I work from process discovery and architecture through SAIL implementation, AI workflow design, testing, optimization, and platform governance." />
+
+      <div class="mt-10 grid gap-3 md:grid-cols-3 lg:grid-cols-6">
+        {lifecycle.map(([stage, copy], index) => (
+          <article class="purple-frame rounded-portfolio p-4">
+            <p class="text-xs font-bold uppercase text-accent">0{index + 1}</p>
+            <h2 class="mt-3 text-lg font-semibold text-text">{stage}</h2>
+            <p class="mt-2 text-xs leading-5 text-muted">{copy}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-band border-t border-border">
+    <div class="shell">
+      <SectionHeader eyebrow="Capability lanes" title="Architecture, AI, plugins, UX, automation, and platform health in one Appian operating model." />
+      <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {expertiseAreas.map((area, index) => (
+          <article class="glass-panel p-5">
+            <div class="flex items-start justify-between gap-4">
+              <h2 class="text-xl font-semibold text-text">{area.title}</h2>
+              <span class="rounded-full border border-accent/35 bg-accentSoft px-3 py-1 text-xs font-bold text-accent">0{index + 1}</span>
+            </div>
             <p class="mt-4 text-sm leading-7 text-muted">{area.summary}</p>
             <div class="mt-5 flex flex-wrap gap-2">
-              {area.capabilities.map((capability) => <span class="chip text-[0.72rem]">{capability}</span>)}
+              {area.capabilities.slice(0, 5).map((capability) => <span class="chip text-[0.72rem]">{capability}</span>)}
             </div>
           </article>
         ))}
@@ -24,11 +57,11 @@ import { expertiseAreas, skills } from "@/lib/content";
 
   <section class="section-band border-t border-border">
     <div class="shell grid gap-4 lg:grid-cols-3">
-      {Object.entries(skills).map(([group, items]) => (
-        <article class="rounded-portfolio border border-border bg-surface p-6">
-          <h2 class="capitalize text-xl font-semibold text-text">{group.replace(/([A-Z])/g, " $1")}</h2>
+      {skillGroups.map(([group, items]) => (
+        <article class="rounded-portfolio border border-border bg-surface/74 p-5">
+          <h2 class="text-xl font-semibold text-text">{group}</h2>
           <div class="mt-5 flex flex-wrap gap-2">
-            {items.map((item) => <span class="chip">{item}</span>)}
+            {(items as string[]).map((item) => <span class="chip">{item}</span>)}
           </div>
         </article>
       ))}

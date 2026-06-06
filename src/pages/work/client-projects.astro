@@ -1,16 +1,19 @@
 ---
-import ProjectCard from "@/components/ProjectCard.astro";
+import ProjectExplorer from "@/components/ProjectExplorer";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { categoryDescriptions, projectsByCategory } from "@/lib/content";
+import { categoryDescriptions, categoryLabels, projectToCard, projectsByCategory } from "@/lib/content";
+
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const cards = projectsByCategory["client-projects"].map(projectToCard);
 ---
 
 <BaseLayout title="Client Projects" description={categoryDescriptions["client-projects"]} path="/work/client-projects">
   <section class="section-band">
     <div class="shell">
       <SectionHeader as="h1" eyebrow="Client projects" title="Enterprise Appian delivery, advisory, and workflow modernization." copy={categoryDescriptions["client-projects"]} />
-      <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {projectsByCategory["client-projects"].map((project) => <ProjectCard project={project} />)}
+      <div class="mt-10">
+        <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
       </div>
     </div>
   </section>

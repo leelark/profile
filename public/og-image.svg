@@ -1,25 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">Leelark Saxena Portfolio</title>
   <desc id="desc">Enterprise Appian architecture, AI workflows, plugins, and accelerators portfolio preview.</desc>
-  <rect width="1200" height="630" fill="#090a0e"/>
-  <rect x="56" y="56" width="1088" height="518" rx="18" fill="#11131b" stroke="#373b4b" stroke-width="2"/>
+  <rect width="1200" height="630" fill="#08050c"/>
+  <rect x="56" y="56" width="1088" height="518" rx="18" fill="#341539" stroke="#53345b" stroke-width="2"/>
   <path d="M92 148H1108M92 482H1108M258 88V542M942 88V542" stroke="#232635" stroke-width="2"/>
-  <rect x="92" y="96" width="210" height="44" rx="8" fill="#7b5cff"/>
+  <rect x="92" y="96" width="210" height="44" rx="8" fill="#c47aff"/>
   <text x="118" y="124" fill="#ffffff" font-family="Arial, sans-serif" font-size="18" font-weight="700">LEELARK SAXENA</text>
   <text x="92" y="238" fill="#f5f7fa" font-family="Arial, sans-serif" font-size="64" font-weight="700">Enterprise Appian</text>
   <text x="92" y="310" fill="#f5f7fa" font-family="Arial, sans-serif" font-size="64" font-weight="700">Architect</text>
   <text x="92" y="374" fill="#abb1bf" font-family="Arial, sans-serif" font-size="30">AI workflow automation, plugins,</text>
   <text x="92" y="414" fill="#abb1bf" font-family="Arial, sans-serif" font-size="30">document intelligence, and accelerators.</text>
-  <rect x="790" y="126" width="258" height="74" rx="10" fill="#181b26" stroke="#373b4b"/>
-  <rect x="790" y="232" width="258" height="74" rx="10" fill="#181b26" stroke="#373b4b"/>
-  <rect x="790" y="338" width="258" height="74" rx="10" fill="#181b26" stroke="#373b4b"/>
-  <rect x="790" y="444" width="258" height="74" rx="10" fill="#181b26" stroke="#373b4b"/>
+  <rect x="790" y="126" width="258" height="74" rx="10" fill="#120c18" stroke="#53345b"/>
+  <rect x="790" y="232" width="258" height="74" rx="10" fill="#120c18" stroke="#53345b"/>
+  <rect x="790" y="338" width="258" height="74" rx="10" fill="#120c18" stroke="#53345b"/>
+  <rect x="790" y="444" width="258" height="74" rx="10" fill="#120c18" stroke="#53345b"/>
   <text x="822" y="171" fill="#f5f7fa" font-family="Arial, sans-serif" font-size="25" font-weight="700">Appian</text>
   <text x="822" y="277" fill="#f5f7fa" font-family="Arial, sans-serif" font-size="25" font-weight="700">AI Workflows</text>
   <text x="822" y="383" fill="#f5f7fa" font-family="Arial, sans-serif" font-size="25" font-weight="700">Plugins</text>
   <text x="822" y="489" fill="#f5f7fa" font-family="Arial, sans-serif" font-size="25" font-weight="700">Accelerators</text>
   <circle cx="1012" cy="163" r="10" fill="#34d399"/>
   <circle cx="1012" cy="269" r="10" fill="#4da6ff"/>
-  <circle cx="1012" cy="375" r="10" fill="#7b5cff"/>
+  <circle cx="1012" cy="375" r="10" fill="#c47aff"/>
   <circle cx="1012" cy="481" r="10" fill="#f59e0b"/>
 </svg>

@@ -5,20 +5,27 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { contact } from "@/lib/content";
 ---
 
-<BaseLayout title="Contact" description={contact.intro} path="/contact">
+<BaseLayout title="Contact" description="Contact Leelark Saxena for Appian architecture, AI workflow, plugin, and enterprise automation work." path="/contact">
   <section class="section-band">
-    <div class="shell grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+    <div class="shell grid gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
       <div>
-        <SectionHeader as="h1" eyebrow="Contact" title={contact.headline} copy={contact.intro} />
-        <div class="mt-8 grid gap-3 text-sm text-muted">
-          <p><strong class="text-text">Email:</strong> <a class="hover:text-text" href={`mailto:${contact.email}`}>{contact.email}</a></p>
-          <p><strong class="text-text">Location:</strong> {contact.location}</p>
+        <SectionHeader as="h1" eyebrow="Contact" title="Discuss Appian architecture, AI workflow automation, or plugin development." />
+        <div class="mt-7 grid gap-3">
+          <div class="purple-frame rounded-portfolio p-4">
+            <p class="text-xs font-bold uppercase text-muted">Best fit</p>
+            <p class="mt-2 text-sm leading-6 text-text">Appian consulting, solution architecture, plugin/component work, AI workflow design, and enterprise automation POCs.</p>
+          </div>
+          <div class="rounded-portfolio border border-border bg-surface/72 p-4">
+            <p class="text-xs font-bold uppercase text-muted">Email</p>
+            <a class="mt-2 block text-sm font-semibold text-text hover:text-accent" href={`mailto:${contact.email}`}>{contact.email}</a>
+          </div>
         </div>
       </div>
-      <div class="rounded-portfolio border border-border bg-surface p-6">
+
+      <div class="glass-panel p-5 md:p-6">
         <ContactForm />
         <p class="mt-5 text-xs leading-5 text-muted">
-          Your message will be sent through the portfolio contact form provider. Please do not share confidential client data, credentials, tokens, or sensitive project details in this form.
+          Please avoid sharing confidential client data, credentials, tokens, or sensitive project details in this form.
         </p>
       </div>
     </div>

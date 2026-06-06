@@ -1,16 +1,19 @@
 ---
-import ProjectCard from "@/components/ProjectCard.astro";
+import ProjectExplorer from "@/components/ProjectExplorer";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { categoryDescriptions, projectsByCategory } from "@/lib/content";
+import { categoryDescriptions, categoryLabels, projectToCard, projectsByCategory } from "@/lib/content";
+
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const cards = projectsByCategory.accelerators.map(projectToCard);
 ---
 
 <BaseLayout title="Accelerators" description={categoryDescriptions.accelerators} path="/work/accelerators">
   <section class="section-band">
     <div class="shell">
       <SectionHeader as="h1" eyebrow="Accelerators" title="Reusable Appian patterns and advisory assets for platform value." copy={categoryDescriptions.accelerators} />
-      <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {projectsByCategory.accelerators.map((project) => <ProjectCard project={project} />)}
+      <div class="mt-10">
+        <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
       </div>
     </div>
   </section>

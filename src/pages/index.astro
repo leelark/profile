@@ -1,9 +1,9 @@
 ---
 import HeroVisual from "@/components/HeroVisual.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
+import ProjectExplorer from "@/components/ProjectExplorer";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { expertiseAreas, featuredProjects, profile, stats } from "@/lib/content";
+import { certifications, categoryLabels, featuredProjects, profile, projectToCard, publication, skills } from "@/lib/content";
 import { withBase } from "@/lib/paths";
 
 const structuredData = [
@@ -11,10 +11,10 @@ const structuredData = [
     "@context": "https://schema.org",
     "@type": "Person",
     name: profile.name,
-    jobTitle: "Enterprise Appian Solution Architect",
+    jobTitle: "Appian Solution Architect and Developer",
     url: "https://leelark.github.io/profile/",
     email: "mailto:leelarksaxena1997@outlook.com",
-    knowsAbout: ["Appian", "AI workflow automation", "Enterprise architecture", "Plugin development"]
+    knowsAbout: ["Appian", "SAIL", "Process Models", "Appian AI", "Plugin Development", "Enterprise Workflow Automation"]
   },
   {
     "@context": "https://schema.org",
@@ -23,61 +23,142 @@ const structuredData = [
     url: "https://leelark.github.io/profile/"
   }
 ];
+
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const featuredCards = featuredProjects.map(projectToCard);
+const heroSummary =
+  "Level-3 Certified Appian BPM Developer and Solution Architect with hands-on experience across Records, Reports, Process Models, CDTs, Smart Service Plugins, SAIL components, integrations, and enterprise workflow delivery.";
+const whatIDo = [
+  {
+    title: "Appian Solution Design",
+    copy: "I shape records, data models, process models, integrations, reporting, governance, and scalable Appian application architecture."
+  },
+  {
+    title: "AI Workflow Automation",
+    copy: "I design document extraction, classification, claim routing, eligibility checks, knowledge discovery, and human-review workflows."
+  },
+  {
+    title: "Plugins and Components",
+    copy: "I build Appian extensions including HTML/PDF viewers, evidence highlighting, custom components, and reusable smart-service patterns."
+  },
+  {
+    title: "Enterprise Delivery",
+    copy: "I support analysis, UX, implementation, testing, performance triage, platform health, deployment governance, and accelerator delivery."
+  }
+];
+const lifecycle = ["Analyze", "Design", "Build", "Integrate", "Test", "Optimize"];
+const publicSkills = [
+  ...skills.primary.slice(0, 11),
+  ...skills.secondary.filter((skill) => ["JavaScript", "Java", "HTML/CSS", "Node.js"].includes(skill)),
+  ...skills.integrationAndAutomation.slice(0, 5)
+].slice(0, 20);
 ---
 
-<BaseLayout title="Leelark Saxena - Enterprise Appian Architect" description={profile.homepageSummary} path="/" structuredData={structuredData}>
-  <section class="section-band">
-    <div class="shell grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-      <div>
-        <p class="eyebrow mb-4">Appian architecture / AI workflows / Enterprise automation</p>
-        <h1 class="max-w-4xl text-balance text-4xl font-semibold leading-[1.06] text-text md:text-6xl">
-          Enterprise Appian architect building AI-powered workflows, plugins, and reusable automation platforms.
+<BaseLayout title="Leelark Saxena - Appian Solution Architect and Developer" description={heroSummary} path="/" structuredData={structuredData}>
+  <section class="section-band pt-8 md:pt-12">
+    <div class="shell grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+      <div class="max-w-3xl reveal-up">
+        <p class="eyebrow mb-4">Appian Solution Architect / Level-3 Certified BPM Developer</p>
+        <h1 class="text-balance text-4xl font-semibold leading-[1.06] text-text md:text-5xl">
+          Leelark Saxena
         </h1>
-        <p class="mt-6 max-w-3xl text-pretty text-lg leading-8 text-muted">
-          {profile.homepageSummary}
+        <p class="mt-4 text-balance text-2xl font-semibold leading-tight text-text/92 md:text-3xl">
+          I design and build Appian platforms, AI workflows, plugins, and enterprise automation systems.
+        </p>
+        <p class="mt-6 max-w-2xl text-base leading-8 text-muted md:text-lg">
+          {heroSummary} I work across the complete software development lifecycle from analysis and design to implementation, testing, optimization, and advisory.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a class="inline-flex min-h-12 items-center rounded-portfolio bg-accent px-5 text-sm font-bold text-white transition hover:bg-accent/90" href={withBase("/work")}>
-            View work
-          </a>
-          <a class="inline-flex min-h-12 items-center rounded-portfolio border border-border px-5 text-sm font-bold text-text transition hover:border-accent" href={withBase("/contact")}>
-            Contact
-          </a>
+          <a class="primary-button" href={withBase("/work")}>Explore work</a>
+          <a class="quiet-button" href={withBase("/contact")}>Start a conversation</a>
         </div>
-        <dl class="mt-10 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {stats.map((stat) => (
-            <div class="rounded-portfolio border border-border bg-surface p-4">
-              <dt class="text-xs font-semibold uppercase text-muted">{stat.label}</dt>
-              <dd class="mt-2 text-xl font-semibold text-text">{stat.value}</dd>
-            </div>
-          ))}
+        <dl class="mt-8 grid gap-3 sm:grid-cols-2">
+          <div class="purple-frame rounded-portfolio p-4">
+            <dt class="text-xs font-bold uppercase text-muted">Certification</dt>
+            <dd class="mt-2 text-lg font-semibold text-text">Appian Level-3 / Lead Developer</dd>
+          </div>
+          <div class="purple-frame rounded-portfolio p-4">
+            <dt class="text-xs font-bold uppercase text-muted">Focus</dt>
+            <dd class="mt-2 text-lg font-semibold text-text">Architecture, AI, plugins, automation</dd>
+          </div>
         </dl>
       </div>
-      <HeroVisual />
-    </div>
-  </section>
-
-  <section class="section-band border-t border-border">
-    <div class="shell">
-      <SectionHeader eyebrow="Selected work" title="Case studies that show architecture, product thinking, and Appian depth." copy="Featured work spans AI claims intelligence, knowledge discovery, Appian Accelerate advisory, EBRD workflow modernization, document intelligence plugins, and platform performance accelerators." />
-      <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {featuredProjects.map((project) => <ProjectCard project={project} />)}
+      <div class="reveal-up reveal-delay-2">
+        <HeroVisual />
       </div>
     </div>
   </section>
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Expertise" title="A portfolio built around enterprise delivery, not isolated code samples." />
-      <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {expertiseAreas.map((area) => (
-          <article class="rounded-portfolio border border-border bg-surface p-6">
-            <h3 class="text-xl font-semibold text-text">{area.title}</h3>
-            <p class="mt-4 text-sm leading-7 text-muted">{area.summary}</p>
-            <div class="mt-5 flex flex-wrap gap-2">
-              {area.capabilities.slice(0, 5).map((capability) => <span class="chip text-[0.72rem]">{capability}</span>)}
-            </div>
+      <SectionHeader eyebrow="What I do" title="I turn complex Appian delivery into clear architecture, usable workflows, and reusable assets." />
+      <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {whatIDo.map((item, index) => (
+          <article class="glass-panel p-5">
+            <p class="text-xs font-bold uppercase text-accent">0{index + 1}</p>
+            <h2 class="mt-4 text-xl font-semibold text-text">{item.title}</h2>
+            <p class="mt-3 text-sm leading-7 text-muted">{item.copy}</p>
           </article>
+        ))}
+      </div>
+      <div class="mt-8 overflow-hidden rounded-portfolio border border-border bg-surface/70 p-4">
+        <div class="grid gap-3 md:grid-cols-6">
+          {lifecycle.map((stage, index) => (
+            <div class="relative rounded-portfolio bg-elevated/72 p-4">
+              <p class="text-xs font-bold uppercase text-muted">Stage {index + 1}</p>
+              <p class="mt-2 text-sm font-semibold text-text">{stage}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-band border-t border-border">
+    <div class="shell">
+      <SectionHeader eyebrow="Featured work" title="Click any work item to open a focused project detail view." copy="The full case-study routes remain available inside each modal for deeper reading and direct sharing." />
+      <div class="mt-9">
+        <ProjectExplorer projects={featuredCards} categories={categories} showFilters={false} compact client:load />
+      </div>
+    </div>
+  </section>
+
+  <section class="section-band border-t border-border">
+    <div class="shell grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+      <div>
+        <SectionHeader eyebrow="Technical skills" title="Appian-first skill set with integration, automation, AI, and plugin depth." />
+        <div class="mt-7 flex flex-wrap gap-2">
+          {publicSkills.map((skill) => <span class="chip">{skill}</span>)}
+        </div>
+      </div>
+      <div class="grid gap-4 md:grid-cols-2">
+        <article class="glass-panel p-5">
+          <h2 class="text-xl font-semibold text-text">Certifications</h2>
+          <div class="mt-4 space-y-3">
+            {certifications.map((item) => (
+              <div class="rounded-portfolio border border-border bg-elevated/60 p-3">
+                <p class="text-sm font-semibold text-text">{item.title}</p>
+                {item.score && <p class="mt-1 text-xs font-bold text-accent">{item.score}</p>}
+              </div>
+            ))}
+          </div>
+        </article>
+        <article class="glass-panel p-5">
+          <h2 class="text-xl font-semibold text-text">Research Publication</h2>
+          <p class="mt-4 text-sm font-semibold leading-6 text-text">{publication.title}</p>
+          <p class="mt-2 text-sm leading-6 text-muted">{publication.publication}</p>
+          <p class="mt-3 text-sm leading-7 text-muted">{publication.websiteCopy}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-band border-t border-border">
+    <div class="shell">
+      <SectionHeader eyebrow="Domains" title="Enterprise contexts where I apply Appian architecture and automation." />
+      <div class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {profile.domains.slice(0, 8).map((domain) => (
+          <div class="rounded-portfolio border border-border bg-surface/72 p-4 text-sm font-semibold text-text">{domain}</div>
         ))}
       </div>
     </div>

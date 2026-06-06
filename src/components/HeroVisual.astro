@@ -1,29 +1,49 @@
 ---
-const layers = [
-  { label: "Strategy", value: "Architecture, governance, product direction" },
-  { label: "Automation", value: "Appian workflows, tasks, integrations" },
-  { label: "Intelligence", value: "AI document review, routing, evidence" },
-  { label: "Experience", value: "Enterprise UX, grids, viewers, accelerators" }
+import ArchitectScene from "@/components/ArchitectScene";
+import { withBase } from "@/lib/paths";
+
+const plates = [
+  { label: "Appian Records", value: "data model" },
+  { label: "Process Models", value: "workflow" },
+  { label: "AI Skills", value: "intelligence" },
+  { label: "Plugins", value: "extension" }
 ];
 ---
 
-<div class="relative overflow-hidden rounded-portfolio border border-border bg-surface p-5 shadow-panel md:p-6" aria-label="Portfolio capability architecture visual">
-  <div class="grid gap-3">
-    {layers.map((layer, index) => (
-      <div class="rounded-portfolio border border-border bg-elevated/72 p-4">
-        <div class="flex items-center justify-between gap-4">
-          <p class="text-sm font-semibold text-text">{layer.label}</p>
-          <span class="text-xs font-bold text-accent">0{index + 1}</span>
+<div class="relative" aria-label="Leelark Saxena portfolio hero visual">
+  <div class="glass-panel relative overflow-hidden p-4 md:p-5">
+    <div class="grid gap-4 lg:grid-cols-[0.82fr_1fr] lg:items-stretch">
+      <div class="relative min-h-[420px] overflow-hidden rounded-portfolio border border-accent/30 bg-accentSoft">
+        <img
+          class="absolute inset-0 h-full w-full object-cover object-center"
+          src={withBase("/main_photo.jpg")}
+          alt="Leelark Saxena"
+          loading="eager"
+          decoding="async"
+        />
+        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0b0610] via-[#0b0610]/62 to-transparent p-5">
+          <p class="text-xs font-bold uppercase tracking-[0.08em] text-white/72">Level-3 Certified</p>
+          <p class="mt-1 text-xl font-semibold text-white">Appian Solution Architect</p>
         </div>
-        <p class="mt-2 text-sm leading-6 text-muted">{layer.value}</p>
       </div>
-    ))}
-  </div>
-  <div class="mt-5 grid grid-cols-4 gap-2" aria-hidden="true">
-    {layers.map((_, index) => (
-      <div class="h-2 rounded-full bg-accent/25">
-        <div class="h-2 rounded-full bg-accent" style={`width: ${42 + index * 16}%`}></div>
+
+      <div class="grid min-h-[420px] gap-4">
+        <div class="relative overflow-hidden rounded-portfolio border border-border bg-canvas/60">
+          <ArchitectScene client:load />
+          <div class="pointer-events-none absolute left-4 top-4 rounded-portfolio border border-border bg-surface/78 px-3 py-2 text-xs font-bold uppercase text-muted backdrop-blur">
+            Appian + AI architecture
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          {plates.map((plate, index) => (
+            <div class="purple-frame rounded-portfolio p-3">
+              <p class="text-xs font-bold uppercase text-muted">0{index + 1} / {plate.value}</p>
+              <p class="mt-1 text-sm font-semibold text-text">{plate.label}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    ))}
+    </div>
   </div>
 </div>

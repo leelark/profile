@@ -1,4 +1,5 @@
 import { excerpt, renderMarkdown, slugify, splitBullets, splitParagraphs, stripMarkdown } from "./markdown";
+import { projectPath } from "./paths";
 
 export type ProjectCategory = "Client Projects" | "Plugins" | "Innovative Projects" | "Accelerators";
 export type CategorySlug = "client-projects" | "plugins" | "innovative-projects" | "accelerators";
@@ -34,6 +35,25 @@ export type ProjectDetail = {
   businessValue: string[];
   technologies: string[];
   confirmationNeeded: string[];
+};
+
+export type ProjectCardPayload = {
+  slug: string;
+  title: string;
+  category: ProjectCategory;
+  categorySlug: CategorySlug;
+  heroExcerpt: string;
+  heroSummary: string;
+  role: string;
+  domain: string;
+  tags: string[];
+  href: string;
+  keyFeatures: string[];
+  businessValue: string[];
+  technologies: string[];
+  problem: string;
+  solution: string;
+  architecture: string;
 };
 
 export type Profile = {
@@ -262,6 +282,12 @@ function sectionPlain(source: string, heading: string) {
   return stripMarkdown(headingSection(source, heading));
 }
 
+function labelBlock(source: string, label: string) {
+  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = source.match(new RegExp(`^${escaped}:\\s*\\n\\n?([\\s\\S]*?)(?=\\n[A-Z][A-Za-z /]+:\\s*\\n|\\n### |\\n## |$)`, "m"));
+  return stripMarkdown(match?.[1] ?? "");
+}
+
 export const profile: Profile = {
   name: "Leelark Saxena",
   primaryRole: sectionPlain(profileDetailRaw, "Portfolio Role"),
@@ -327,24 +353,24 @@ export const education: EducationItem[] = [
 export const certifications: Certification[] = [
   {
     title: "Appian Level 3 / Appian Certified Lead Developer",
-    websiteCopy: sectionPlain(expertiseRaw.match(/^### Appian Level 3[\s\S]*?(?=^### Appian Level 2)/m)?.[0] ?? "", "Website Copy")
+    websiteCopy: labelBlock(expertiseRaw.match(/^### Appian Level 3[\s\S]*?(?=^### Appian Level 2)/m)?.[0] ?? "", "Website Copy")
   },
   {
     title: "Appian Level 2",
     score: "82.5%",
-    websiteCopy: sectionPlain(expertiseRaw.match(/^### Appian Level 2[\s\S]*?(?=^### Appian Level 1)/m)?.[0] ?? "", "Website Copy")
+    websiteCopy: labelBlock(expertiseRaw.match(/^### Appian Level 2[\s\S]*?(?=^### Appian Level 1)/m)?.[0] ?? "", "Website Copy")
   },
   {
     title: "Appian Level 1",
     score: "85.2%",
-    websiteCopy: sectionPlain(expertiseRaw.match(/^### Appian Level 1[\s\S]*?(?=^## Research Publication)/m)?.[0] ?? "", "Website Copy")
+    websiteCopy: labelBlock(expertiseRaw.match(/^### Appian Level 1[\s\S]*?(?=^## Research Publication)/m)?.[0] ?? "", "Website Copy")
   }
 ];
 
 export const publication = {
   title: field(headingSection(expertiseRaw, "Research Publication"), "Title"),
   publication: field(headingSection(expertiseRaw, "Research Publication"), "Publication"),
-  websiteCopy: sectionPlain(headingSection(expertiseRaw, "Research Publication"), "Website Copy"),
+  websiteCopy: labelBlock(headingSection(expertiseRaw, "Research Publication"), "Website Copy"),
   detailsNeeded: splitBullets(headingSection(headingSection(expertiseRaw, "Research Publication"), "Publication Details Needed Before Website Launch"))
 };
 
@@ -385,3 +411,26 @@ export const renderedProfile = {
   longBio: sectionHtml(profileDetailRaw, "Long Bio"),
   aboutClosingCopy: renderMarkdown(profile.aboutClosingCopy)
 };
+
+export function projectToCard(project: ProjectDetail): ProjectCardPayload {
+  const plainSection = (title: string) => stripMarkdown(project.sections.find((section) => section.title === title)?.body ?? "");
+
+  return {
+    slug: project.slug,
+    title: project.title,
+    category: project.category,
+    categorySlug: project.categorySlug,
+    heroExcerpt: project.heroExcerpt,
+    heroSummary: project.heroSummary,
+    role: project.role,
+    domain: project.domain,
+    tags: project.tags,
+    href: projectPath(project.slug),
+    keyFeatures: project.keyFeatures.slice(0, 6),
+    businessValue: project.businessValue.slice(0, 5),
+    technologies: project.technologies.slice(0, 8),
+    problem: plainSection("Problem"),
+    solution: plainSection("Solution Overview"),
+    architecture: plainSection("Architecture and Technical Approach")
+  };
+}

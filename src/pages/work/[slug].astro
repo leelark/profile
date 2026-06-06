@@ -1,9 +1,8 @@
 ---
 import CaseStudySections from "@/components/CaseStudySections.astro";
-import EvidenceBadge from "@/components/EvidenceBadge.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
+import ProjectExplorer from "@/components/ProjectExplorer";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { projects } from "@/lib/content";
+import { categoryLabels, projects, projectToCard } from "@/lib/content";
 import { canonicalUrl, withBase } from "@/lib/paths";
 
 export function getStaticPaths() {
@@ -17,6 +16,8 @@ const { project } = Astro.props;
 const related = projects
   .filter((candidate) => candidate.slug !== project.slug && candidate.category === project.category)
   .slice(0, 3);
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const relatedCards = related.map(projectToCard);
 const structuredData = [
   {
     "@context": "https://schema.org",
@@ -63,8 +64,7 @@ const structuredData = [
         <a class="text-sm font-semibold text-muted hover:text-text" href={withBase("/work")}>&lt;- Back to work</a>
         <div class="mt-8 flex flex-wrap gap-2">
           <span class="chip">{project.category}</span>
-          <EvidenceBadge status={project.evidenceStatus} />
-          {project.publicVisibility === "needs-confirmation" && <span class="chip border-caution/50 text-caution">Concept evidence pending</span>}
+          <span class="chip">{project.domain}</span>
         </div>
         <h1 class="mt-6 text-balance text-4xl font-semibold leading-tight text-text md:text-6xl">{project.title}</h1>
         <p class="mt-6 text-lg leading-8 text-muted">{project.heroSummary}</p>
@@ -101,8 +101,8 @@ const structuredData = [
       {related.length > 0 && (
         <div class="mt-14">
           <h2 class="text-2xl font-semibold text-text">Related work</h2>
-          <div class="mt-6 grid gap-4 md:grid-cols-3">
-            {related.map((item) => <ProjectCard project={item} compact />)}
+          <div class="mt-6">
+            <ProjectExplorer projects={relatedCards} categories={categories} showFilters={false} compact client:load />
           </div>
         </div>
       )}

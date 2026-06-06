@@ -1,26 +1,35 @@
 ---
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { certifications, education, experience, publication, timeline } from "@/lib/content";
+import { certifications, education, experience, publication } from "@/lib/content";
+
+const compactExperience = experience.map((item) => ({
+  company: item.company,
+  role: item.role,
+  period: item.period,
+  summary: item.positioning || item.resumeCopy
+}));
+const primaryEducation = education[0];
 ---
 
-<BaseLayout title="Resume" description="Experience, education, certifications, and publication for Leelark Saxena." path="/resume">
+<BaseLayout title="Resume" description="Compact professional resume for Leelark Saxena, Appian Solution Architect and Developer." path="/resume">
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Resume" title="Experience across Appian consulting, enterprise delivery, AI workflow design, and plugin innovation." />
-      <div class="mt-10 space-y-4">
-        {experience.map((item) => (
-          <article class="rounded-portfolio border border-border bg-surface p-6">
-            <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-              <div>
-                <h2 class="text-2xl font-semibold text-text">{item.role}</h2>
-                <p class="mt-1 text-sm font-semibold text-accent">{item.company}</p>
-              </div>
-              <p class="text-sm font-semibold text-muted">{item.period}</p>
+      <SectionHeader as="h1" eyebrow="Resume" title="Appian Solution Architect and Developer with enterprise workflow, AI, and plugin delivery experience." />
+
+      <div class="mt-10 grid gap-4">
+        {compactExperience.map((item, index) => (
+          <article class="glass-panel grid gap-4 p-5 md:grid-cols-[150px_1fr] md:items-start">
+            <div>
+              <p class="text-xs font-bold uppercase text-accent">0{index + 1}</p>
+              <p class="mt-2 text-sm font-semibold text-muted">{item.period}</p>
             </div>
-            <p class="mt-5 text-sm leading-7 text-muted">{item.resumeCopy || item.positioning}</p>
-            <div class="mt-5 flex flex-wrap gap-2">
-              {item.representativeWork.slice(0, 7).map((work) => <span class="chip">{work}</span>)}
+            <div>
+              <div class="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
+                <h2 class="text-2xl font-semibold text-text">{item.role}</h2>
+                <p class="text-sm font-bold text-accent">{item.company}</p>
+              </div>
+              <p class="mt-4 max-w-4xl text-sm leading-7 text-muted">{item.summary}</p>
             </div>
           </article>
         ))}
@@ -30,45 +39,31 @@ import { certifications, education, experience, publication, timeline } from "@/
 
   <section class="section-band border-t border-border">
     <div class="shell grid gap-4 lg:grid-cols-3">
-      <article class="rounded-portfolio border border-border bg-surface p-6">
+      <article class="purple-frame rounded-portfolio p-5">
         <h2 class="text-xl font-semibold text-text">Education</h2>
-        <div class="mt-5 space-y-5">
-          {education.map((item) => (
-            <div>
-              <p class="font-semibold text-text">{item.qualification}</p>
-              <p class="mt-1 text-sm text-muted">{item.institution} / {item.year}</p>
-              {item.score && <p class="mt-1 text-sm text-accent">{item.score}</p>}
-            </div>
-          ))}
-        </div>
+        <p class="mt-4 text-base font-semibold text-text">{primaryEducation.qualification}</p>
+        <p class="mt-2 text-sm leading-6 text-muted">{primaryEducation.institution}</p>
+        <p class="mt-2 text-sm font-bold text-accent">{primaryEducation.year} / {primaryEducation.score}</p>
       </article>
-      <article class="rounded-portfolio border border-border bg-surface p-6">
-        <h2 class="text-xl font-semibold text-text">Certifications</h2>
-        <div class="mt-5 space-y-5">
-          {certifications.map((item) => (
-            <div>
-              <p class="font-semibold text-text">{item.title}</p>
-              {item.score && <p class="mt-1 text-sm text-accent">{item.score}</p>}
-              <p class="mt-2 text-sm leading-6 text-muted">{item.websiteCopy}</p>
-            </div>
-          ))}
-        </div>
-      </article>
-      <article class="rounded-portfolio border border-border bg-surface p-6">
-        <h2 class="text-xl font-semibold text-text">Publication</h2>
-        <p class="mt-5 font-semibold text-text">{publication.title}</p>
-        <p class="mt-2 text-sm text-accent">{publication.publication}</p>
-        <p class="mt-3 text-sm leading-6 text-muted">{publication.websiteCopy}</p>
-      </article>
-    </div>
-  </section>
 
-  <section class="section-band border-t border-border">
-    <div class="shell">
-      <SectionHeader eyebrow="Timeline" title="Career timeline" />
-      <div class="mt-8 grid gap-3">
-        {timeline.map((item) => <div class="rounded-portfolio border border-border bg-surface p-4 text-sm leading-7 text-muted">{item}</div>)}
-      </div>
+      <article class="purple-frame rounded-portfolio p-5">
+        <h2 class="text-xl font-semibold text-text">Certifications</h2>
+        <p class="mt-4 text-base font-semibold text-text">Appian Certified Lead Developer / Level 3</p>
+        <div class="mt-4 grid gap-2">
+          {certifications.slice(1).map((item) => (
+            <div class="rounded-portfolio border border-border bg-surface/58 p-3">
+              <p class="text-sm font-semibold text-text">{item.title}</p>
+              {item.score && <p class="mt-1 text-xs font-bold text-accent">{item.score}</p>}
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <article class="purple-frame rounded-portfolio p-5">
+        <h2 class="text-xl font-semibold text-text">Publication</h2>
+        <p class="mt-4 text-sm font-semibold leading-6 text-text">{publication.title}</p>
+        <p class="mt-2 text-sm leading-6 text-muted">{publication.publication}</p>
+      </article>
     </div>
   </section>
 </BaseLayout>
