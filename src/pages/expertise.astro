@@ -2,7 +2,21 @@
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { expertiseAreas, skills } from "@/lib/content";
+import { breadcrumbStructuredData, personStructuredData, webPageStructuredData } from "@/lib/seo";
 
+const pageDescription = "Appian solution design, AI workflow automation, plugin development, enterprise UX, and platform governance expertise.";
+const structuredData = [
+  personStructuredData(),
+  webPageStructuredData({
+    name: "Appian Expertise - Leelark Saxena",
+    description: pageDescription,
+    path: "/expertise"
+  }),
+  breadcrumbStructuredData([
+    { name: "Home", path: "/" },
+    { name: "Expertise", path: "/expertise" }
+  ])
+];
 const lifecycle = [
   ["Discover", "process pain points, users, systems, documents"],
   ["Architect", "records, process models, integrations, data"],
@@ -18,7 +32,7 @@ const skillGroups = [
 ];
 ---
 
-<BaseLayout title="Expertise" description="Appian solution design, AI workflow automation, plugin development, enterprise UX, and platform governance expertise." path="/expertise">
+<BaseLayout title="Expertise" description={pageDescription} path="/expertise" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
       <SectionHeader as="h1" eyebrow="Expertise" title="Solution design across the complete Appian delivery lifecycle." copy="I work from process discovery and architecture through SAIL implementation, AI workflow design, testing, optimization, and platform governance." />

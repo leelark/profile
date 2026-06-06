@@ -2,7 +2,7 @@
 import CaseStudySections from "@/components/CaseStudySections.astro";
 import ProjectExplorer from "@/components/ProjectExplorer";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { categoryLabels, projects, projectToCard } from "@/lib/content";
+import { categoryLabels, mergedAcceleratorSlugs, projects, projectToCard } from "@/lib/content";
 import { canonicalUrl, withBase } from "@/lib/paths";
 
 export function getStaticPaths() {
@@ -27,6 +27,7 @@ export function getStaticPaths() {
 
 const { project, isLegacyRoute = false } = Astro.props;
 const canonicalPath = `/work/${project.publicSlug}`;
+const isMergedAcceleratorRoute = mergedAcceleratorSlugs.includes(project.slug);
 const related = projects
   .filter((candidate) => candidate.slug !== project.slug && candidate.category === project.category)
   .slice(0, 3);
@@ -71,7 +72,7 @@ const structuredData = [
 ];
 ---
 
-<BaseLayout title={project.title} description={project.heroExcerpt} path={canonicalPath} structuredData={structuredData} noindex={isLegacyRoute}>
+<BaseLayout title={project.title} description={project.heroExcerpt} path={canonicalPath} structuredData={structuredData} noindex={isLegacyRoute || isMergedAcceleratorRoute}>
   <section class="section-band">
     <div class="shell">
       <div class="mx-auto max-w-reading">

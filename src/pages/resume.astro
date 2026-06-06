@@ -2,7 +2,9 @@
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { certifications, education, experience, publication } from "@/lib/content";
+import { breadcrumbStructuredData, personStructuredData, webPageStructuredData } from "@/lib/seo";
 
+const pageDescription = "Compact professional resume for Leelark Saxena, Appian Solution Architect and Developer.";
 const compactExperience = experience.map((item) => ({
   company: item.company,
   role: item.role,
@@ -10,9 +12,22 @@ const compactExperience = experience.map((item) => ({
   summary: item.positioning || item.resumeCopy
 }));
 const primaryEducation = education[0];
+const structuredData = [
+  personStructuredData(),
+  webPageStructuredData({
+    type: "ProfilePage",
+    name: "Resume - Leelark Saxena",
+    description: pageDescription,
+    path: "/resume"
+  }),
+  breadcrumbStructuredData([
+    { name: "Home", path: "/" },
+    { name: "Resume", path: "/resume" }
+  ])
+];
 ---
 
-<BaseLayout title="Resume" description="Compact professional resume for Leelark Saxena, Appian Solution Architect and Developer." path="/resume">
+<BaseLayout title="Resume" description={pageDescription} path="/resume" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
       <SectionHeader as="h1" eyebrow="Resume" title="Appian Solution Architect and Developer with enterprise workflow, AI, and plugin delivery experience." />

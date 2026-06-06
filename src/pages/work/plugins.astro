@@ -2,16 +2,30 @@
 import ProjectExplorer from "@/components/ProjectExplorer";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { categoryDescriptions, categoryLabels, projectToCard, projectsByCategory } from "@/lib/content";
+import { categoryDescriptions, categoryLabels, portfolioProjectsByCategory, projectToCard } from "@/lib/content";
+import { collectionPageStructuredData } from "@/lib/seo";
 
 const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
-const cards = projectsByCategory.plugins.map(projectToCard);
+const categoryProjects = portfolioProjectsByCategory.plugins;
+const cards = categoryProjects.map(projectToCard);
+const pageDescription = categoryDescriptions.plugins;
+const structuredData = collectionPageStructuredData({
+  name: "Appian Plugins - Leelark Saxena",
+  description: pageDescription,
+  path: "/work/plugins",
+  projects: categoryProjects,
+  breadcrumbs: [
+    { name: "Home", path: "/" },
+    { name: "Work", path: "/work" },
+    { name: "Plugins", path: "/work/plugins" }
+  ]
+});
 ---
 
-<BaseLayout title="Plugins" description={categoryDescriptions.plugins} path="/work/plugins">
+<BaseLayout title="Plugins" description={pageDescription} path="/work/plugins" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Plugins" title="Custom Appian component innovation for document and HTML-heavy workflows." copy={categoryDescriptions.plugins} />
+      <SectionHeader as="h1" eyebrow="Plugins" title="Custom Appian component innovation for document and HTML-heavy workflows." copy={pageDescription} />
       <div class="mt-10">
         <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
       </div>

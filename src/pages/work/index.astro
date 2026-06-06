@@ -2,16 +2,28 @@
 import ProjectExplorer from "@/components/ProjectExplorer";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { categoryLabels, projectToCard, projects } from "@/lib/content";
+import { categoryLabels, portfolioProjects, projectToCard } from "@/lib/content";
+import { collectionPageStructuredData } from "@/lib/seo";
 
 const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
-const cards = projects.map(projectToCard);
+const cards = portfolioProjects.map(projectToCard);
+const pageDescription = "Explore Leelark Saxena's Appian client projects, plugins, innovative POCs, and accelerators.";
+const structuredData = collectionPageStructuredData({
+  name: "Portfolio Work - Leelark Saxena",
+  description: pageDescription,
+  path: "/work",
+  projects: portfolioProjects,
+  breadcrumbs: [
+    { name: "Home", path: "/" },
+    { name: "Work", path: "/work" }
+  ]
+});
 ---
 
-<BaseLayout title="Work" description="Explore Leelark Saxena's Appian client projects, plugins, innovative POCs, and accelerators." path="/work">
+<BaseLayout title="Work" description={pageDescription} path="/work" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Work" title="A modal-first portfolio of Appian architecture, AI workflows, plugins, and accelerators." copy="Use the animated tabs to move between client delivery, custom components, innovation POCs, and reusable Appian accelerators." />
+      <SectionHeader as="h1" eyebrow="Work" title="Appian solution design, AI workflows, plugins, and selected accelerator workstreams." copy="Use the filters to move between client delivery, custom components, innovation POCs, and the Appian Accelerate accelerator suite." />
       <div class="mt-10">
         <ProjectExplorer projects={cards} categories={categories} client:load />
       </div>

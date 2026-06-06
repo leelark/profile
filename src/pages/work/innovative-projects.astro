@@ -2,16 +2,30 @@
 import ProjectExplorer from "@/components/ProjectExplorer";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { categoryDescriptions, categoryLabels, projectToCard, projectsByCategory } from "@/lib/content";
+import { categoryDescriptions, categoryLabels, portfolioProjectsByCategory, projectToCard } from "@/lib/content";
+import { collectionPageStructuredData } from "@/lib/seo";
 
 const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
-const cards = projectsByCategory["innovative-projects"].map(projectToCard);
+const categoryProjects = portfolioProjectsByCategory["innovative-projects"];
+const cards = categoryProjects.map(projectToCard);
+const pageDescription = categoryDescriptions["innovative-projects"];
+const structuredData = collectionPageStructuredData({
+  name: "Innovative Projects - Leelark Saxena",
+  description: pageDescription,
+  path: "/work/innovative-projects",
+  projects: categoryProjects,
+  breadcrumbs: [
+    { name: "Home", path: "/" },
+    { name: "Work", path: "/work" },
+    { name: "Innovative Projects", path: "/work/innovative-projects" }
+  ]
+});
 ---
 
-<BaseLayout title="Innovative Projects" description={categoryDescriptions["innovative-projects"]} path="/work/innovative-projects">
+<BaseLayout title="Innovative Projects" description={pageDescription} path="/work/innovative-projects" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Innovation POCs" title="AI-enabled product thinking across claims, knowledge, citizen services, and workflow automation." copy={categoryDescriptions["innovative-projects"]} />
+      <SectionHeader as="h1" eyebrow="Innovation POCs" title="AI-enabled product thinking across claims, knowledge, citizen services, and workflow automation." copy={pageDescription} />
       <div class="mt-10">
         <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
       </div>

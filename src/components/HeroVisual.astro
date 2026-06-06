@@ -1,61 +1,42 @@
 ---
-import ArchitectScene from "@/components/ArchitectScene";
 import { withBase } from "@/lib/paths";
 
-const plates = [
-  { label: "Appian Records", value: "data model" },
-  { label: "Process Models", value: "workflow" },
-  { label: "AI Skills", value: "intelligence" },
-  { label: "Plugins", value: "extension" }
+const signals = [
+  "Requirement analysis",
+  "Solution design",
+  "SAIL development",
+  "Workflow automation",
+  "Appian AI",
+  "Plugin engineering"
 ];
 ---
 
-<div class="relative" aria-label="Leelark Saxena portfolio hero visual">
-  <div class="glass-panel relative overflow-hidden p-4 md:p-5">
-    <div class="grid gap-4 lg:grid-cols-[0.82fr_1fr] lg:items-stretch">
-      <div class="relative min-h-[420px] overflow-hidden rounded-portfolio border border-accent/30 bg-accentSoft">
-        <img
-          class="absolute inset-0 h-full w-full object-cover object-center"
-          src={withBase("/main_photo.jpg")}
-          alt="Leelark Saxena"
-          loading="eager"
-          decoding="async"
-        />
-        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0b0610] via-[#0b0610]/62 to-transparent p-5">
-          <p class="text-xs font-bold uppercase tracking-[0.08em] text-white/72">Level-3 Certified</p>
-          <p class="mt-1 text-xl font-semibold text-white">Appian Solution Architect</p>
-        </div>
-      </div>
-
-      <div class="grid min-h-[420px] gap-4">
-        <div class="relative overflow-hidden rounded-portfolio border border-border bg-canvas/60">
-          <div class="architecture-fallback" aria-hidden="true">
-            <span class="architecture-line architecture-line-1"></span>
-            <span class="architecture-line architecture-line-2"></span>
-            <span class="architecture-line architecture-line-3"></span>
-            <span class="architecture-node architecture-node-1"></span>
-            <span class="architecture-node architecture-node-2"></span>
-            <span class="architecture-node architecture-node-3"></span>
-            <span class="architecture-node architecture-node-4"></span>
-            <span class="architecture-node architecture-node-5"></span>
-          </div>
-          <div class="absolute inset-0">
-            <ArchitectScene client:idle />
-          </div>
-          <div class="pointer-events-none absolute left-4 top-4 rounded-portfolio border border-border bg-surface/78 px-3 py-2 text-xs font-bold uppercase text-muted backdrop-blur">
-            Appian + AI architecture
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          {plates.map((plate, index) => (
-            <div class="purple-frame rounded-portfolio p-3">
-              <p class="text-xs font-bold uppercase text-muted">0{index + 1} / {plate.value}</p>
-              <p class="mt-1 text-sm font-semibold text-text">{plate.label}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+<div class="hero-portrait-system" aria-label="Leelark Saxena profile visual">
+  <div class="hero-portrait-shell">
+    <div class="hero-portrait-ring hero-portrait-ring-outer" aria-hidden="true"></div>
+    <div class="hero-portrait-ring hero-portrait-ring-inner" aria-hidden="true"></div>
+    <figure class="hero-portrait-frame">
+      <img
+        class="hero-portrait-image"
+        src={withBase("/main_photo.jpg")}
+        alt="Leelark Saxena"
+        loading="eager"
+        decoding="async"
+      />
+    </figure>
+    <div class="hero-credential-card">
+      <p class="text-[0.68rem] font-bold uppercase text-muted">Certified</p>
+      <p class="mt-1 text-sm font-semibold text-text">Appian Level-3 / Lead Developer</p>
     </div>
+    <div class="hero-focus-card">
+      <p class="text-[0.68rem] font-bold uppercase text-muted">Positioning</p>
+      <p class="mt-1 text-sm font-semibold text-text">Appian Solution Architect</p>
+    </div>
+  </div>
+
+  <div class="mt-6 grid gap-2 sm:grid-cols-2">
+    {signals.map((signal) => (
+      <span class="hero-signal-chip">{signal}</span>
+    ))}
   </div>
 </div>

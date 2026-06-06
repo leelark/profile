@@ -5,48 +5,39 @@ import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { certifications, categoryLabels, featuredProjects, profile, projectToCard, publication, skills } from "@/lib/content";
 import { withBase } from "@/lib/paths";
+import { personStructuredData, websiteStructuredData } from "@/lib/seo";
 
-const structuredData = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: profile.name,
-    jobTitle: "Appian Solution Architect and Developer",
-    url: "https://leelark.github.io/profile/",
-    email: "mailto:leelarksaxena1997@outlook.com",
-    knowsAbout: ["Appian", "SAIL", "Process Models", "Appian AI", "Plugin Development", "Enterprise Workflow Automation"]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Leelark Saxena Portfolio",
-    url: "https://leelark.github.io/profile/"
-  }
-];
+const structuredData = [personStructuredData(), websiteStructuredData()];
 
 const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
 const featuredCards = featuredProjects.map(projectToCard);
 const heroSummary =
-  "Appian Solution Architect and Certified Lead Developer designing enterprise workflows, AI document intelligence, plugins, and reusable accelerators.";
+  "Appian Solution Architect and Certified Lead Developer designing enterprise workflows, Appian AI experiences, custom plugins, reusable accelerators, and scalable automation platforms.";
 const whatIDo = [
   {
+    title: "Requirement Analysis",
+    copy: "I convert business problems, stakeholder constraints, and process gaps into clear Appian solution scope, data needs, and delivery priorities."
+  },
+  {
     title: "Appian Solution Design",
-    copy: "I shape records, data models, process models, integrations, reporting, governance, and scalable Appian application architecture."
+    copy: "I shape Records, data models, process models, integrations, reports, security, governance, and reusable application structure."
   },
   {
-    title: "AI Workflow Automation",
-    copy: "I design document extraction, classification, claim routing, eligibility checks, knowledge discovery, and human-review workflows."
+    title: "Workflow Automation",
+    copy: "I build process automation across approvals, claims, documents, task management, exceptions, escalations, and operational handoffs."
   },
   {
-    title: "Plugins and Components",
-    copy: "I build Appian extensions including HTML/PDF viewers, evidence highlighting, custom components, and reusable smart-service patterns."
-  },
-  {
-    title: "Enterprise Delivery",
-    copy: "I support analysis, UX, implementation, testing, performance triage, platform health, deployment governance, and accelerator delivery."
+    title: "Appian AI and Plugins",
+    copy: "I extend Appian with AI-assisted knowledge discovery, document intelligence, component plugins, smart services, and evidence-driven UX."
   }
 ];
-const lifecycle = ["Analyze", "Design", "Build", "Integrate", "Test", "Optimize"];
+const lifecycle = ["Analyze", "Model", "Design", "Automate", "Integrate", "Govern"];
+const architecturePlates = [
+  { id: "01", label: "Appian Records", value: "data model", tone: "text-blueSignal" },
+  { id: "02", label: "Process Models", value: "workflow", tone: "text-accent" },
+  { id: "03", label: "AI Skills", value: "intelligence", tone: "text-verified" },
+  { id: "04", label: "Plugins", value: "extension", tone: "text-caution" }
+];
 const publicSkills = [
   ...skills.primary.slice(0, 11),
   ...skills.secondary.filter((skill) => ["JavaScript", "Java", "HTML/CSS", "Node.js"].includes(skill)),
@@ -55,31 +46,35 @@ const publicSkills = [
 ---
 
 <BaseLayout title="Leelark Saxena - Appian Solution Architect and Developer" description={heroSummary} path="/" structuredData={structuredData}>
-  <section class="section-band pt-8 md:pt-12">
-    <div class="shell grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+  <section class="section-band hero-section pt-10 md:pt-14">
+    <div class="shell grid gap-9 lg:grid-cols-[1.12fr_0.88fr] lg:items-center">
       <div class="max-w-3xl reveal-up">
         <p class="eyebrow mb-4">Appian Solution Architect / Level-3 Certified BPM Developer</p>
-        <h1 class="text-balance text-4xl font-semibold leading-[1.06] text-text md:text-5xl">
+        <h1 class="text-balance text-4xl font-semibold leading-[1.04] text-text md:text-6xl">
           Leelark Saxena
         </h1>
-        <p class="mt-4 text-balance text-2xl font-semibold leading-tight text-text/92 md:text-3xl">
-          I design and build enterprise Appian platforms, AI workflows, plugins, and automation systems.
+        <p class="mt-5 text-balance text-2xl font-semibold leading-tight text-text/94 md:text-3xl">
+          I design and deliver enterprise Appian solutions across requirements, architecture, development, workflow automation, AI, and custom plugins.
         </p>
         <p class="mt-6 max-w-2xl text-base leading-8 text-muted md:text-lg">
-          {heroSummary} I work across analysis, design, implementation, testing, optimization, and advisory.
+          {heroSummary} My work connects product thinking, enterprise architecture, Appian implementation, and practical governance so complex workflows become reliable business systems.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <a class="primary-button" href={withBase("/work")}>Explore work</a>
           <a class="quiet-button" href={withBase("/contact")}>Start a conversation</a>
         </div>
-        <dl class="mt-8 grid gap-3 sm:grid-cols-2">
-          <div class="purple-frame rounded-portfolio p-4">
-            <dt class="text-xs font-bold uppercase text-muted">Certification</dt>
-            <dd class="mt-2 text-lg font-semibold text-text">Appian Level-3 / Lead Developer</dd>
+        <dl class="mt-8 grid gap-3 sm:grid-cols-3">
+          <div class="proof-tile">
+            <dt>Certification</dt>
+            <dd>Appian L3</dd>
           </div>
-          <div class="purple-frame rounded-portfolio p-4">
-            <dt class="text-xs font-bold uppercase text-muted">Focus</dt>
-            <dd class="mt-2 text-lg font-semibold text-text">Architecture, AI, plugins, automation</dd>
+          <div class="proof-tile">
+            <dt>Core Focus</dt>
+            <dd>Solution Design</dd>
+          </div>
+          <div class="proof-tile">
+            <dt>Depth</dt>
+            <dd>AI + Plugins</dd>
           </div>
         </dl>
       </div>
@@ -94,21 +89,50 @@ const publicSkills = [
       <SectionHeader eyebrow="What I do" title="I turn complex Appian delivery into clear architecture, usable workflows, and reusable assets." />
       <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {whatIDo.map((item, index) => (
-          <article class="glass-panel p-5">
+          <article class="capability-card p-5">
             <p class="text-xs font-bold uppercase text-accent">0{index + 1}</p>
             <h2 class="mt-4 text-xl font-semibold text-text">{item.title}</h2>
             <p class="mt-3 text-sm leading-7 text-muted">{item.copy}</p>
           </article>
         ))}
       </div>
-      <div class="mt-8 overflow-hidden rounded-portfolio border border-border bg-surface/70 p-4">
-        <div class="grid gap-3 md:grid-cols-6">
-          {lifecycle.map((stage, index) => (
-            <div class="relative rounded-portfolio bg-elevated/72 p-4">
-              <p class="text-xs font-bold uppercase text-muted">Stage {index + 1}</p>
-              <p class="mt-2 text-sm font-semibold text-text">{stage}</p>
+    </div>
+  </section>
+
+  <section class="section-band border-t border-border">
+    <div class="shell grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+      <div>
+        <SectionHeader eyebrow="Appian operating model" title="A structured delivery system for solution design, workflow automation, AI, and platform governance." copy="The architecture visual is intentionally lower on the page: it supports the story after the role and value proposition are clear." />
+        <div class="mt-8 grid gap-3 sm:grid-cols-2">
+          {architecturePlates.map((plate) => (
+            <div class="architecture-plate">
+              <p class:list={["text-xs font-bold uppercase", plate.tone]}>{plate.id} / {plate.value}</p>
+              <p class="mt-2 text-base font-semibold text-text">{plate.label}</p>
             </div>
           ))}
+        </div>
+        <div class="mt-7 grid gap-2 md:grid-cols-6">
+          {lifecycle.map((stage, index) => (
+            <div class="lifecycle-node">
+              <p class="text-[0.68rem] font-bold uppercase text-muted">Step {index + 1}</p>
+              <p class="mt-1 text-sm font-semibold text-text">{stage}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="architecture-showcase">
+        <div class="architecture-fallback" aria-hidden="true">
+          <span class="architecture-line architecture-line-1"></span>
+          <span class="architecture-line architecture-line-2"></span>
+          <span class="architecture-line architecture-line-3"></span>
+          <span class="architecture-node architecture-node-1"></span>
+          <span class="architecture-node architecture-node-2"></span>
+          <span class="architecture-node architecture-node-3"></span>
+          <span class="architecture-node architecture-node-4"></span>
+          <span class="architecture-node architecture-node-5"></span>
+        </div>
+        <div class="pointer-events-none absolute left-4 top-4 rounded-portfolio border border-border bg-surface/80 px-3 py-2 text-xs font-bold uppercase text-muted backdrop-blur">
+          Appian + AI delivery map
         </div>
       </div>
     </div>
@@ -116,7 +140,7 @@ const publicSkills = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Featured work" title="Click any work item to open a focused project detail view." copy="The full case-study routes remain available inside each modal for deeper reading and direct sharing." />
+      <SectionHeader eyebrow="Featured work" title="Click any work item to open a focused project detail view." copy="Each popup includes an architecture/workflow visual and an expandable detail section for deeper review." />
       <div class="mt-9">
         <ProjectExplorer projects={featuredCards} categories={categories} showFilters={false} compact client:load />
       </div>

@@ -43,12 +43,16 @@ export type ProjectCardPayload = {
   title: string;
   category: ProjectCategory;
   categorySlug: CategorySlug;
+  evidenceStatus: EvidenceStatus;
   heroExcerpt: string;
   heroSummary: string;
   role: string;
   domain: string;
   tags: string[];
   href: string;
+  workflowSteps: string[];
+  acceleratorHighlights: string[];
+  parentProgram?: string;
   keyFeatures: string[];
   businessValue: string[];
   technologies: string[];
@@ -134,11 +138,36 @@ const featuredSlugs = [
 
 const featuredAcceleratorSlugs = [
   "appian-server-metrics-performance-triage",
-  "appian-monitoring-observability-accelerator",
-  "dynamic-editable-grid-accelerator",
-  "formatted-excel-import-export",
+  "appian-monitoring-observability-accelerator"
+];
+
+export const standaloneAcceleratorSlugs = [
+  "appian-server-metrics-performance-triage",
+  "appian-monitoring-observability-accelerator"
+];
+
+export const mergedAcceleratorSlugs = [
+  "appian-ai-document-intelligence-enablement",
+  "appian-best-practices-governance-review",
+  "appian-cloud-operating-model-advisory",
   "appian-dependency-governance-accelerator",
-  "appian-ai-document-intelligence-enablement"
+  "appian-deployment-devops-governance",
+  "appian-health-check-risk-review",
+  "autonomous-client-transition-knowledge-absorption",
+  "device-access-audit-accelerator",
+  "document-merge-integrity-rca",
+  "dynamic-editable-grid-accelerator",
+  "editable-paragraph-grid-accelerator",
+  "enterprise-document-chatbot-improvement-accelerator",
+  "excel-merge-large-export",
+  "formatted-excel-import-export",
+  "hierarchical-data-entry-ux-redesign",
+  "message-queue-consumption-modernization",
+  "notification-api-reliability-accelerator",
+  "pdf-reconciliation-viewer-compatibility-rca",
+  "process-hq-readiness-accelerator",
+  "secure-snowflake-connectivity-accelerator",
+  "transaction-manager-sql-portability-accelerator"
 ];
 
 const categoryOrder: Record<ProjectCategory, number> = {
@@ -153,7 +182,8 @@ const publicProjectTitles: Record<string, string> = {
   "rapid2-hsbc-horizon-scanning": "Regulatory Horizon Scanning Platform",
   "invesco-aml-change-management": "Investment Management AML and Change Management",
   "invesco-reconciliation-system": "Investment Operations Reconciliation System",
-  "carlyle-bridge-module": "Finance Document Bridge Module"
+  "carlyle-bridge-module": "Finance Document Bridge Module",
+  "appian-monitoring-observability-accelerator": "Appian Cloud Log Streaming and Observability Accelerator"
 };
 
 const publicProjectSlugs: Record<string, string> = {
@@ -266,6 +296,46 @@ function tagsFor(project: {
       return true;
     })
     .slice(0, 7);
+}
+
+function workflowStepsFor(project: { category: ProjectCategory; slug: string }) {
+  if (project.slug === "appian-accelerate-program") {
+    return ["Requirement signal", "Technical review", "Accelerator pattern", "Client guidance", "Reusable library"];
+  }
+
+  if (project.slug.includes("server-metrics")) {
+    return ["Health Check export", "Python analysis", "KPI scoring", "Capacity view", "Remediation plan"];
+  }
+
+  if (project.slug.includes("monitoring") || project.slug.includes("observability")) {
+    return ["Log stream", "Metric catalog", "Stability hierarchy", "Dashboard map", "Triage action"];
+  }
+
+  if (project.slug.includes("claimroute")) {
+    return ["Claim intake", "AI classification", "Routing decision", "Human review", "Resolution workflow"];
+  }
+
+  if (project.slug.includes("knowledge") || project.slug.includes("chatbot")) {
+    return ["Question", "Knowledge index", "AI response", "Source evidence", "Feedback loop"];
+  }
+
+  if (project.slug.includes("document") || project.slug.includes("viewer") || project.slug.includes("pdf")) {
+    return ["Document input", "Viewer layer", "Evidence mapping", "User action", "Appian save"];
+  }
+
+  if (project.category === "Plugins") {
+    return ["Appian interface", "Component plugin", "Event bridge", "Data capture", "Workflow handoff"];
+  }
+
+  if (project.category === "Accelerators") {
+    return ["Client pattern", "Reusable design", "Appian implementation", "Governance guide", "Adoption path"];
+  }
+
+  if (project.category === "Innovative Projects") {
+    return ["Opportunity", "Product model", "Decision logic", "Workflow UX", "Outcome review"];
+  }
+
+  return ["Requirements", "Records model", "Process model", "Integration", "Governance"];
 }
 
 function parseProject(path: string, raw: string): ProjectDetail {
@@ -435,20 +505,28 @@ export const allProjects = Object.entries(projectModules)
 export const draftProjects = allProjects.filter((project) => project.publicVisibility !== "public");
 export const projects = allProjects.filter((project) => project.slug !== "accelerator-catalog" && project.publicVisibility === "public");
 export const acceleratorCatalog = allProjects.find((project) => project.slug === "accelerator-catalog");
+export const acceleratorSuiteProjects = projects.filter((project) => mergedAcceleratorSlugs.includes(project.slug));
+export const standaloneAccelerators = projects.filter((project) => standaloneAcceleratorSlugs.includes(project.slug));
+export const portfolioProjects = projects.filter(
+  (project) => project.category !== "Accelerators" || standaloneAcceleratorSlugs.includes(project.slug)
+);
 export const featuredProjects = featuredSlugs
-  .map((slug) => projects.find((project) => project.slug === slug))
+  .map((slug) => portfolioProjects.find((project) => project.slug === slug))
   .filter((project): project is ProjectDetail => Boolean(project));
 export const featuredAccelerators = featuredAcceleratorSlugs
-  .map((slug) => projects.find((project) => project.slug === slug))
+  .map((slug) => standaloneAccelerators.find((project) => project.slug === slug))
   .filter((project): project is ProjectDetail => Boolean(project));
 export const projectsByCategory = Object.fromEntries(
   Object.entries(categoryLabels).map(([slug, label]) => [slug, projects.filter((project) => project.category === label)])
 ) as Record<CategorySlug, ProjectDetail[]>;
+export const portfolioProjectsByCategory = Object.fromEntries(
+  Object.entries(categoryLabels).map(([slug, label]) => [slug, portfolioProjects.filter((project) => project.category === label)])
+) as Record<CategorySlug, ProjectDetail[]>;
 
 export const stats = [
   { label: "Experience", value: "6+ years" },
-  { label: "Portfolio items", value: `${projects.length}` },
-  { label: "Accelerators", value: `${projectsByCategory.accelerators.length}` },
+  { label: "Portfolio items", value: `${portfolioProjects.length}` },
+  { label: "Accelerator suite", value: `${acceleratorSuiteProjects.length}+` },
   { label: "Core stack", value: "Appian + AI" }
 ];
 
@@ -465,12 +543,19 @@ export function projectToCard(project: ProjectDetail): ProjectCardPayload {
     title: project.title,
     category: project.category,
     categorySlug: project.categorySlug,
+    evidenceStatus: project.evidenceStatus,
     heroExcerpt: project.heroExcerpt,
     heroSummary: project.heroSummary,
     role: project.role,
     domain: project.domain,
     tags: project.tags,
     href: projectPath(project.publicSlug),
+    workflowSteps: workflowStepsFor(project),
+    acceleratorHighlights:
+      project.slug === "appian-accelerate-program"
+        ? acceleratorSuiteProjects.slice(0, 9).map((item) => item.title)
+        : [],
+    parentProgram: project.category === "Accelerators" ? "Appian Accelerate Program" : undefined,
     keyFeatures: project.keyFeatures.slice(0, 6),
     businessValue: project.businessValue.slice(0, 5),
     technologies: project.technologies.slice(0, 8),

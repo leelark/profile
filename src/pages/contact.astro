@@ -3,9 +3,25 @@ import ContactForm from "@/components/ContactForm.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { contact } from "@/lib/content";
+import { breadcrumbStructuredData, personStructuredData, webPageStructuredData } from "@/lib/seo";
+
+const pageDescription = "Contact Leelark Saxena for Appian architecture, AI workflow, plugin, and enterprise automation work.";
+const structuredData = [
+  personStructuredData(),
+  webPageStructuredData({
+    type: "ContactPage",
+    name: "Contact Leelark Saxena",
+    description: pageDescription,
+    path: "/contact"
+  }),
+  breadcrumbStructuredData([
+    { name: "Home", path: "/" },
+    { name: "Contact", path: "/contact" }
+  ])
+];
 ---
 
-<BaseLayout title="Contact" description="Contact Leelark Saxena for Appian architecture, AI workflow, plugin, and enterprise automation work." path="/contact">
+<BaseLayout title="Contact" description={pageDescription} path="/contact" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell grid gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
       <div>

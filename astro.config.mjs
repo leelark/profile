@@ -9,6 +9,30 @@ const legacyProjectSlugs = [
   "invesco-reconciliation-system",
   "carlyle-bridge-module"
 ];
+const mergedAcceleratorSlugs = [
+  "appian-ai-document-intelligence-enablement",
+  "appian-best-practices-governance-review",
+  "appian-cloud-operating-model-advisory",
+  "appian-dependency-governance-accelerator",
+  "appian-deployment-devops-governance",
+  "appian-health-check-risk-review",
+  "autonomous-client-transition-knowledge-absorption",
+  "device-access-audit-accelerator",
+  "document-merge-integrity-rca",
+  "dynamic-editable-grid-accelerator",
+  "editable-paragraph-grid-accelerator",
+  "enterprise-document-chatbot-improvement-accelerator",
+  "excel-merge-large-export",
+  "formatted-excel-import-export",
+  "hierarchical-data-entry-ux-redesign",
+  "message-queue-consumption-modernization",
+  "notification-api-reliability-accelerator",
+  "pdf-reconciliation-viewer-compatibility-rca",
+  "process-hq-readiness-accelerator",
+  "secure-snowflake-connectivity-accelerator",
+  "transaction-manager-sql-portability-accelerator"
+];
+const excludedProjectSlugs = [...legacyProjectSlugs, ...mergedAcceleratorSlugs];
 const basePath = "/profile/";
 
 export default defineConfig({
@@ -19,7 +43,7 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !legacyProjectSlugs.some((slug) => page.includes(`${basePath}work/${slug}/`))
+      filter: (page) => !excludedProjectSlugs.some((slug) => page.includes(`${basePath}work/${slug}/`))
     })
   ],
   vite: {
