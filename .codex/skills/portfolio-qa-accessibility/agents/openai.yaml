@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio QA and Accessibility"
+  short_description: "Run portfolio quality checks"
+  default_prompt: "Review accessibility, responsiveness, performance, SEO, content safety, and polish."

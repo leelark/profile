@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio SDLC Orchestrator"
+  short_description: "Coordinate portfolio SDLC work"
+  default_prompt: "Coordinate the portfolio website SDLC using the project specs and skills."

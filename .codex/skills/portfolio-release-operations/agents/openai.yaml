@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Release Operations"
+  short_description: "Plan launch and operations"
+  default_prompt: "Prepare deployment, launch checklist, rollback, monitoring, and maintenance."

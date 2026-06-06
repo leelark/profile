@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Frontend Architecture"
+  short_description: "Plan frontend architecture"
+  default_prompt: "Plan stack, routes, data models, components, SEO, and performance architecture."

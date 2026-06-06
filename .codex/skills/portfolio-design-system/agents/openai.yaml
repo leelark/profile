@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Design System"
+  short_description: "Apply premium portfolio design"
+  default_prompt: "Design or review the portfolio theme, layout, animation, and responsive UX."

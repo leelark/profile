@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Frontend Implementation"
+  short_description: "Guide portfolio frontend build"
+  default_prompt: "Use this skill when the user explicitly asks to implement the portfolio website frontend."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Implementation Planner"
+  short_description: "Plan build tasks and milestones"
+  default_prompt: "Convert the portfolio specs into phased implementation tasks and acceptance criteria."

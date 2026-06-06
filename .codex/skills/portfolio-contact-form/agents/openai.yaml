@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Contact Form"
+  short_description: "Design Splitforms contact flow"
+  default_prompt: "Design or review the Splitforms contact form, redirect, validation, and QA. Implement only after explicit development approval."

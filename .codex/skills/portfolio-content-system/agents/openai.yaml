@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Content System"
+  short_description: "Manage portfolio content safely"
+  default_prompt: "Create, review, or refine portfolio content using evidence and public-safe rules."
