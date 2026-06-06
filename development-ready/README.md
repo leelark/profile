@@ -36,6 +36,7 @@ Build a powerful, modern, responsive, animated, sleek, and premium personal port
 - [Resources and Asset Plan](resources-and-assets-plan.md)
 - [Asset Inventory](asset-inventory.md)
 - [SDLC Roadmap and Backlog](sdlc-roadmap-and-backlog.md)
+- [AI Development Team Operating Model](ai-development-team-operating-model.md)
 - [Project Skills Index](project-skills-index.md)
 - [Official Reference Links](official-reference-links.md)
 
@@ -62,13 +63,14 @@ Before implementation starts, a developer or agent should:
 1. Read `context.md`.
 2. Read `AGENTS.md`.
 3. Read this index.
-4. Read `technical-solution-design.md`.
-5. Read `functional-requirements.md`.
-6. Read `content-data-architecture.md`.
-7. Read `content-normalization-contract.md`.
-8. Read `page-component-specification.md`.
-9. Read `contact-form-specification.md`.
-10. Read the relevant project-local skills in `.codex/skills/`.
+4. Read `ai-development-team-operating-model.md`.
+5. Read `technical-solution-design.md`.
+6. Read `functional-requirements.md`.
+7. Read `content-data-architecture.md`.
+8. Read `content-normalization-contract.md`.
+9. Read `page-component-specification.md`.
+10. Read `contact-form-specification.md`.
+11. Read the relevant project-local skills in `.codex/skills/`.
 
 ## Public-Safe Rule
 

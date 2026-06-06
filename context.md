@@ -87,6 +87,8 @@ Development-ready specifications are stored in `development-ready/`.
 
 Project-local reusable Codex skills are stored in `.codex/skills/`.
 
+The continuous multi-agent development runbook and starter prompt are stored in `development-ready/ai-development-team-operating-model.md`.
+
 Use `portfolio-frontend-implementation` only after the user explicitly requests actual website implementation.
 
 Recommended future implementation stack:

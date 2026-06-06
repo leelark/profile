@@ -34,12 +34,13 @@ Before implementation begins, read:
 
 1. `context.md`
 2. `development-ready/README.md`
-3. `development-ready/technical-solution-design.md`
-4. `development-ready/functional-requirements.md`
-5. `development-ready/content-data-architecture.md`
-6. `development-ready/content-normalization-contract.md`
-7. `development-ready/page-component-specification.md`
-8. `development-ready/contact-form-specification.md`
+3. `development-ready/ai-development-team-operating-model.md`
+4. `development-ready/technical-solution-design.md`
+5. `development-ready/functional-requirements.md`
+6. `development-ready/content-data-architecture.md`
+7. `development-ready/content-normalization-contract.md`
+8. `development-ready/page-component-specification.md`
+9. `development-ready/contact-form-specification.md`
 
 Project-local skills live in `.codex/skills/`.
 
