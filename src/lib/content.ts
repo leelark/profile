@@ -14,6 +14,7 @@ export type ContentSection = {
 
 export type ProjectDetail = {
   slug: string;
+  publicSlug: string;
   title: string;
   category: ProjectCategory;
   categorySlug: CategorySlug;
@@ -155,6 +156,14 @@ const publicProjectTitles: Record<string, string> = {
   "carlyle-bridge-module": "Finance Document Bridge Module"
 };
 
+const publicProjectSlugs: Record<string, string> = {
+  "ebrd-asb-modernization": "advisor-services-platform-modernization",
+  "rapid2-hsbc-horizon-scanning": "regulatory-horizon-scanning-platform",
+  "invesco-aml-change-management": "investment-management-aml-change-management",
+  "invesco-reconciliation-system": "investment-operations-reconciliation-system",
+  "carlyle-bridge-module": "finance-document-bridge-module"
+};
+
 const publicTextReplacements: Array<[RegExp, string]> = [
   [/\bEuropean Bank for Reconstruction and Development\b/g, "regional development finance institution"],
   [/\bEBRD's\b/g, "the development finance institution's"],
@@ -261,6 +270,7 @@ function tagsFor(project: {
 
 function parseProject(path: string, raw: string): ProjectDetail {
   const slug = slugFromPath(path);
+  const publicSlug = publicProjectSlugs[slug] ?? slug;
   const title = publicProjectTitles[slug] ?? publicText(firstHeading(raw));
   const category = (field(raw, "Primary Category") as ProjectCategory) || categoryFromPath(path);
   const secondaryCategories = splitBullets(
@@ -283,6 +293,7 @@ function parseProject(path: string, raw: string): ProjectDetail {
 
   return {
     slug,
+    publicSlug,
     title,
     category,
     categorySlug: categorySlug(category),
@@ -450,7 +461,7 @@ export function projectToCard(project: ProjectDetail): ProjectCardPayload {
   const plainSection = (title: string) => stripMarkdown(project.sections.find((section) => section.title === title)?.body ?? "");
 
   return {
-    slug: project.slug,
+    slug: project.publicSlug,
     title: project.title,
     category: project.category,
     categorySlug: project.categorySlug,
@@ -459,7 +470,7 @@ export function projectToCard(project: ProjectDetail): ProjectCardPayload {
     role: project.role,
     domain: project.domain,
     tags: project.tags,
-    href: projectPath(project.slug),
+    href: projectPath(project.publicSlug),
     keyFeatures: project.keyFeatures.slice(0, 6),
     businessValue: project.businessValue.slice(0, 5),
     technologies: project.technologies.slice(0, 8),

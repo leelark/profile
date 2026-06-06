@@ -8,6 +8,7 @@ type Props = {
   title?: string;
   description?: string;
   path?: string;
+  noindex?: boolean;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
 };
 
@@ -15,6 +16,7 @@ const {
   title = "Leelark Saxena - Enterprise Appian Architect",
   description = profile.homepageSummary,
   path = "/",
+  noindex = false,
   structuredData
 } = Astro.props;
 
@@ -47,6 +49,7 @@ const navLinks = [
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
     <meta property="og:type" content="website" />

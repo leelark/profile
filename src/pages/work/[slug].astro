@@ -6,13 +6,27 @@ import { categoryLabels, projects, projectToCard } from "@/lib/content";
 import { canonicalUrl, withBase } from "@/lib/paths";
 
 export function getStaticPaths() {
-  return projects.map((project) => ({
-    params: { slug: project.slug },
-    props: { project }
-  }));
+  return projects.flatMap((project) => {
+    const routes = [
+      {
+        params: { slug: project.publicSlug },
+        props: { project, isLegacyRoute: false }
+      }
+    ];
+
+    if (project.publicSlug !== project.slug) {
+      routes.push({
+        params: { slug: project.slug },
+        props: { project, isLegacyRoute: true }
+      });
+    }
+
+    return routes;
+  });
 }
 
-const { project } = Astro.props;
+const { project, isLegacyRoute = false } = Astro.props;
+const canonicalPath = `/work/${project.publicSlug}`;
 const related = projects
   .filter((candidate) => candidate.slug !== project.slug && candidate.category === project.category)
   .slice(0, 3);
@@ -24,7 +38,7 @@ const structuredData = [
     "@type": "CreativeWork",
     name: project.title,
     description: project.heroExcerpt,
-    url: canonicalUrl(`/work/${project.slug}`),
+    url: canonicalUrl(canonicalPath),
     author: {
       "@type": "Person",
       name: "Leelark Saxena"
@@ -50,14 +64,14 @@ const structuredData = [
         "@type": "ListItem",
         position: 3,
         name: project.title,
-        item: canonicalUrl(`/work/${project.slug}`)
+        item: canonicalUrl(canonicalPath)
       }
     ]
   }
 ];
 ---
 
-<BaseLayout title={project.title} description={project.heroExcerpt} path={`/work/${project.slug}`} structuredData={structuredData}>
+<BaseLayout title={project.title} description={project.heroExcerpt} path={canonicalPath} structuredData={structuredData} noindex={isLegacyRoute}>
   <section class="section-band">
     <div class="shell">
       <div class="mx-auto max-w-reading">
