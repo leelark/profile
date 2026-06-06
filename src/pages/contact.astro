@@ -1,0 +1,26 @@
+---
+import ContactForm from "@/components/ContactForm.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { contact } from "@/lib/content";
+---
+
+<BaseLayout title="Contact" description={contact.intro} path="/contact">
+  <section class="section-band">
+    <div class="shell grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+      <div>
+        <SectionHeader as="h1" eyebrow="Contact" title={contact.headline} copy={contact.intro} />
+        <div class="mt-8 grid gap-3 text-sm text-muted">
+          <p><strong class="text-text">Email:</strong> <a class="hover:text-text" href={`mailto:${contact.email}`}>{contact.email}</a></p>
+          <p><strong class="text-text">Location:</strong> {contact.location}</p>
+        </div>
+      </div>
+      <div class="rounded-portfolio border border-border bg-surface p-6">
+        <ContactForm />
+        <p class="mt-5 text-xs leading-5 text-muted">
+          Your message will be sent through the portfolio contact form provider. Please do not share confidential client data, credentials, tokens, or sensitive project details in this form.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

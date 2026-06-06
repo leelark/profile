@@ -1,0 +1,111 @@
+---
+import CaseStudySections from "@/components/CaseStudySections.astro";
+import EvidenceBadge from "@/components/EvidenceBadge.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { projects } from "@/lib/content";
+import { canonicalUrl, withBase } from "@/lib/paths";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project }
+  }));
+}
+
+const { project } = Astro.props;
+const related = projects
+  .filter((candidate) => candidate.slug !== project.slug && candidate.category === project.category)
+  .slice(0, 3);
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.heroExcerpt,
+    url: canonicalUrl(`/work/${project.slug}`),
+    author: {
+      "@type": "Person",
+      name: "Leelark Saxena"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: canonicalUrl("/")
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Work",
+        item: canonicalUrl("/work")
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: project.title,
+        item: canonicalUrl(`/work/${project.slug}`)
+      }
+    ]
+  }
+];
+---
+
+<BaseLayout title={project.title} description={project.heroExcerpt} path={`/work/${project.slug}`} structuredData={structuredData}>
+  <section class="section-band">
+    <div class="shell">
+      <div class="mx-auto max-w-reading">
+        <a class="text-sm font-semibold text-muted hover:text-text" href={withBase("/work")}>&lt;- Back to work</a>
+        <div class="mt-8 flex flex-wrap gap-2">
+          <span class="chip">{project.category}</span>
+          <EvidenceBadge status={project.evidenceStatus} />
+          {project.publicVisibility === "needs-confirmation" && <span class="chip border-caution/50 text-caution">Concept evidence pending</span>}
+        </div>
+        <h1 class="mt-6 text-balance text-4xl font-semibold leading-tight text-text md:text-6xl">{project.title}</h1>
+        <p class="mt-6 text-lg leading-8 text-muted">{project.heroSummary}</p>
+        <div class="mt-8 grid gap-3 md:grid-cols-3">
+          <div class="rounded-portfolio border border-border bg-surface p-4">
+            <p class="text-xs font-bold uppercase text-muted">Role</p>
+            <p class="mt-2 text-sm font-semibold text-text">{project.role}</p>
+          </div>
+          <div class="rounded-portfolio border border-border bg-surface p-4">
+            <p class="text-xs font-bold uppercase text-muted">Domain</p>
+            <p class="mt-2 text-sm font-semibold text-text">{project.domain}</p>
+          </div>
+          <div class="rounded-portfolio border border-border bg-surface p-4">
+            <p class="text-xs font-bold uppercase text-muted">Focus</p>
+            <p class="mt-2 text-sm font-semibold text-text">{project.tags.slice(0, 2).join(" / ")}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-band border-t border-border">
+    <div class="shell">
+      <CaseStudySections project={project} />
+    </div>
+  </section>
+
+  <section class="section-band border-t border-border">
+    <div class="shell">
+      <div class="mx-auto max-w-reading">
+        <p class="eyebrow mb-3">Portfolio copy</p>
+        <div class="prose-portfolio" set:html={project.sections.find((section) => section.title === "Final Portfolio Copy")?.html ?? ""} />
+      </div>
+      {related.length > 0 && (
+        <div class="mt-14">
+          <h2 class="text-2xl font-semibold text-text">Related work</h2>
+          <div class="mt-6 grid gap-4 md:grid-cols-3">
+            {related.map((item) => <ProjectCard project={item} compact />)}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

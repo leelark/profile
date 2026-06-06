@@ -1,0 +1,37 @@
+---
+import SectionHeader from "@/components/SectionHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { expertiseAreas, skills } from "@/lib/content";
+---
+
+<BaseLayout title="Expertise" description="Appian architecture, AI solution design, workflow automation, plugin development, enterprise UX, performance, and governance expertise." path="/expertise">
+  <section class="section-band">
+    <div class="shell">
+      <SectionHeader as="h1" eyebrow="Expertise" title="Enterprise Appian depth across architecture, AI, workflows, plugins, UX, and platform health." />
+      <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {expertiseAreas.map((area) => (
+          <article class="rounded-portfolio border border-border bg-surface p-6">
+            <h2 class="text-xl font-semibold text-text">{area.title}</h2>
+            <p class="mt-4 text-sm leading-7 text-muted">{area.summary}</p>
+            <div class="mt-5 flex flex-wrap gap-2">
+              {area.capabilities.map((capability) => <span class="chip text-[0.72rem]">{capability}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-band border-t border-border">
+    <div class="shell grid gap-4 lg:grid-cols-3">
+      {Object.entries(skills).map(([group, items]) => (
+        <article class="rounded-portfolio border border-border bg-surface p-6">
+          <h2 class="capitalize text-xl font-semibold text-text">{group.replace(/([A-Z])/g, " $1")}</h2>
+          <div class="mt-5 flex flex-wrap gap-2">
+            {items.map((item) => <span class="chip">{item}</span>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

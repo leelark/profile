@@ -1,0 +1,31 @@
+---
+import ProjectExplorer from "@/components/ProjectExplorer";
+import SectionHeader from "@/components/SectionHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { categoryLabels, projects } from "@/lib/content";
+import { projectPath } from "@/lib/paths";
+
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const cards = projects.map((project) => ({
+  slug: project.slug,
+  title: project.title,
+  category: project.category,
+  categorySlug: project.categorySlug,
+  evidenceStatus: project.evidenceStatus,
+  heroExcerpt: project.heroExcerpt,
+  role: project.role,
+  tags: project.tags,
+  href: projectPath(project.slug)
+}));
+---
+
+<BaseLayout title="Work" description="Explore Leelark Saxena's Appian client projects, plugins, innovative POCs, and accelerators." path="/work">
+  <section class="section-band">
+    <div class="shell">
+      <SectionHeader as="h1" eyebrow="Portfolio work" title="Client projects, plugins, innovation POCs, and accelerators in one structured portfolio." copy="Use the filters to move between enterprise delivery, custom Appian components, AI/product POCs, and reusable advisory accelerators." />
+      <div class="mt-10">
+        <ProjectExplorer projects={cards} categories={categories} client:load />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,32 @@
+{
+  "name": "leelark-profile",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro check && astro build",
+    "preview": "astro preview --host 127.0.0.1",
+    "check": "astro check",
+    "lint:content": "node scripts/validate-content.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.3.0",
+    "@astrojs/sitemap": "^3.5.0",
+    "astro": "^5.15.0",
+    "lucide-react": "^0.468.0",
+    "marked": "^15.0.0",
+    "motion": "^11.15.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "3.4.17",
+    "typescript": "^5.7.2"
+  }
+}

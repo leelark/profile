@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-canvas: 9 10 14;
+  --color-surface: 17 19 27;
+  --color-elevated: 24 27 38;
+  --color-border: 55 59 75;
+  --color-text: 245 247 250;
+  --color-muted: 171 177 191;
+  --color-accent: 123 92 255;
+  --color-accent-soft: 58 45 115;
+  --color-blue-signal: 77 166 255;
+  --color-verified: 52 211 153;
+  --color-caution: 245 158 11;
+  --ring-color: rgb(156 132 255);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --color-canvas: 247 247 249;
+  --color-surface: 255 255 255;
+  --color-elevated: 245 244 250;
+  --color-border: 215 217 226;
+  --color-text: 20 23 31;
+  --color-muted: 83 89 104;
+  --color-accent: 92 55 196;
+  --color-accent-soft: 232 226 255;
+  --color-blue-signal: 18 109 191;
+  --color-verified: 21 128 92;
+  --color-caution: 180 83 9;
+  --ring-color: rgb(92 55 196);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: rgb(var(--color-canvas));
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(180deg, rgb(var(--color-canvas)) 0%, rgb(var(--color-surface) / 0.7) 100%);
+  color: rgb(var(--color-text));
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  transform: translateY(-160%);
+  border: 1px solid rgb(var(--color-border));
+  border-radius: 8px;
+  background: rgb(var(--color-surface));
+  color: rgb(var(--color-text));
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.7rem 0.9rem;
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: rgb(var(--color-accent) / 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer components {
+  .shell {
+    width: min(100% - 32px, 1180px);
+    margin-inline: auto;
+  }
+
+  .section-band {
+    padding-block: clamp(56px, 8vw, 112px);
+  }
+
+  .eyebrow {
+    color: rgb(var(--color-accent));
+    font-size: 0.78rem;
+    font-weight: 760;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .panel {
+    border: 1px solid rgb(var(--color-border));
+    border-radius: 8px;
+    background: rgb(var(--color-surface) / 0.88);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 0.16);
+  }
+
+  .chip {
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid rgb(var(--color-border));
+    border-radius: 999px;
+    background: rgb(var(--color-elevated) / 0.72);
+    color: rgb(var(--color-muted));
+    font-size: 0.78rem;
+    font-weight: 680;
+    line-height: 1;
+    padding: 0.45rem 0.7rem;
+  }
+
+  .prose-portfolio {
+    color: rgb(var(--color-muted));
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .prose-portfolio h2,
+  .prose-portfolio h3 {
+    color: rgb(var(--color-text));
+    line-height: 1.18;
+  }
+
+  .prose-portfolio ul {
+    padding-left: 1.15rem;
+  }
+
+  .prose-portfolio li + li {
+    margin-top: 0.45rem;
+  }
+}

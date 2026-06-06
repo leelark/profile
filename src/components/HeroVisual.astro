@@ -1,0 +1,29 @@
+---
+const layers = [
+  { label: "Strategy", value: "Architecture, governance, product direction" },
+  { label: "Automation", value: "Appian workflows, tasks, integrations" },
+  { label: "Intelligence", value: "AI document review, routing, evidence" },
+  { label: "Experience", value: "Enterprise UX, grids, viewers, accelerators" }
+];
+---
+
+<div class="relative overflow-hidden rounded-portfolio border border-border bg-surface p-5 shadow-panel md:p-6" aria-label="Portfolio capability architecture visual">
+  <div class="grid gap-3">
+    {layers.map((layer, index) => (
+      <div class="rounded-portfolio border border-border bg-elevated/72 p-4">
+        <div class="flex items-center justify-between gap-4">
+          <p class="text-sm font-semibold text-text">{layer.label}</p>
+          <span class="text-xs font-bold text-accent">0{index + 1}</span>
+        </div>
+        <p class="mt-2 text-sm leading-6 text-muted">{layer.value}</p>
+      </div>
+    ))}
+  </div>
+  <div class="mt-5 grid grid-cols-4 gap-2" aria-hidden="true">
+    {layers.map((_, index) => (
+      <div class="h-2 rounded-full bg-accent/25">
+        <div class="h-2 rounded-full bg-accent" style={`width: ${42 + index * 16}%`}></div>
+      </div>
+    ))}
+  </div>
+</div>

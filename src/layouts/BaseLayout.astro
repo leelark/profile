@@ -1,0 +1,113 @@
+---
+import NavControls from "@/components/NavControls";
+import { profile } from "@/lib/content";
+import { canonicalUrl, withBase } from "@/lib/paths";
+import "@/styles/global.css";
+
+type Props = {
+  title?: string;
+  description?: string;
+  path?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+};
+
+const {
+  title = "Leelark Saxena - Enterprise Appian Architect",
+  description = profile.homepageSummary,
+  path = "/",
+  structuredData
+} = Astro.props;
+
+const pageTitle = title.includes("Leelark") ? title : `${title} | Leelark Saxena`;
+const canonical = canonicalUrl(path);
+const socialImage = canonicalUrl("/og-image.svg");
+const normalizePath = (value: string) => {
+  const cleaned = value === "/" ? value : value.replace(/\/$/, "");
+  return cleaned || "/";
+};
+const currentPath = normalizePath(path);
+const navLinks = [
+  { path: "/", label: "Home" },
+  { path: "/work", label: "Work" },
+  { path: "/expertise", label: "Expertise" },
+  { path: "/plugins-and-accelerators", label: "Plugins" },
+  { path: "/about", label: "About" },
+  { path: "/resume", label: "Resume" },
+  { path: "/contact", label: "Contact" }
+].map((link) => ({
+  ...link,
+  href: withBase(link.path),
+  current: link.path === "/" ? currentPath === "/" : currentPath === link.path || currentPath.startsWith(`${link.path}/`)
+}));
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Leelark Saxena Portfolio" />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:alt" content="Leelark Saxena portfolio preview with enterprise Appian, AI workflow, plugin, and accelerator positioning." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="theme-color" content="#090a0e" />
+    <script is:inline>
+      const savedTheme = window.localStorage.getItem("theme");
+      document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dark";
+    </script>
+    {structuredData && (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="sticky top-0 z-40 border-b border-border bg-canvas/88 backdrop-blur">
+      <div class="shell flex min-h-[72px] items-center justify-between gap-4">
+        <a class="flex min-w-0 flex-col" href={withBase("/")}>
+          <span class="text-sm font-bold text-text">Leelark Saxena</span>
+          <span class="truncate text-xs text-muted">Enterprise Appian Architect</span>
+        </a>
+        <nav class="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
+          {navLinks.map((link) => (
+            <a
+              class:list={[
+                "rounded-portfolio px-3 py-2 text-sm font-semibold text-muted transition hover:bg-elevated hover:text-text",
+                link.current && "bg-elevated text-text"
+              ]}
+              href={link.href}
+              aria-current={link.current ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+        <NavControls links={navLinks} client:load />
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <footer class="border-t border-border py-10">
+      <div class="shell flex flex-col gap-4 text-sm text-muted md:flex-row md:items-center md:justify-between">
+        <p>Leelark Saxena - Enterprise Appian architecture, AI workflows, plugins, and accelerators.</p>
+        <div class="flex flex-wrap gap-3">
+          <a class="hover:text-text" href={withBase("/work")}>Work</a>
+          <a class="hover:text-text" href={withBase("/contact")}>Contact</a>
+          <a class="hover:text-text" href="mailto:leelarksaxena1997@outlook.com">Email</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

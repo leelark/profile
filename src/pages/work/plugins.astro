@@ -1,0 +1,17 @@
+---
+import ProjectCard from "@/components/ProjectCard.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { categoryDescriptions, projectsByCategory } from "@/lib/content";
+---
+
+<BaseLayout title="Plugins" description={categoryDescriptions.plugins} path="/work/plugins">
+  <section class="section-band">
+    <div class="shell">
+      <SectionHeader as="h1" eyebrow="Plugins" title="Custom Appian component innovation for document and HTML-heavy workflows." copy={categoryDescriptions.plugins} />
+      <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {projectsByCategory.plugins.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
