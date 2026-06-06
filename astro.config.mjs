@@ -34,6 +34,7 @@ const mergedAcceleratorSlugs = [
 ];
 const excludedProjectSlugs = [...legacyProjectSlugs, ...mergedAcceleratorSlugs];
 const basePath = "/profile/";
+const excludedSitemapPaths = [`${basePath}thanks/`];
 
 export default defineConfig({
   site: "https://leelark.github.io",
@@ -43,7 +44,9 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !excludedProjectSlugs.some((slug) => page.includes(`${basePath}work/${slug}/`))
+      filter: (page) =>
+        !excludedSitemapPaths.some((path) => page.includes(path)) &&
+        !excludedProjectSlugs.some((slug) => page.includes(`${basePath}work/${slug}/`))
     })
   ],
   vite: {

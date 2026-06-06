@@ -1,10 +1,11 @@
 ---
 import SectionHeader from "@/components/SectionHeader.astro";
+import TechnicalSkillGrid from "@/components/TechnicalSkillGrid";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { expertiseAreas, skills } from "@/lib/content";
+import { expertiseAreas, technicalSkillGroups } from "@/lib/content";
 import { breadcrumbStructuredData, personStructuredData, webPageStructuredData } from "@/lib/seo";
 
-const pageDescription = "Appian solution design, AI workflow automation, plugin development, enterprise UX, and platform governance expertise.";
+const pageDescription = "Appian solution design, workflow automation, plugin engineering, data integration, and platform governance expertise.";
 const structuredData = [
   personStructuredData(),
   webPageStructuredData({
@@ -19,23 +20,18 @@ const structuredData = [
 ];
 const lifecycle = [
   ["Discover", "process pain points, users, systems, documents"],
-  ["Architect", "records, process models, integrations, data"],
-  ["Design UX", "SAIL interfaces, grids, reviews, dashboards"],
-  ["Build", "Appian objects, plugins, AI skills, APIs"],
+  ["Solution Design", "workflow, data, controls, integration model"],
+  ["Build", "SAIL, records, process models, plugins, APIs"],
+  ["Integrate", "SQL, SFTP, web APIs, document flows"],
   ["Validate", "testing, security, performance, accessibility"],
   ["Scale", "governance, monitoring, accelerators, optimization"]
-];
-const skillGroups = [
-  ["Appian", skills.primary.slice(0, 10)],
-  ["Engineering", skills.secondary.slice(0, 6)],
-  ["Integration", skills.integrationAndAutomation.slice(0, 7)]
 ];
 ---
 
 <BaseLayout title="Expertise" description={pageDescription} path="/expertise" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Expertise" title="Solution design across the complete Appian delivery lifecycle." copy="I work from process discovery and architecture through SAIL implementation, AI workflow design, testing, optimization, and platform governance." />
+      <SectionHeader as="h1" eyebrow="Expertise" title="Solution design across the complete Appian delivery lifecycle." copy="I work from discovery to build, integration, validation, and platform scale. The focus is practical delivery, not tool lists." />
 
       <div class="mt-10 grid gap-3 md:grid-cols-3 lg:grid-cols-6">
         {lifecycle.map(([stage, copy], index) => (
@@ -51,17 +47,22 @@ const skillGroups = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Capability lanes" title="Architecture, AI, plugins, UX, automation, and platform health in one Appian operating model." />
+      <SectionHeader eyebrow="Capability lanes" title="A visual map of how the work is delivered." copy="Each lane connects business intent, Appian build depth, reusable assets, and operating controls." />
       <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {expertiseAreas.map((area, index) => (
-          <article class="glass-panel p-5">
-            <div class="flex items-start justify-between gap-4">
-              <h2 class="text-xl font-semibold text-text">{area.title}</h2>
-              <span class="rounded-full border border-accent/35 bg-accentSoft px-3 py-1 text-xs font-bold text-accent">0{index + 1}</span>
+          <article class="capability-lane-card">
+            <div class="capability-lane-visual" aria-hidden="true">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <i></i>
+                <i></i>
+                <i></i>
+              </div>
             </div>
-            <p class="mt-4 text-sm leading-7 text-muted">{area.summary}</p>
-            <div class="mt-5 flex flex-wrap gap-2">
-              {area.capabilities.slice(0, 5).map((capability) => <span class="chip text-[0.72rem]">{capability}</span>)}
+            <h2>{area.title}</h2>
+            <p>{area.summary}</p>
+            <div class="mt-5 grid gap-2">
+              {area.capabilities.slice(0, 4).map((capability) => <span class="capability-line">{capability}</span>)}
             </div>
           </article>
         ))}
@@ -70,15 +71,11 @@ const skillGroups = [
   </section>
 
   <section class="section-band border-t border-border">
-    <div class="shell grid gap-4 lg:grid-cols-3">
-      {skillGroups.map(([group, items]) => (
-        <article class="rounded-portfolio border border-border bg-surface/74 p-5">
-          <h2 class="text-xl font-semibold text-text">{group}</h2>
-          <div class="mt-5 flex flex-wrap gap-2">
-            {(items as string[]).map((item) => <span class="chip">{item}</span>)}
-          </div>
-        </article>
-      ))}
+    <div class="shell">
+      <SectionHeader eyebrow="Technical skill map" title="Platform, programming, data, integration, and governance skills." />
+      <div class="mt-8">
+        <TechnicalSkillGrid groups={technicalSkillGroups} compact />
+      </div>
     </div>
   </section>
 </BaseLayout>

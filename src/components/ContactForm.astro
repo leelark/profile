@@ -1,6 +1,4 @@
 ---
-import { contact } from "@/lib/content";
-
 const redirect = "https://leelark.github.io/profile/thanks/";
 ---
 
@@ -31,11 +29,8 @@ const redirect = "https://leelark.github.io/profile/thanks/";
       <input id="contact-company" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="company" autocomplete="organization" maxlength="140" />
     </label>
     <label class="grid gap-2">
-      <span class="text-sm font-semibold text-text">Inquiry type <span class="text-accent">(required)</span></span>
-      <select id="contact-inquiry-type" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="inquiry_type" required>
-        <option value="">Select an inquiry type</option>
-        {contact.inquiryTypes.map((type) => <option value={type}>{type}</option>)}
-      </select>
+      <span class="text-sm font-semibold text-text">Role or context</span>
+      <input id="contact-context" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="context" autocomplete="off" maxlength="140" />
     </label>
   </div>
 

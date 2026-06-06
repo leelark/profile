@@ -18,9 +18,8 @@ const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug
 const pluginCards = portfolioProjectsByCategory.plugins.map(projectToCard);
 const standaloneAcceleratorCards = standaloneAccelerators.map(projectToCard);
 const appianAccelerate = projects.find((project) => project.slug === "appian-accelerate-program");
-const appianAccelerateHref = withBase(`/work/${appianAccelerate?.publicSlug ?? "appian-accelerate-program"}`);
 const pageDescription =
-  "Reusable Appian plugins, component patterns, and Appian Accelerate workstreams for workflow automation, AI, document intelligence, and platform governance.";
+  "Reusable Appian plugins, component patterns, and accelerator workstreams for workflow automation, document intelligence, integration, and platform governance.";
 const structuredData = collectionPageStructuredData({
   name: "Plugins and Accelerators - Leelark Saxena",
   description: pageDescription,
@@ -104,14 +103,14 @@ const pluginPillars = [
       <div>
         <p class="eyebrow mb-4">Plugins and Accelerators</p>
         <h1 class="text-balance text-4xl font-semibold leading-tight text-text md:text-6xl">
-          Reusable Appian assets for plugins, AI workflows, and delivery acceleration.
+          Reusable Appian assets for plugins, workflow delivery, and platform acceleration.
         </h1>
         <p class="mt-6 text-lg leading-8 text-muted">
-          This page groups productized Appian component work with the Appian Accelerate accelerator suite, making the reusable value visible without exposing private client implementation details.
+          This page groups productized Appian component work with accelerator patterns. It shows reusable value without exposing private client implementation details.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a class="primary-button" href={appianAccelerateHref}>View Appian Accelerate</a>
           <a class="quiet-button" href={withBase("/work/plugins")}>Browse plugins</a>
+          <a class="primary-button" href={withBase("/work/accelerators")}>Browse accelerators</a>
         </div>
       </div>
 
@@ -132,7 +131,7 @@ const pluginPillars = [
           </div>
         </dl>
         <p class="mt-6 text-sm leading-7 text-muted">
-          Accelerator details remain anchored to Appian Accelerate where appropriate, while distinct platform-health workstreams are available as standalone case studies.
+          Accelerator details are grouped into capability families so platform, delivery, integration, and governance value is easier to scan.
         </p>
       </aside>
     </div>
@@ -141,7 +140,7 @@ const pluginPillars = [
   <section class="section-band border-t border-border">
     <div class="shell">
       <SectionHeader eyebrow="Plugin library" title="Custom Appian components for document-heavy and interaction-heavy workflow experiences." copy="These plugins frame Leelark as a hands-on component developer who can extend Appian when standard interface patterns are not enough." />
-      <div class="mt-8 grid gap-4 lg:grid-cols-[0.76fr_1.24fr]">
+      <div class="mt-8 grid items-start gap-4 lg:grid-cols-[0.76fr_1.24fr]">
         <div class="rounded-portfolio border border-border bg-surface/74 p-5">
           <p class="eyebrow">Reusable plugin value</p>
           <ul class="mt-4 grid gap-3 text-sm leading-6 text-muted">
@@ -160,7 +159,7 @@ const pluginPillars = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Appian Accelerate" title="Accelerator workstreams grouped as one advisory and delivery capability suite." copy="The grouping supports the portfolio story: repeated platform problems become reusable Appian patterns, operating-model guidance, and implementation accelerators." />
+      <SectionHeader eyebrow="Accelerator library" title="Reusable workstreams grouped as one advisory and delivery capability suite." copy="Repeated platform problems become reusable Appian patterns, operating-model guidance, and implementation accelerators." />
       <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {acceleratorGroups.map((group, index) => (
           <article class="glass-panel p-5">
@@ -178,11 +177,10 @@ const pluginPillars = [
           </article>
         ))}
       </div>
-      <div class="mt-8 rounded-portfolio border border-border bg-surface/74 p-5 md:flex md:items-center md:justify-between md:gap-6">
+      <div class="mt-8 rounded-portfolio border border-border bg-surface/74 p-5">
         <p class="text-sm leading-7 text-muted">
-          The full Appian Accelerate case study carries the program-level narrative, advisory model, accelerator catalog, and reusable workstream positioning.
+          The accelerator suite is presented as a portfolio-ready library. Each workstream is framed around the reusable problem it solves, the Appian capability it strengthens, and the operating value it can create.
         </p>
-        <a class="quiet-button mt-4 md:mt-0" href={appianAccelerateHref}>Open Appian Accelerate</a>
       </div>
     </div>
   </section>

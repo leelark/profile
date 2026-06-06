@@ -96,9 +96,12 @@ export function projectItemListStructuredData(projects: ProjectDetail[]): Struct
     itemListElement: projects.map((project, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      url: canonicalUrl(`/work/${project.publicSlug}`),
-      name: project.title,
-      description: project.heroExcerpt
+      item: {
+        "@type": "CreativeWork",
+        name: project.title,
+        description: project.heroExcerpt,
+        genre: project.category
+      }
     }))
   });
 }

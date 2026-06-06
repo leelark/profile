@@ -5,7 +5,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { contact } from "@/lib/content";
 import { breadcrumbStructuredData, personStructuredData, webPageStructuredData } from "@/lib/seo";
 
-const pageDescription = "Contact Leelark Saxena for Appian architecture, AI workflow, plugin, and enterprise automation work.";
+const pageDescription = "Contact Leelark Saxena for Appian solution design, workflow automation, plugin engineering, and enterprise delivery work.";
 const structuredData = [
   personStructuredData(),
   webPageStructuredData({
@@ -25,15 +25,21 @@ const structuredData = [
   <section class="section-band">
     <div class="shell grid gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
       <div>
-        <SectionHeader as="h1" eyebrow="Contact" title="Discuss Appian architecture, AI workflow automation, or plugin development." />
+        <SectionHeader as="h1" eyebrow="Contact" title="Discuss Appian solution design, workflow automation, or plugin engineering." copy="Share the business context, delivery goal, or Appian challenge. Keep sensitive project data out of the message." />
         <div class="mt-7 grid gap-3">
-          <div class="purple-frame rounded-portfolio p-4">
-            <p class="text-xs font-bold uppercase text-muted">Best fit</p>
-            <p class="mt-2 text-sm leading-6 text-text">Appian consulting, solution architecture, plugin/component work, AI workflow design, and enterprise automation POCs.</p>
-          </div>
           <div class="rounded-portfolio border border-border bg-surface/72 p-4">
             <p class="text-xs font-bold uppercase text-muted">Email</p>
             <a class="mt-2 block text-sm font-semibold text-text hover:text-accent" href={`mailto:${contact.email}`}>{contact.email}</a>
+          </div>
+          <div class="rounded-portfolio border border-border bg-surface/72 p-4">
+            <p class="text-xs font-bold uppercase text-muted">Location</p>
+            <p class="mt-2 text-sm font-semibold text-text">{contact.location}</p>
+          </div>
+          <div class="contact-signal-panel">
+            <span>Workflow automation</span>
+            <span>Appian delivery</span>
+            <span>Custom plugins</span>
+            <span>Data and integration</span>
           </div>
         </div>
       </div>

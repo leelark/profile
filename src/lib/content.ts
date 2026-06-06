@@ -1,5 +1,4 @@
 import { excerpt, renderMarkdown, slugify, splitBullets, splitParagraphs, stripMarkdown } from "./markdown";
-import { projectPath } from "./paths";
 
 export type ProjectCategory = "Client Projects" | "Plugins" | "Innovative Projects" | "Accelerators";
 export type CategorySlug = "client-projects" | "plugins" | "innovative-projects" | "accelerators";
@@ -49,10 +48,8 @@ export type ProjectCardPayload = {
   role: string;
   domain: string;
   tags: string[];
-  href: string;
   workflowSteps: string[];
   acceleratorHighlights: string[];
-  parentProgram?: string;
   keyFeatures: string[];
   businessValue: string[];
   technologies: string[];
@@ -102,6 +99,17 @@ export type Certification = {
   websiteCopy: string;
 };
 
+export type TechnicalSkill = {
+  name: string;
+  note: string;
+};
+
+export type TechnicalSkillGroup = {
+  title: string;
+  summary: string;
+  skills: TechnicalSkill[];
+};
+
 const projectModules = import.meta.glob<string>("../../portfolio-content/projects/**/*.md", {
   query: "?raw",
   import: "default",
@@ -123,7 +131,7 @@ export const categoryLabels: Record<CategorySlug, ProjectCategory> = {
 export const categoryDescriptions: Record<CategorySlug, string> = {
   "client-projects": "Enterprise client delivery, advisory, workflow modernization, and Appian architecture work.",
   plugins: "Custom Appian component and plugin innovation for document, HTML, PDF, and interaction-heavy use cases.",
-  "innovative-projects": "AI-powered POCs and product-style experiments across claims, knowledge discovery, government services, and workflow automation.",
+  "innovative-projects": "Product-style POCs across claims, knowledge discovery, government services, decisioning, and workflow automation.",
   accelerators: "Reusable Appian patterns, advisory playbooks, performance reviews, grid systems, integration guidance, and platform-health accelerators."
 };
 
@@ -414,20 +422,78 @@ export const profile: Profile = {
   aboutClosingCopy: sectionPlain(profileDetailRaw, "About Page Closing Copy")
 };
 
+const expertiseAreaOverrides: Record<string, Partial<ExpertiseArea>> = {
+  "Enterprise Solution Design": {
+    summary: "I shape Appian solutions around business outcomes, process clarity, data structure, controls, and delivery sequencing.",
+    capabilities: ["requirements to solution scope", "process and data architecture", "security and governance model", "delivery roadmap"]
+  },
+  "Workflow Automation": {
+    summary: "I build enterprise workflows that move work from intake to resolution with clear tasks, routing, exceptions, and traceability.",
+    capabilities: ["intake to resolution flow", "task routing and exceptions", "reporting and traceability", "operational handoff"]
+  },
+  "AI and Document Intelligence": {
+    summary: "I use AI where it improves document handling, decision support, evidence review, and knowledge discovery inside governed workflows.",
+    capabilities: ["document extraction", "classification and routing", "evidence-backed review", "human approval controls"]
+  },
+  "Plugin Engineering": {
+    summary: "I extend Appian with custom component and smart service plugin patterns for document, HTML, highlighting, and event-driven use cases.",
+    capabilities: ["custom SAIL component plugins", "custom smart service plugins", "document viewer patterns", "value bridge and events"]
+  },
+  "Platform Health and Governance": {
+    summary: "I support platform reviews through metrics, logs, performance triage, deployment control, and reusable governance guidance.",
+    capabilities: ["health check review", "metrics and log analysis", "performance triage", "governance review"]
+  }
+};
+
 export const expertiseAreas: ExpertiseArea[] = [
-  "Enterprise Appian Architecture",
-  "AI Solution Design",
-  "Workflow Automation",
-  "Plugin and Component Development",
-  "Enterprise UX",
-  "Performance, Platform Health, and Governance"
-].map((title) => {
-  const body = expertiseRaw.match(new RegExp(`(?:^|\\n)### ${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\n([\\s\\S]*?)(?=\\n### |\\n## |$)`))?.[1] ?? "";
+  {
+    title: "Enterprise Solution Design",
+    sourceTitle: "Enterprise Appian Architecture"
+  },
+  {
+    title: "Workflow Automation",
+    sourceTitle: "Workflow Automation"
+  },
+  {
+    title: "AI and Document Intelligence",
+    sourceTitle: "AI Solution Design"
+  },
+  {
+    title: "Plugin Engineering",
+    sourceTitle: "Plugin and Component Development"
+  },
+  {
+    title: "Integration and Data Modeling",
+    sourceTitle: ""
+  },
+  {
+    title: "Platform Health and Governance",
+    sourceTitle: "Performance, Platform Health, and Governance"
+  }
+].map(({ title, sourceTitle }) => {
+  if (!sourceTitle) {
+    return {
+      title,
+      summary:
+        "I connect Appian records, database design, APIs, SFTP, SQL, reporting, and operational data flows into reliable enterprise systems.",
+      capabilities: [
+        "data modeling",
+        "record-centric design",
+        "SQL and stored procedures",
+        "REST and Web APIs",
+        "SFTP and file automation",
+        "reporting and reconciliation"
+      ]
+    };
+  }
+
+  const body = expertiseRaw.match(new RegExp(`(?:^|\\n)### ${sourceTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\n([\\s\\S]*?)(?=\\n### |\\n## |$)`))?.[1] ?? "";
   const summary = body.match(/^Content for website:\s*\n\n([\s\S]*?)(?=^Capabilities:)/m)?.[1] ?? body;
+  const override = expertiseAreaOverrides[title];
   return {
     title,
-    summary: stripMarkdown(summary),
-    capabilities: splitBullets(body.match(/^Capabilities:\s*\n([\s\S]*)/m)?.[1] ?? "")
+    summary: override?.summary ?? stripMarkdown(summary),
+    capabilities: override?.capabilities ?? splitBullets(body.match(/^Capabilities:\s*\n([\s\S]*)/m)?.[1] ?? "")
   };
 });
 
@@ -436,6 +502,61 @@ export const skills = {
   secondary: splitBullets(expertiseRaw.match(/^Secondary Skills:\s*\n([\s\S]*?)(?=^Integration and Automation:)/m)?.[1] ?? ""),
   integrationAndAutomation: splitBullets(expertiseRaw.match(/^Integration and Automation:\s*\n([\s\S]*?)(?=\n## |$)/m)?.[1] ?? "")
 };
+
+export const technicalSkillGroups: TechnicalSkillGroup[] = [
+  {
+    title: "Appian Platform",
+    summary: "Solution design, workflow delivery, data modeling, custom SAIL component plugins, and custom smart service plugins.",
+    skills: [
+      { name: "Appian", note: "enterprise application platform" },
+      { name: "Workflow Automation", note: "process design and delivery" },
+      { name: "Data Modeling", note: "records, relational data, reporting" },
+      { name: "Appian AI", note: "document and decision support" },
+      { name: "Custom SAIL Plugin", note: "component extension patterns" },
+      { name: "Custom Smart Service Plugin", note: "Java-backed process extensions" }
+    ]
+  },
+  {
+    title: "Engineering",
+    summary: "Application logic, plugin development, UI implementation, backend services, and programming fundamentals.",
+    skills: [
+      { name: "JavaScript", note: "components and browser behavior" },
+      { name: "Java", note: "plugins and backend logic" },
+      { name: "HTML/CSS", note: "interface implementation" },
+      { name: "Node.js", note: "tooling and services" },
+      { name: "PHP", note: "web application foundation" },
+      { name: "Spring", note: "Java service framework" },
+      { name: "C/C++", note: "programming foundation" },
+      { name: "R", note: "analysis foundation" }
+    ]
+  },
+  {
+    title: "Data and Integration",
+    summary: "Enterprise data access, file automation, API connectivity, document processing, and operational reporting.",
+    skills: [
+      { name: "SQL", note: "queries and data operations" },
+      { name: "MS SQL Server", note: "enterprise relational database" },
+      { name: "MySQL", note: "database-backed Appian work" },
+      { name: "REST APIs", note: "system connectivity" },
+      { name: "Web APIs", note: "Appian service exposure" },
+      { name: "SFTP", note: "managed file exchange" },
+      { name: "Excel/CSV Automation", note: "import and export flows" },
+      { name: "PDF Processing", note: "document workflows" }
+    ]
+  },
+  {
+    title: "Delivery and Governance",
+    summary: "Requirements, testing, performance review, deployment control, platform health, and reusable accelerator design.",
+    skills: [
+      { name: "Requirement Analysis", note: "scope and process clarity" },
+      { name: "Solution Design", note: "architecture and delivery model" },
+      { name: "Testing", note: "validation and quality control" },
+      { name: "Performance Review", note: "logs, metrics, triage" },
+      { name: "Governance", note: "dependencies and standards" },
+      { name: "Accelerator Design", note: "reusable delivery assets" }
+    ]
+  }
+];
 
 function parseExperience(company: string): ExperienceItem {
   const body = experienceRaw.match(new RegExp(`(?:^|\\n)### ${company.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\n([\\s\\S]*?)(?=\\n### |\\n## |$)`))?.[1] ?? "";
@@ -527,7 +648,7 @@ export const stats = [
   { label: "Experience", value: "6+ years" },
   { label: "Portfolio items", value: `${portfolioProjects.length}` },
   { label: "Accelerator suite", value: `${acceleratorSuiteProjects.length}+` },
-  { label: "Core stack", value: "Appian + AI" }
+  { label: "Core focus", value: "Appian delivery" }
 ];
 
 export const renderedProfile = {
@@ -549,13 +670,11 @@ export function projectToCard(project: ProjectDetail): ProjectCardPayload {
     role: project.role,
     domain: project.domain,
     tags: project.tags,
-    href: projectPath(project.publicSlug),
     workflowSteps: workflowStepsFor(project),
     acceleratorHighlights:
       project.slug === "appian-accelerate-program"
         ? acceleratorSuiteProjects.slice(0, 9).map((item) => item.title)
         : [],
-    parentProgram: project.category === "Accelerators" ? "Appian Accelerate Program" : undefined,
     keyFeatures: project.keyFeatures.slice(0, 6),
     businessValue: project.businessValue.slice(0, 5),
     technologies: project.technologies.slice(0, 8),

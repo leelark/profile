@@ -1,48 +1,51 @@
 ---
 import HeroVisual from "@/components/HeroVisual.astro";
-import ProjectExplorer from "@/components/ProjectExplorer";
 import SectionHeader from "@/components/SectionHeader.astro";
+import TechnicalSkillGrid from "@/components/TechnicalSkillGrid";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { certifications, categoryLabels, featuredProjects, profile, projectToCard, publication, skills } from "@/lib/content";
+import { certifications, publication, technicalSkillGroups } from "@/lib/content";
 import { withBase } from "@/lib/paths";
 import { personStructuredData, websiteStructuredData } from "@/lib/seo";
 
 const structuredData = [personStructuredData(), websiteStructuredData()];
 
-const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
-const featuredCards = featuredProjects.map(projectToCard);
 const heroSummary =
-  "Appian Solution Architect and Certified Lead Developer designing enterprise workflows, Appian AI experiences, custom plugins, reusable accelerators, and scalable automation platforms.";
+  "Enterprise Appian Solution Architect and Certified Lead Developer designing workflow platforms, data models, integrations, custom plugins, and AI-assisted experiences where they create clear business value.";
 const whatIDo = [
   {
-    title: "Requirement Analysis",
-    copy: "I convert business problems, stakeholder constraints, and process gaps into clear Appian solution scope, data needs, and delivery priorities."
-  },
-  {
-    title: "Appian Solution Design",
-    copy: "I shape Records, data models, process models, integrations, reports, security, governance, and reusable application structure."
+    title: "Solution Design",
+    copy: "Clear requirements, process boundaries, data structures, user roles, and delivery priorities before build starts."
   },
   {
     title: "Workflow Automation",
-    copy: "I build process automation across approvals, claims, documents, task management, exceptions, escalations, and operational handoffs."
+    copy: "Reliable Appian workflows for approvals, claims, documents, exceptions, escalations, and operational handoffs."
   },
   {
-    title: "Appian AI and Plugins",
-    copy: "I extend Appian with AI-assisted knowledge discovery, document intelligence, component plugins, smart services, and evidence-driven UX."
+    title: "Plugin Engineering",
+    copy: "Custom SAIL component plugins and smart service plugin thinking for use cases that need Appian extension."
+  },
+  {
+    title: "Platform Governance",
+    copy: "Reusable accelerators, performance reviews, deployment guidance, and standards that help teams scale safely."
   }
 ];
-const lifecycle = ["Analyze", "Model", "Design", "Automate", "Integrate", "Govern"];
-const architecturePlates = [
-  { id: "01", label: "Appian Records", value: "data model", tone: "text-blueSignal" },
-  { id: "02", label: "Process Models", value: "workflow", tone: "text-accent" },
-  { id: "03", label: "AI Skills", value: "intelligence", tone: "text-verified" },
-  { id: "04", label: "Plugins", value: "extension", tone: "text-caution" }
+const operatingLayers = [
+  { title: "Business Intake", items: ["process goals", "users", "rules"], tone: "blue" },
+  { title: "Appian Experience", items: ["SAIL", "records", "reports"], tone: "purple" },
+  { title: "Process Orchestration", items: ["tasks", "routing", "exceptions"], tone: "green" },
+  { title: "Data and Integration", items: ["data modeling", "SQL", "APIs / SFTP"], tone: "blue" },
+  { title: "Extension Layer", items: ["custom SAIL plugin", "smart service plugin", "AI when useful"], tone: "amber" },
+  { title: "Governance", items: ["testing", "performance", "deployment"], tone: "neutral" }
 ];
-const publicSkills = [
-  ...skills.primary.slice(0, 11),
-  ...skills.secondary.filter((skill) => ["JavaScript", "Java", "HTML/CSS", "Node.js"].includes(skill)),
-  ...skills.integrationAndAutomation.slice(0, 5)
-].slice(0, 20);
+const domainCards = [
+  { title: "Banking", copy: "Regulatory workflow, alert triage, auditability, and platform modernization." },
+  { title: "Investment Management", copy: "AML, change management, reconciliation, and operational reporting." },
+  { title: "Insurance", copy: "Claims intake, routing, evidence review, and decision-support flows." },
+  { title: "Healthcare", copy: "Revenue-cycle and document-heavy workflow automation concepts." },
+  { title: "Manufacturing", copy: "Traceability, operational records, and exception handling." },
+  { title: "Enterprise Advisory", copy: "Platform health, governance, performance, and reusable accelerator guidance." },
+  { title: "Public-Sector POCs", copy: "Citizen-service style journeys, document handling, and eligibility review." }
+];
 ---
 
 <BaseLayout title="Leelark Saxena - Appian Solution Architect and Developer" description={heroSummary} path="/" structuredData={structuredData}>
@@ -54,10 +57,10 @@ const publicSkills = [
           Leelark Saxena
         </h1>
         <p class="mt-5 text-balance text-2xl font-semibold leading-tight text-text/94 md:text-3xl">
-          I design and deliver enterprise Appian solutions across requirements, architecture, development, workflow automation, AI, and custom plugins.
+          I design Appian platforms that make enterprise workflows clearer, faster, and easier to operate.
         </p>
         <p class="mt-6 max-w-2xl text-base leading-8 text-muted md:text-lg">
-          {heroSummary} My work connects product thinking, enterprise architecture, Appian implementation, and practical governance so complex workflows become reliable business systems.
+          {heroSummary} The work spans solution design, hands-on build, reusable accelerators, and practical governance for regulated business operations.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <a class="primary-button" href={withBase("/work")}>Explore work</a>
@@ -74,7 +77,7 @@ const publicSkills = [
           </div>
           <div class="proof-tile">
             <dt>Depth</dt>
-            <dd>AI + Plugins</dd>
+            <dd>Plugins and AI</dd>
           </div>
         </dl>
       </div>
@@ -86,7 +89,7 @@ const publicSkills = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="What I do" title="I turn complex Appian delivery into clear architecture, usable workflows, and reusable assets." />
+      <SectionHeader eyebrow="What I do" title="Practical Appian delivery across design, build, automation, and governance." />
       <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {whatIDo.map((item, index) => (
           <article class="capability-card p-5">
@@ -100,39 +103,28 @@ const publicSkills = [
   </section>
 
   <section class="section-band border-t border-border">
-    <div class="shell grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+    <div class="shell">
       <div>
-        <SectionHeader eyebrow="Appian operating model" title="A structured delivery system for solution design, workflow automation, AI, and platform governance." copy="The architecture visual is intentionally lower on the page: it supports the story after the role and value proposition are clear." />
-        <div class="mt-8 grid gap-3 sm:grid-cols-2">
-          {architecturePlates.map((plate) => (
-            <div class="architecture-plate">
-              <p class:list={["text-xs font-bold uppercase", plate.tone]}>{plate.id} / {plate.value}</p>
-              <p class="mt-2 text-base font-semibold text-text">{plate.label}</p>
-            </div>
-          ))}
-        </div>
-        <div class="mt-7 grid gap-2 md:grid-cols-6">
-          {lifecycle.map((stage, index) => (
-            <div class="lifecycle-node">
-              <p class="text-[0.68rem] font-bold uppercase text-muted">Step {index + 1}</p>
-              <p class="mt-1 text-sm font-semibold text-text">{stage}</p>
-            </div>
-          ))}
-        </div>
+        <SectionHeader eyebrow="Appian operating model" title="A complete delivery model for workflow, data, integration, plugins, and governance." copy="Appian is strongest when process, data, user experience, integrations, and controls are designed together. AI belongs inside that model when it improves decisions, document handling, or knowledge discovery." />
       </div>
-      <div class="architecture-showcase">
-        <div class="architecture-fallback" aria-hidden="true">
-          <span class="architecture-line architecture-line-1"></span>
-          <span class="architecture-line architecture-line-2"></span>
-          <span class="architecture-line architecture-line-3"></span>
-          <span class="architecture-node architecture-node-1"></span>
-          <span class="architecture-node architecture-node-2"></span>
-          <span class="architecture-node architecture-node-3"></span>
-          <span class="architecture-node architecture-node-4"></span>
-          <span class="architecture-node architecture-node-5"></span>
+      <div class="operating-model mt-9">
+        <div class="operating-model-rail" aria-hidden="true">
+          <span>01</span>
+          <span>02</span>
+          <span>03</span>
+          <span>04</span>
+          <span>05</span>
+          <span>06</span>
         </div>
-        <div class="pointer-events-none absolute left-4 top-4 rounded-portfolio border border-border bg-surface/80 px-3 py-2 text-xs font-bold uppercase text-muted backdrop-blur">
-          Appian + AI delivery map
+        <div class="operating-model-grid">
+          {operatingLayers.map((layer) => (
+            <article class:list={["operating-layer", `operating-layer-${layer.tone}`]}>
+              <h2>{layer.title}</h2>
+              <div>
+                {layer.items.map((item) => <span>{item}</span>)}
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </div>
@@ -140,22 +132,19 @@ const publicSkills = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Featured work" title="Click any work item to open a focused project detail view." copy="Each popup includes an architecture/workflow visual and an expandable detail section for deeper review." />
-      <div class="mt-9">
-        <ProjectExplorer projects={featuredCards} categories={categories} showFilters={false} compact client:load />
+      <div>
+        <SectionHeader eyebrow="Technical skills" title="A full-stack Appian skill set without raw object inventory." copy="The skill map groups the platform, programming, data, integration, and delivery capabilities that show up across the portfolio." />
+        <div class="mt-8">
+          <TechnicalSkillGrid groups={technicalSkillGroups} />
+        </div>
       </div>
     </div>
   </section>
 
   <section class="section-band border-t border-border">
-    <div class="shell grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-      <div>
-        <SectionHeader eyebrow="Technical skills" title="Appian-first skill set with integration, automation, AI, and plugin depth." />
-        <div class="mt-7 flex flex-wrap gap-2">
-          {publicSkills.map((skill) => <span class="chip">{skill}</span>)}
-        </div>
-      </div>
-      <div class="grid gap-4 md:grid-cols-2">
+    <div class="shell">
+      <SectionHeader eyebrow="Credentials" title="Certification and research foundation." />
+      <div class="mt-8 grid gap-4 md:grid-cols-2">
         <article class="glass-panel p-5">
           <h2 class="text-xl font-semibold text-text">Certifications</h2>
           <div class="mt-4 space-y-3">
@@ -179,10 +168,13 @@ const publicSkills = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Domains" title="Enterprise contexts where I apply Appian architecture and automation." />
-      <div class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {profile.domains.slice(0, 8).map((domain) => (
-          <div class="rounded-portfolio border border-border bg-surface/72 p-4 text-sm font-semibold text-text">{domain}</div>
+      <SectionHeader eyebrow="Domains" title="Enterprise contexts where the Appian delivery model applies." />
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {domainCards.map((domain) => (
+          <article class="domain-card">
+            <h2>{domain.title}</h2>
+            <p>{domain.copy}</p>
+          </article>
         ))}
       </div>
     </div>

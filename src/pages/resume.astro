@@ -5,13 +5,6 @@ import { certifications, education, experience, publication } from "@/lib/conten
 import { breadcrumbStructuredData, personStructuredData, webPageStructuredData } from "@/lib/seo";
 
 const pageDescription = "Compact professional resume for Leelark Saxena, Appian Solution Architect and Developer.";
-const compactExperience = experience.map((item) => ({
-  company: item.company,
-  role: item.role,
-  period: item.period,
-  summary: item.positioning || item.resumeCopy
-}));
-const primaryEducation = education[0];
 const structuredData = [
   personStructuredData(),
   webPageStructuredData({
@@ -30,11 +23,26 @@ const structuredData = [
 <BaseLayout title="Resume" description={pageDescription} path="/resume" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Resume" title="Appian Solution Architect and Developer with enterprise workflow, AI, and plugin delivery experience." />
+      <SectionHeader as="h1" eyebrow="Resume" title="Enterprise Appian delivery experience, built for quick recruiter review." copy="A concise view of consulting roles, Appian delivery depth, education, certifications, and research foundation." />
+
+      <div class="mt-8 grid gap-3 sm:grid-cols-3">
+        <div class="proof-tile">
+          <dt>Experience</dt>
+          <dd>6+ years</dd>
+        </div>
+        <div class="proof-tile">
+          <dt>Certification</dt>
+          <dd>Appian L3</dd>
+        </div>
+        <div class="proof-tile">
+          <dt>Focus</dt>
+          <dd>Solution Design</dd>
+        </div>
+      </div>
 
       <div class="mt-10 grid gap-4">
-        {compactExperience.map((item, index) => (
-          <article class="glass-panel grid gap-4 p-5 md:grid-cols-[150px_1fr] md:items-start">
+        {experience.map((item, index) => (
+          <article class="resume-experience-card">
             <div>
               <p class="text-xs font-bold uppercase text-accent">0{index + 1}</p>
               <p class="mt-2 text-sm font-semibold text-muted">{item.period}</p>
@@ -44,7 +52,27 @@ const structuredData = [
                 <h2 class="text-2xl font-semibold text-text">{item.role}</h2>
                 <p class="text-sm font-bold text-accent">{item.company}</p>
               </div>
-              <p class="mt-4 max-w-4xl text-sm leading-7 text-muted">{item.summary}</p>
+              <p class="mt-4 max-w-4xl text-sm leading-7 text-muted">{item.positioning || item.resumeCopy}</p>
+              <div class="mt-5 grid gap-4 lg:grid-cols-2">
+                {item.responsibilities.length > 0 && (
+                  <div>
+                    <p class="text-xs font-bold uppercase text-muted">Core responsibility</p>
+                    <ul class="mt-3 grid gap-2 text-sm leading-6 text-muted">
+                      {item.responsibilities.slice(0, 4).map((point) => (
+                        <li class="resume-list-item"><span aria-hidden="true"></span><p>{point}</p></li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {item.representativeWork.length > 0 && (
+                  <div>
+                    <p class="text-xs font-bold uppercase text-muted">Representative work</p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      {item.representativeWork.slice(0, 5).map((work) => <span class="chip text-[0.72rem]">{work.replace(/\.$/, "")}</span>)}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </article>
         ))}
@@ -53,14 +81,25 @@ const structuredData = [
   </section>
 
   <section class="section-band border-t border-border">
-    <div class="shell grid gap-4 lg:grid-cols-3">
-      <article class="purple-frame rounded-portfolio p-5">
-        <h2 class="text-xl font-semibold text-text">Education</h2>
-        <p class="mt-4 text-base font-semibold text-text">{primaryEducation.qualification}</p>
-        <p class="mt-2 text-sm leading-6 text-muted">{primaryEducation.institution}</p>
-        <p class="mt-2 text-sm font-bold text-accent">{primaryEducation.year} / {primaryEducation.score}</p>
-      </article>
+    <div class="shell">
+      <SectionHeader eyebrow="Education" title="Academic foundation across engineering, higher secondary, and secondary education." />
+      <div class="education-track mt-8">
+        {education.map((item, index) => (
+          <article class="education-card">
+            <span class="education-step">{index + 1}</span>
+            <div>
+              <h2>{item.qualification}</h2>
+              <p>{item.institution}</p>
+              <strong>{item.year} / {item.score}</strong>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
 
+  <section class="section-band border-t border-border">
+    <div class="shell grid gap-4 lg:grid-cols-2">
       <article class="purple-frame rounded-portfolio p-5">
         <h2 class="text-xl font-semibold text-text">Certifications</h2>
         <p class="mt-4 text-base font-semibold text-text">Appian Certified Lead Developer / Level 3</p>
@@ -77,7 +116,8 @@ const structuredData = [
       <article class="purple-frame rounded-portfolio p-5">
         <h2 class="text-xl font-semibold text-text">Publication</h2>
         <p class="mt-4 text-sm font-semibold leading-6 text-text">{publication.title}</p>
-        <p class="mt-3 text-sm leading-6 text-muted">{publication.publicNote}</p>
+        <p class="mt-3 text-sm leading-6 text-muted">{publication.websiteCopy}</p>
+        <p class="mt-3 text-xs font-semibold leading-5 text-muted">{publication.publicNote}</p>
       </article>
     </div>
   </section>
