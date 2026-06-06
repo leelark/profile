@@ -28,9 +28,10 @@ export default function ArchitectScene() {
     const camera = new PerspectiveCamera(45, 1, 0.1, 100);
     camera.position.set(0, 0.2, 7);
 
-    const renderer = new WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+    const renderer = new WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x120c18, 0.18);
+    renderer.domElement.setAttribute("aria-hidden", "true");
     renderer.domElement.style.display = "block";
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
@@ -100,6 +101,7 @@ export default function ArchitectScene() {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
+      if (reduceMotion) renderer.render(scene, camera);
     };
 
     resize();
@@ -124,7 +126,11 @@ export default function ArchitectScene() {
       animationId = window.requestAnimationFrame(animate);
     };
 
-    animate();
+    if (reduceMotion) {
+      renderer.render(scene, camera);
+    } else {
+      animate();
+    }
 
     return () => {
       window.cancelAnimationFrame(animationId);
@@ -148,6 +154,7 @@ export default function ArchitectScene() {
   return (
     <div
       ref={containerRef}
+      role="img"
       className="h-[280px] w-full md:h-[340px]"
       aria-label="Animated 3D architecture network showing Appian, AI, plugins, workflows, and governance layers"
     />

@@ -68,6 +68,12 @@ const structuredData = [
         </div>
         <h1 class="mt-6 text-balance text-4xl font-semibold leading-tight text-text md:text-6xl">{project.title}</h1>
         <p class="mt-6 text-lg leading-8 text-muted">{project.heroSummary}</p>
+        {project.finalPortfolioCopy && (
+          <div class="mt-8 rounded-portfolio border border-border bg-surface/72 p-5">
+            <p class="eyebrow mb-3">Executive summary</p>
+            <div class="prose-portfolio" set:html={project.sections.find((section) => section.title === "Final Portfolio Copy")?.html ?? ""} />
+          </div>
+        )}
         <div class="mt-8 grid gap-3 md:grid-cols-3">
           <div class="rounded-portfolio border border-border bg-surface p-4">
             <p class="text-xs font-bold uppercase text-muted">Role</p>
@@ -94,12 +100,8 @@ const structuredData = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <div class="mx-auto max-w-reading">
-        <p class="eyebrow mb-3">Portfolio copy</p>
-        <div class="prose-portfolio" set:html={project.sections.find((section) => section.title === "Final Portfolio Copy")?.html ?? ""} />
-      </div>
       {related.length > 0 && (
-        <div class="mt-14">
+        <div>
           <h2 class="text-2xl font-semibold text-text">Related work</h2>
           <div class="mt-6">
             <ProjectExplorer projects={relatedCards} categories={categories} showFilters={false} compact client:load />

@@ -7,8 +7,15 @@ export function withBase(path = "/") {
     return path;
   }
 
-  const normalized = path.startsWith("/") ? path.slice(1) : path;
-  return `${SITE_BASE}${normalized}`.replace(/\/{2,}/g, "/");
+  const suffixMatch = path.match(/([?#].*)$/);
+  const suffix = suffixMatch?.[1] ?? "";
+  const rawPath = suffix ? path.slice(0, -suffix.length) : path;
+  const normalized = rawPath.startsWith("/") ? rawPath.slice(1) : rawPath;
+  const basedPath = `${SITE_BASE}${normalized}`.replace(/\/{2,}/g, "/");
+  const hasExtension = /\.[a-zA-Z0-9]+$/.test(basedPath);
+  const routedPath = hasExtension || basedPath.endsWith("/") ? basedPath : `${basedPath}/`;
+
+  return `${routedPath}${suffix}`;
 }
 
 export function canonicalUrl(path = "/") {

@@ -196,7 +196,7 @@ textarea:focus-visible {
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    background: linear-gradient(135deg, #341539, rgb(var(--color-accent)));
+    background: linear-gradient(135deg, #341539, #5b1c71 58%, #6f277e);
     color: white;
     font-size: 0.9rem;
     font-weight: 800;

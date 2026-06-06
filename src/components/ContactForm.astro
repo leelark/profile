@@ -16,23 +16,23 @@ const redirect = "https://leelark.github.io/profile/thanks/";
 
   <div class="grid gap-5 md:grid-cols-2">
     <label class="grid gap-2">
-      <span class="text-sm font-semibold text-text">Name</span>
-      <input class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="name" autocomplete="name" required />
+      <span class="text-sm font-semibold text-text">Name <span class="text-accent">(required)</span></span>
+      <input id="contact-name" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="name" autocomplete="name" required maxlength="100" />
     </label>
     <label class="grid gap-2">
-      <span class="text-sm font-semibold text-text">Email</span>
-      <input class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="email" type="email" autocomplete="email" required />
+      <span class="text-sm font-semibold text-text">Email <span class="text-accent">(required)</span></span>
+      <input id="contact-email" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="email" type="email" autocomplete="email" required maxlength="160" />
     </label>
   </div>
 
   <div class="grid gap-5 md:grid-cols-2">
     <label class="grid gap-2">
       <span class="text-sm font-semibold text-text">Company or organization</span>
-      <input class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="company" autocomplete="organization" />
+      <input id="contact-company" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="company" autocomplete="organization" maxlength="140" />
     </label>
     <label class="grid gap-2">
-      <span class="text-sm font-semibold text-text">Inquiry type</span>
-      <select class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="inquiry_type" required>
+      <span class="text-sm font-semibold text-text">Inquiry type <span class="text-accent">(required)</span></span>
+      <select id="contact-inquiry-type" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="inquiry_type" required>
         <option value="">Select an inquiry type</option>
         {contact.inquiryTypes.map((type) => <option value={type}>{type}</option>)}
       </select>
@@ -40,9 +40,18 @@ const redirect = "https://leelark.github.io/profile/thanks/";
   </div>
 
   <label class="grid gap-2">
-    <span class="text-sm font-semibold text-text">Message</span>
-    <textarea class="min-h-40 rounded-portfolio border border-border bg-elevated px-4 py-3 text-text" name="message" required minlength="20" autocomplete="off"></textarea>
-    <span class="text-xs leading-5 text-muted">Share the context, project type, or Appian challenge you want to discuss.</span>
+    <span class="text-sm font-semibold text-text">Message <span class="text-accent">(required)</span></span>
+    <textarea
+      id="contact-message"
+      class="min-h-40 rounded-portfolio border border-border bg-elevated px-4 py-3 text-text"
+      name="message"
+      required
+      minlength="20"
+      maxlength="2000"
+      autocomplete="off"
+      aria-describedby="contact-message-help"
+    ></textarea>
+    <span id="contact-message-help" class="text-xs leading-5 text-muted">Share the context, project type, or Appian challenge you want to discuss. Maximum 2,000 characters.</span>
   </label>
 
   <button class="primary-button w-fit" type="submit">

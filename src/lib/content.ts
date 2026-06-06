@@ -429,8 +429,8 @@ export function projectToCard(project: ProjectDetail): ProjectCardPayload {
     keyFeatures: project.keyFeatures.slice(0, 6),
     businessValue: project.businessValue.slice(0, 5),
     technologies: project.technologies.slice(0, 8),
-    problem: plainSection("Problem"),
-    solution: plainSection("Solution Overview"),
-    architecture: plainSection("Architecture and Technical Approach")
+    problem: excerpt(plainSection("Problem"), 360),
+    solution: excerpt(plainSection("Solution Overview"), 420),
+    architecture: excerpt(plainSection("Architecture and Technical Approach"), 420)
   };
 }

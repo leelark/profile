@@ -1,6 +1,6 @@
 import { ArrowUpRight, BriefcaseBusiness, Layers3, Plug, Sparkles, Workflow, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 
 type ProjectCardData = {
   slug: string;
@@ -57,9 +57,15 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
     [projects, selectedSlug]
   );
 
-  function openProject(slug: string) {
-    lastFocusRef.current = document.activeElement as HTMLElement | null;
+  function openProject(slug: string, trigger?: HTMLElement) {
+    lastFocusRef.current = trigger ?? (document.activeElement as HTMLElement | null);
     setSelectedSlug(slug);
+  }
+
+  function handleProjectClick(event: MouseEvent<HTMLAnchorElement>, slug: string) {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    openProject(slug, event.currentTarget);
   }
 
   function closeProject() {
@@ -115,6 +121,7 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
             return (
               <button
                 key={category.slug}
+                id={`project-tab-${category.slug}`}
                 type="button"
                 role="tab"
                 aria-selected={selected}
@@ -127,7 +134,7 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                 {selected && (
                   <motion.span
                     layoutId="active-project-filter"
-                    className="absolute inset-0 bg-gradient-to-r from-[#341539] to-accent"
+                    className="absolute inset-0 bg-gradient-to-r from-[#341539] via-[#5b1c71] to-[#6f277e]"
                     transition={{ duration: reduceMotion ? 0 : 0.2 }}
                   />
                 )}
@@ -138,23 +145,29 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
         </div>
       )}
 
-      <motion.div id="project-results" layout className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <motion.div
+        id="project-results"
+        role={showFilters ? "tabpanel" : undefined}
+        aria-labelledby={showFilters ? `project-tab-${active}` : undefined}
+        layout
+        className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+      >
         <AnimatePresence mode="popLayout">
           {filtered.map((project, index) => {
             const visual = categoryVisuals[project.categorySlug] ?? categoryVisuals["client-projects"];
             const Icon = visual.icon;
             return (
-              <motion.button
+              <motion.a
                 layout
                 key={project.slug}
-                type="button"
-                initial={{ opacity: 0, y: reduceMotion ? 0 : 4 }}
+                href={project.href}
+                initial={false}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: reduceMotion ? 0 : 4 }}
                 transition={{ duration: reduceMotion ? 0 : 0.18, delay: compact ? 0 : Math.min(index * 0.018, 0.12) }}
                 className="group flex min-h-[300px] flex-col justify-between rounded-portfolio border border-border bg-surface/78 p-5 text-left shadow-panel transition hover:-translate-y-1 hover:border-accent/60 hover:bg-elevated/82 md:p-6"
-                onClick={() => openProject(project.slug)}
-                aria-label={`View detail for ${project.title}`}
+                onClick={(event) => handleProjectClick(event, project.slug)}
+                aria-label={`Open details for ${project.title}`}
               >
                 <span>
                   <span className="mb-5 flex items-start justify-between gap-4">
@@ -178,12 +191,14 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                       </span>
                     ))}
                   </span>
-                  <span className="primary-button w-full justify-between">
-                    View detail
-                    <ArrowUpRight className="ml-2" size={16} aria-hidden="true" />
+                  <span className="flex items-center justify-between gap-4 border-t border-border pt-5">
+                    <span className="text-sm font-bold text-text transition group-hover:text-accent">View detail</span>
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-portfolio border border-border bg-accentSoft text-text transition group-hover:border-accent">
+                      <ArrowUpRight size={16} aria-hidden="true" />
+                    </span>
                   </span>
                 </span>
-              </motion.button>
+              </motion.a>
             );
           })}
         </AnimatePresence>
