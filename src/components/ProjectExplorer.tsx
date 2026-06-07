@@ -10,7 +10,6 @@ import {
   Database,
   FileText,
   GitBranch,
-  Layers3,
   Plug,
   Sparkles,
   Workflow,
@@ -18,7 +17,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 
 type ProjectCardData = {
   sourceSlug: string;
@@ -55,20 +54,13 @@ type Props = {
 };
 
 const categoryVisuals: Record<string, { icon: typeof BriefcaseBusiness; label: string; color: string; accent: string }> = {
-  "client-projects": { icon: BriefcaseBusiness, label: "Enterprise delivery", color: "text-blueSignal", accent: "project-accent-blue" },
-  plugins: { icon: Plug, label: "Plugin extension", color: "text-accent", accent: "project-accent-purple" },
-  "innovative-projects": { icon: Sparkles, label: "Product concept", color: "text-verified", accent: "project-accent-green" },
-  accelerators: { icon: Workflow, label: "Appian Accelerate", color: "text-caution", accent: "project-accent-amber" }
+  "client-projects": { icon: BriefcaseBusiness, label: "Client delivery", color: "text-blueSignal", accent: "project-accent-blue" },
+  plugins: { icon: Plug, label: "Plugin build", color: "text-accent", accent: "project-accent-purple" },
+  "innovative-projects": { icon: Sparkles, label: "Innovation POC", color: "text-verified", accent: "project-accent-green" },
+  accelerators: { icon: Workflow, label: "Accelerator", color: "text-caution", accent: "project-accent-amber" }
 };
 
-const mapIcons = [Database, Workflow, Layers3, BadgeCheck];
 const focusIcons = [Database, Workflow, BrainCircuit, GitBranch, Activity, Cpu, FileText, Bot, Cable];
-
-const evidenceLabels: Record<string, string> = {
-  Confirmed: "Evidence-backed",
-  "Partially Confirmed": "Source-backed draft",
-  "Needs Confirmation": "Needs confirmation"
-};
 
 export default function ProjectExplorer({ projects, categories, showFilters = true, compact = false }: Props) {
   const [active, setActive] = useState("all");
@@ -189,23 +181,30 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                     <Icon className={visual.color} size={21} aria-hidden="true" />
                     <span>{compactText(project.domain, 44)}</span>
                   </span>
-                  <span className="project-category-mark">{visual.label}</span>
                 </div>
 
+                <div className="project-card-mark" aria-hidden="true">
+                  <Icon className={visual.color} size={30} />
+                </div>
                 <h3 className="mt-6 text-xl font-semibold leading-snug text-text">{project.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-muted">{compactText(project.heroExcerpt, compact ? 148 : 190)}</p>
+                <p className="mt-3 text-sm leading-7 text-muted">{compactText(project.heroExcerpt || project.heroSummary, compact ? 128 : 158)}</p>
 
-                <div className="project-flow-mini" aria-label={`${project.title} delivery flow`}>
-                  {project.workflowSteps.slice(0, 4).map((step) => (
-                    <span key={`${project.slug}-${step}`}>
-                      <i aria-hidden="true" />
-                      <b>{step}</b>
-                    </span>
-                  ))}
+                <div className="project-card-meta" aria-label={`${project.title} quick details`}>
+                  <span>
+                    <small>Role</small>
+                    <strong>{compactText(project.role, 54)}</strong>
+                  </span>
+                  <span>
+                    <small>Focus</small>
+                    <strong>{compactText(project.tags[0] ?? project.category, 42)}</strong>
+                  </span>
                 </div>
 
                 <div className="project-card-action">
-                  <span>{evidenceLabels[project.evidenceStatus] ?? project.evidenceStatus}</span>
+                  <span className="project-card-type">
+                    <Icon className={visual.color} size={15} aria-hidden="true" />
+                    <span>{visual.label}</span>
+                  </span>
                   <button
                     type="button"
                     className="project-detail-button"
@@ -214,7 +213,7 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                       openProject(project.slug, event.currentTarget);
                     }}
                   >
-                    View Details
+                    View work
                     <ArrowUpRight size={15} aria-hidden="true" />
                   </button>
                 </div>
@@ -226,6 +225,11 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
 
       <AnimatePresence>
         {selectedProject && (
+          (() => {
+            const visual = categoryVisuals[selectedProject.categorySlug] ?? categoryVisuals["client-projects"];
+            const Icon = visual.icon;
+
+            return (
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center bg-canvas/90 p-3 backdrop-blur-sm md:p-5"
             initial={{ opacity: 0 }}
@@ -249,13 +253,15 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
             >
               <div className="project-modal-header">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.08em] text-accent">
-                    {selectedProject.category} / {selectedProject.domain}
-                  </p>
+                  <div className="project-modal-kicker">
+                    <span aria-hidden="true">
+                      <Icon className={visual.color} size={16} />
+                    </span>
+                    <p>{visual.label} / {selectedProject.domain}</p>
+                  </div>
                   <h2 id={`project-dialog-${selectedProject.slug}`} className="mt-2 text-2xl font-semibold leading-tight text-text md:text-3xl">
                     {selectedProject.title}
                   </h2>
-                  <p className="mt-2 text-sm font-semibold text-muted">{evidenceLabels[selectedProject.evidenceStatus] ?? selectedProject.evidenceStatus}</p>
                 </div>
                 <button
                   ref={closeRef}
@@ -269,193 +275,157 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
               </div>
 
               <div className="project-modal-body">
-                <ProjectMap project={selectedProject} />
-                {selectedProject.sourceSlug === "appian-accelerate-program" ? (
-                  <AccelerateProgramView project={selectedProject} />
-                ) : (
-                  <ProjectReadout project={selectedProject} />
-                )}
+                <ProjectReadout project={selectedProject} />
               </div>
             </motion.div>
           </motion.div>
+            );
+          })()
         )}
       </AnimatePresence>
     </div>
   );
 }
 
-function ProjectMap({ project }: { project: ProjectCardData }) {
+function ProjectReadout({ project }: { project: ProjectCardData }) {
   const visual = categoryVisuals[project.categorySlug] ?? categoryVisuals["client-projects"];
   const Icon = visual.icon;
-  const mapItems = [
-    { label: "Need", text: project.problem || project.heroExcerpt },
-    { label: "Solution", text: project.solution || project.heroSummary },
-    { label: "Platform", text: project.architecture || project.technologies.slice(0, 3).join(", ") },
-    { label: "Value", text: project.businessValue[0] || project.heroExcerpt }
-  ];
-  const focusItems = project.workflowSteps.length > 0 ? project.workflowSteps : project.tags.slice(0, 5);
+  const functionality =
+    project.sourceSlug === "appian-accelerate-program" && project.acceleratorHighlights.length > 0
+      ? project.acceleratorHighlights
+      : project.keyFeatures.length > 0
+        ? project.keyFeatures
+        : project.workflowSteps;
+  const impact = project.businessValue.length > 0 ? project.businessValue : [project.heroSummary || project.heroExcerpt];
+  const tech = project.technologies.length > 0 ? project.technologies : project.tags;
 
   return (
-    <div className={`project-map ${visual.accent}`} aria-label={`${project.title} portfolio map`}>
-      <div className="project-map-head">
-        <div className="flex items-center gap-3">
-          <span className="inline-flex h-11 w-11 items-center justify-center rounded-portfolio border border-border bg-surface/80">
-            <Icon className={visual.color} size={21} aria-hidden="true" />
-          </span>
-          <div>
-            <p className="text-xs font-bold uppercase text-muted">{visual.label}</p>
-            <p className="mt-1 text-sm font-semibold text-text">{project.domain}</p>
-          </div>
+    <div className="project-case-layout">
+      <section className={`project-case-overview ${visual.accent}`}>
+        <span className="project-case-icon" aria-hidden="true">
+          <Icon className={visual.color} size={24} />
+        </span>
+        <div>
+          <p className="project-case-eyebrow">Overall</p>
+          <h3>{compactText(project.title, 74)}</h3>
+          <p>{compactText(project.heroSummary || project.heroExcerpt, 280)}</p>
         </div>
-      </div>
-      <div className="project-map-grid">
-        {mapItems.map((item, index) => {
-          const MapIcon = mapIcons[index % mapIcons.length];
-          return (
-            <div className="project-map-node" key={item.label}>
-              <span className="project-map-icon" aria-hidden="true">
-                <MapIcon size={16} />
-              </span>
-              <span>
-                <span className="block text-[0.68rem] font-bold uppercase text-muted">{item.label}</span>
-                <span className="mt-1 block text-sm font-semibold leading-snug text-text">{compactText(item.text, 82)}</span>
-              </span>
-            </div>
-          );
-        })}
-      </div>
-      <div className="project-focus-strip">
-        {focusItems.slice(0, 6).map((item, index) => {
-          const FocusIcon = focusIcons[index % focusIcons.length];
-          return (
-            <span className="project-focus-pill" key={`${project.slug}-${item}`}>
-              <FocusIcon size={14} aria-hidden="true" />
-              <span>{item}</span>
-            </span>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function ProjectReadout({ project }: { project: ProjectCardData }) {
-  return (
-    <div className="project-detail-stack">
-      <div className="modal-summary-panel">
-        <div className="flex items-center gap-3">
-          <Layers3 className="text-accent" size={22} aria-hidden="true" />
-          <p className="text-xs font-bold uppercase text-muted">Architect view</p>
-        </div>
-        <p className="mt-4 text-base leading-7 text-text">{compactText(project.heroSummary || project.heroExcerpt, 360)}</p>
-      </div>
-
-      <div className="project-readout-grid">
-        <DetailBlock title="Problem" text={project.problem || project.heroExcerpt} />
-        <DetailBlock title="Solution" text={project.solution || project.heroSummary} />
-        <DetailBlock title="Architecture" text={project.architecture} />
-      </div>
-
-      <div className="project-visual-panels">
-        <ListBlock title="Highlights" items={project.keyFeatures} />
-        <ListBlock title="Business value" items={project.businessValue} />
-      </div>
-
-      <div>
-        <p className="text-xs font-bold uppercase text-muted">Technology and Appian capabilities</p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {project.technologies.slice(0, 7).map((item) => (
-            <span className="chip" key={item}>
-              {item}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AccelerateProgramView({ project }: { project: ProjectCardData }) {
-  const contributionCards = [
-    { title: "Server Side Metrics Evaluation", copy: "Performance and capacity signals translated into an architect review path.", icon: Activity },
-    { title: "Log Streaming", copy: "Operational telemetry framed for observability, triage, and platform stewardship.", icon: Cable },
-    { title: "Import / Export Formatted Excel", copy: "Excel movement patterns shaped for controlled Appian workflow usage.", icon: FileText },
-    { title: "Accelerator Workstreams", copy: "Governance, AI readiness, deployment, integration, and UX patterns grouped under Appian Accelerate.", icon: Workflow }
-  ];
-
-  return (
-    <div className="project-detail-stack accelerate-program-view">
-      <section className="modal-summary-panel">
-        <div className="flex items-center gap-3">
-          <Workflow className="text-caution" size={22} aria-hidden="true" />
-          <p className="text-xs font-bold uppercase text-muted">What is Appian Accelerate Program</p>
-        </div>
-        <p className="mt-4 text-base leading-7 text-text">
-          A focused Appian program for turning recurring client platform, governance, automation, and enablement needs into structured
-          architect-led workstreams.
-        </p>
       </section>
 
-      <section>
-        <p className="text-xs font-bold uppercase text-muted">Solution Architect Contributions</p>
-        <div className="accelerate-contribution-grid mt-4">
-          {contributionCards.map((item) => {
-            const Icon = item.icon;
+      <div className="project-case-grid">
+        <CaseTextBlock icon={Database} label="Use case" title="What it was for" text={project.problem || project.heroExcerpt} />
+        <CaseTextBlock icon={GitBranch} label="My work" title="Designed and delivered" text={workedOnText(project)} />
+        <CaseListBlock icon={Sparkles} label="Implemented" title="Key functionality" items={functionality} />
+        <CaseListBlock icon={BadgeCheck} label="Impact" title="Value created" items={impact} />
+      </div>
+
+      <section className="project-tech-panel">
+        <div>
+          <p className="project-case-eyebrow">Tech</p>
+          <h3>Technology and Appian capabilities</h3>
+        </div>
+        <div className="project-tech-list">
+          {tech.slice(0, 8).map((item, index) => {
+            const FocusIcon = focusIcons[index % focusIcons.length];
             return (
-              <article className="accelerate-contribution-card" key={item.title}>
-                <span aria-hidden="true">
-                  <Icon size={18} />
-                </span>
-                <h3>{item.title}</h3>
-                <p>{item.copy}</p>
-              </article>
+              <span key={item}>
+                <FocusIcon size={14} aria-hidden="true" />
+                <span>{item}</span>
+              </span>
             );
           })}
         </div>
       </section>
-
-      <section className="accelerate-workstream-river" aria-label="Appian Accelerate Program workstreams">
-        {project.acceleratorHighlights.slice(0, 12).map((item, index) => (
-          <span key={item} style={{ "--step": index } as CSSProperties}>
-            {item}
-          </span>
-        ))}
-      </section>
     </div>
   );
 }
 
-function DetailBlock({ title, text }: { title: string; text: string }) {
+function CaseTextBlock({
+  icon: Icon,
+  label,
+  title,
+  text
+}: {
+  icon: typeof Database;
+  label: string;
+  title: string;
+  text: string;
+}) {
   if (!text) return null;
   return (
-    <section className="detail-block">
-      <h3>{title}</h3>
-      <p>{compactText(text, 260)}</p>
+    <section className="project-case-card">
+      <span className="project-case-card-icon" aria-hidden="true">
+        <Icon size={18} />
+      </span>
+      <div>
+        <p className="project-case-eyebrow">{label}</p>
+        <h3>{title}</h3>
+        <p>{compactText(text, 230)}</p>
+      </div>
     </section>
   );
 }
 
-function ListBlock({ title, items }: { title: string; items: string[] }) {
+function CaseListBlock({
+  icon: Icon,
+  label,
+  title,
+  items
+}: {
+  icon: typeof Database;
+  label: string;
+  title: string;
+  items: string[];
+}) {
   if (items.length === 0) return null;
   return (
-    <section className="detail-block">
-      <h3>{title}</h3>
-      <ul className="detail-list">
-        {items.slice(0, 4).map((item) => (
-          <li key={item}>
-            <span aria-hidden="true" />
-            <p>{compactText(item, 130)}</p>
-          </li>
-        ))}
-      </ul>
+    <section className="project-case-card">
+      <span className="project-case-card-icon" aria-hidden="true">
+        <Icon size={18} />
+      </span>
+      <div>
+        <p className="project-case-eyebrow">{label}</p>
+        <h3>{title}</h3>
+        <ul className="project-case-list">
+          {items.slice(0, 5).map((item) => (
+            <li key={item}>
+              <span aria-hidden="true" />
+              <p>{sentenceCase(compactText(item, 118))}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
   );
+}
+
+function workedOnText(project: ProjectCardData) {
+  const base = project.role ? `Worked as ${project.role}.` : "";
+  const featureSummary = project.keyFeatures.length > 0 ? `Designed and implemented ${joinReadable(project.keyFeatures.slice(0, 3))}.` : "";
+  const design = featureSummary || project.solution || project.architecture || project.heroSummary || project.heroExcerpt;
+  return compactText(`${base} ${design}`, 320);
+}
+
+function joinReadable(items: string[]) {
+  const cleaned = items.map((item) => compactText(item, 64).replace(/\.$/, ""));
+  if (cleaned.length <= 1) return cleaned[0] ?? "";
+  if (cleaned.length === 2) return `${cleaned[0]} and ${cleaned[1]}`;
+  return `${cleaned.slice(0, -1).join(", ")}, and ${cleaned[cleaned.length - 1]}`;
 }
 
 function compactText(text: string, max = 92) {
-  const normalized = text.replace(/\s+/g, " ").trim();
+  const normalized = text
+    .replace(/(?:^|\s)\d+\.\s+/g, " ")
+    .replace(/(?:^|\s)[*-]\s+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   if (normalized.length <= max) return normalized;
   const sliced = normalized.slice(0, max - 1);
   const boundary = sliced.lastIndexOf(" ");
   return `${sliced.slice(0, boundary > 42 ? boundary : max - 1)}...`;
+}
+
+function sentenceCase(text: string) {
+  if (!text) return text;
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 }

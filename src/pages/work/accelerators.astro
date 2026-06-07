@@ -21,37 +21,12 @@ const structuredData = collectionPageStructuredData({
     { name: "Appian Accelerate Program", path: "/work/accelerators" }
   ]
 });
-const suiteGroups = [
-  "Server side metrics evaluation",
-  "Log streaming",
-  "Import / export formatted Excel",
-  "Governance and operating model",
-  "Integration reliability",
-  "AI and process intelligence",
-  "Other existing accelerator work"
-];
 ---
 
 <BaseLayout title="Appian Accelerate Program" description={pageDescription} path="/work/accelerators" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Appian Accelerate Program" title="Accelerator workstreams shaped for architecture review, platform health, automation, and enablement." copy="These items are positioned as Appian Accelerate Program contributions, not generic reusable components." />
-      <div class="mt-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-        <article class="glass-panel p-6">
-          <p class="eyebrow">Umbrella program</p>
-          <h2 class="mt-3 text-2xl font-semibold text-text">Appian Accelerate Program</h2>
-          <p class="mt-4 text-sm leading-7 text-muted">
-            Solution Architect contributions are grouped into focused workstreams for server-side metrics, log streaming, formatted Excel movement, governance, integration reliability, AI readiness, and other existing accelerator work.
-          </p>
-        </article>
-        <div class="grid gap-3 sm:grid-cols-2">
-          {suiteGroups.map((group) => (
-            <div class="rounded-portfolio border border-border bg-surface/72 p-4">
-              <p class="text-sm font-semibold text-text">{group}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <SectionHeader as="h1" eyebrow="Work" title="Appian Accelerators" copy="Reusable Appian workstreams for platform health, governance, automation, and enablement." />
       <div class="mt-10">
         <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
       </div>
