@@ -60,10 +60,10 @@ export default function NavControls({ links }: Props) {
   }, [menuOpen]);
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="header-controls">
       <button
         type="button"
-        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-portfolio border border-border bg-surface text-text transition hover:border-accent"
+        className="header-icon-button"
         onClick={toggleTheme}
         aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
       >
@@ -73,7 +73,7 @@ export default function NavControls({ links }: Props) {
       <button
         ref={menuButtonRef}
         type="button"
-        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-portfolio border border-border bg-surface text-text transition hover:border-accent lg:hidden"
+        className="header-icon-button mobile-menu-button"
         onClick={() => setMenuOpen((value) => !value)}
         aria-expanded={menuOpen}
         aria-controls="mobile-nav"
@@ -92,12 +92,12 @@ export default function NavControls({ links }: Props) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: reduceMotion ? 0 : -8 }}
             transition={{ duration: reduceMotion ? 0 : 0.18 }}
-            className="absolute left-4 right-4 top-[72px] z-50 grid gap-2 rounded-portfolio border border-border bg-surface p-3 shadow-panel lg:hidden"
+            className="mobile-nav-panel"
           >
             {links.map((link) => (
               <a
                 key={link.href}
-                className={`rounded-portfolio px-4 py-3 text-sm font-semibold text-text hover:bg-elevated ${link.current ? "bg-elevated" : ""}`}
+                className={`mobile-nav-link ${link.current ? "is-current" : ""}`}
                 href={link.href}
                 aria-current={link.current ? "page" : undefined}
                 onClick={() => setMenuOpen(false)}

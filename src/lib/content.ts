@@ -54,6 +54,10 @@ export type ProjectCardPayload = {
   keyFeatures: string[];
   businessValue: string[];
   technologies: string[];
+  context: string;
+  roleDetail: string;
+  uxDecisions: string[];
+  finalPortfolioCopy: string;
   problem: string;
   solution: string;
   architecture: string;
@@ -512,18 +516,6 @@ export const skills = {
 
 export const technicalSkillGroups: TechnicalSkillGroup[] = [
   {
-    title: "Appian Platform",
-    summary: "Solution design, workflow delivery, data modeling, custom SAIL component plugins, and custom smart service plugins.",
-    skills: [
-      { name: "Appian", note: "enterprise application platform" },
-      { name: "Workflow Automation", note: "process design and delivery" },
-      { name: "Data Modeling", note: "records, relational data, reporting" },
-      { name: "Appian AI", note: "document and decision support" },
-      { name: "Custom SAIL Plugin", note: "component extension patterns" },
-      { name: "Custom Smart Service Plugin", note: "Java-backed process extensions" }
-    ]
-  },
-  {
     title: "Engineering",
     summary: "Application logic, plugin development, UI implementation, backend services, and programming fundamentals.",
     skills: [
@@ -531,7 +523,6 @@ export const technicalSkillGroups: TechnicalSkillGroup[] = [
       { name: "Java", note: "plugins and backend logic" },
       { name: "HTML", note: "semantic interface structure" },
       { name: "CSS", note: "responsive interface styling" },
-      { name: "Python", note: "analysis and automation tooling" },
       { name: "Node.js", note: "tooling and services" },
       { name: "PHP", note: "web application foundation" },
       { name: "Spring", note: "Java service framework" },
@@ -540,14 +531,11 @@ export const technicalSkillGroups: TechnicalSkillGroup[] = [
     ]
   },
   {
-    title: "Data and Integration",
-    summary: "Enterprise data access, API connectivity, Appian service exposure, reporting, and operational data design.",
+    title: "Database",
+    summary: "Relational database design and SQL Server delivery support for Appian-backed applications.",
     skills: [
-      { name: "SQL", note: "queries and data operations" },
-      { name: "MS SQL", note: "enterprise relational database" },
-      { name: "MySQL", note: "database-backed Appian work" },
-      { name: "REST APIs", note: "system connectivity" },
-      { name: "Web APIs", note: "Appian service exposure" }
+      { name: "MSSQL", note: "queries and data operations" },
+      { name: "MS SQL Server", note: "enterprise relational database" }
     ]
   },
   {
@@ -594,6 +582,7 @@ export const education: EducationItem[] = [
 export const certifications: Certification[] = [
   {
     title: "Appian Level 3 / Appian Certified Lead Developer",
+    score: "≈ 92%",
     websiteCopy: labelBlock(expertiseRaw.match(/^### Appian Level 3[\s\S]*?(?=^### Appian Level 2)/m)?.[0] ?? "", "Website Copy")
   },
   {
@@ -625,6 +614,7 @@ export const appianCapabilityShowcase: TechnicalSkill[] = [
   { name: "Process Design", note: "workflow structure" },
   { name: "SAIL UI Interfaces", note: "user experience" },
   { name: "Records", note: "data-backed views" },
+  { name: "Database Modeling", note: "relational data design" },
   { name: "Integrations", note: "system connectivity" },
   { name: "Web APIs", note: "service exposure" },
   { name: "Appian AI Skills", note: "classification and extraction" },
@@ -702,8 +692,12 @@ export function projectToCard(project: ProjectDetail): ProjectCardPayload {
     keyFeatures: project.keyFeatures.slice(0, 6),
     businessValue: project.businessValue.slice(0, 5),
     technologies: project.technologies.slice(0, 8),
-    problem: excerpt(plainSection("Problem"), 360),
-    solution: excerpt(plainSection("Solution Overview"), 420),
-    architecture: excerpt(plainSection("Architecture and Technical Approach"), 420)
+    context: plainSection("Project Context"),
+    roleDetail: plainSection("My Role"),
+    uxDecisions: splitBullets(project.sections.find((section) => section.title === "UX and Product Decisions")?.body ?? "").slice(0, 5),
+    finalPortfolioCopy: stripMarkdown(project.finalPortfolioCopy),
+    problem: plainSection("Problem"),
+    solution: plainSection("Solution Overview"),
+    architecture: plainSection("Architecture and Technical Approach")
   };
 }

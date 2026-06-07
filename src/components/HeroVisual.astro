@@ -1,5 +1,6 @@
 ---
 import { withBase } from "@/lib/paths";
+import { BadgeCheck } from "lucide-react";
 ---
 
 <div class="hero-portrait-system" aria-label="Leelark Saxena profile visual">
@@ -17,13 +18,14 @@ import { withBase } from "@/lib/paths";
         decoding="async"
       />
     </figure>
-    <div class="hero-credential-card">
-      <p class="text-[0.68rem] font-bold uppercase text-muted">Role</p>
-      <p class="mt-1 text-sm font-semibold text-text">Solution Architect & Lead Appian Developer</p>
-    </div>
-    <div class="hero-focus-card">
-      <p class="text-[0.68rem] font-bold uppercase text-muted">Delivery Lens</p>
-      <p class="mt-1 text-sm font-semibold text-text">Enterprise Appian + AI Workflows</p>
+    <div class="hero-certification-card hero-certification-card-credential" aria-label="Appian Level 3 Certified">
+      <span class="hero-certification-icon" aria-hidden="true">
+        <BadgeCheck size={20} strokeWidth={2.35} />
+      </span>
+      <span class="hero-certification-copy">
+        <small>Appian</small>
+        <strong>Level 3 Certified</strong>
+      </span>
     </div>
   </div>
 </div>

@@ -9,6 +9,7 @@ type Props = {
   description?: string;
   path?: string;
   noindex?: boolean;
+  hideIdentity?: boolean;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
 };
 
@@ -17,6 +18,7 @@ const {
   description = profile.homepageSummary,
   path = "/",
   noindex = false,
+  hideIdentity = false,
   structuredData
 } = Astro.props;
 
@@ -31,8 +33,7 @@ const currentPath = normalizePath(path);
 const navLinks = [
   { path: "/", label: "Home" },
   { path: "/work", label: "Work" },
-  { path: "/expertise", label: "Expertise" },
-  { path: "/plugins-and-accelerators", label: "Reusable Assets" },
+  { path: "/key-works", label: "Key Works" },
   { path: "/resume", label: "Resume" },
   { path: "/contact", label: "Contact" }
 ].map((link) => ({
@@ -40,6 +41,8 @@ const navLinks = [
   href: withBase(link.path),
   current: link.path === "/" ? currentPath === "/" : currentPath === link.path || currentPath.startsWith(`${link.path}/`)
 }));
+const showFloatingContact = currentPath !== "/contact";
+const hideFloatingContactAtHomeCta = currentPath === "/";
 ---
 
 <!doctype html>
@@ -69,29 +72,66 @@ const navLinks = [
       const savedTheme = window.localStorage.getItem("theme");
       document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dark";
     </script>
+    <script is:inline>
+      const setHeaderState = () => {
+        document.documentElement.dataset.navState = window.scrollY > 16 ? "scrolled" : "top";
+      };
+      setHeaderState();
+      window.addEventListener("scroll", setHeaderState, { passive: true });
+    </script>
+    {hideFloatingContactAtHomeCta && (
+      <script is:inline>
+        const setFloatingContactState = () => {
+          const bar = document.querySelector("[data-floating-contact]");
+          const contactSection = document.querySelector("#next-conversation");
+          if (!bar || !contactSection) return;
+
+          const sectionRect = contactSection.getBoundingClientRect();
+          const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+          const shouldHide = sectionRect.top < viewportHeight * 0.82 && sectionRect.bottom > viewportHeight * 0.2;
+          bar.dataset.state = shouldHide ? "hidden" : "visible";
+        };
+
+        window.addEventListener("load", setFloatingContactState, { once: true });
+        window.addEventListener("scroll", setFloatingContactState, { passive: true });
+        window.addEventListener("resize", setFloatingContactState);
+      </script>
+    )}
     {structuredData && (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}
   </head>
   <body>
+    <div class="site-background-field" aria-hidden="true">
+      <span class="site-background-layer site-background-depth"></span>
+      <span class="site-background-layer site-background-structure"></span>
+      <span class="site-background-layer site-background-signal"></span>
+    </div>
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="sticky top-0 z-40 border-b border-border bg-canvas/82 backdrop-blur">
-      <div class="shell flex min-h-[72px] items-center justify-between gap-4">
-        <a class="flex min-w-0 flex-col" href={withBase("/")}>
-          <span class="text-sm font-bold text-text">Leelark Saxena</span>
-          <span class="truncate text-xs text-muted">Solution Architect & Lead Appian Developer</span>
-        </a>
-        <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
+    <header class="site-header">
+      <div class="shell site-header-shell">
+        {hideIdentity ? (
+          <div class="site-identity-placeholder" aria-hidden="true"></div>
+        ) : (
+          <a class="site-identity" href={withBase("/")}>
+            <span class="site-identity-mark" aria-hidden="true">LS</span>
+            <span class="site-identity-copy">
+              <span>Leelark Saxena</span>
+              <span>Solution Architect & Lead Appian Developer</span>
+            </span>
+          </a>
+        )}
+        <nav class="desktop-tab-nav" aria-label="Primary navigation">
           {navLinks.map((link) => (
             <a
               class:list={[
-                "relative rounded-portfolio px-3 py-2 text-sm font-semibold text-muted transition hover:bg-elevated hover:text-text",
-                link.current && "bg-accentSoft text-text"
+                "desktop-nav-link",
+                link.current && "is-current"
               ]}
               href={link.href}
               aria-current={link.current ? "page" : undefined}
             >
-              {link.label}
+              <span>{link.label}</span>
             </a>
           ))}
         </nav>
@@ -102,6 +142,17 @@ const navLinks = [
     <main id="main" tabindex="-1">
       <slot />
     </main>
+
+    {showFloatingContact && (
+      <aside class="floating-contact-bar" data-floating-contact data-state="visible" aria-label="Contact shortcut">
+        <div class="floating-contact-copy">
+          <span>Available for Appian architecture, AI workflow, and plugin delivery.</span>
+        </div>
+        <a class="floating-contact-action" href={withBase("/contact")}>
+          <span>Start a conversation</span>
+        </a>
+      </aside>
+    )}
 
     <footer class="border-t border-border py-10">
       <div class="shell flex flex-col gap-4 text-sm text-muted md:flex-row md:items-center md:justify-between">

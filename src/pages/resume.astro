@@ -1,10 +1,13 @@
 ---
-import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { BadgeCheck, BriefcaseBusiness, ExternalLink, GraduationCap, Newspaper, ShieldCheck } from "lucide-react";
 import { certifications, education, experience, publication } from "@/lib/content";
+import { withBase } from "@/lib/paths";
 import { breadcrumbStructuredData, personStructuredData, webPageStructuredData } from "@/lib/seo";
+import "@/styles/resume.css";
 
-const pageDescription = "Compact professional resume for Leelark Saxena, Appian Solution Architect and Developer.";
+const pageDescription =
+  "Professional resume for Leelark Saxena, covering Appian work experience, education, certifications, and publication.";
 const structuredData = [
   personStructuredData(),
   webPageStructuredData({
@@ -18,83 +21,160 @@ const structuredData = [
     { name: "Resume", path: "/resume" }
   ])
 ];
+
+const resumeStats = ["6+ years", "Appian L3", "Solution Architect"];
+
+const companyLogos: Record<string, { initials: string; logoUrl: string; logoAlt: string }> = {
+  "Yexle Pvt. Limited": {
+    initials: "YX",
+    logoUrl: withBase("/brand/company/yexle-logo.png"),
+    logoAlt: "Yexle logo"
+  },
+  "Coforge DPA Pvt. Limited": {
+    initials: "CF",
+    logoUrl: withBase("/brand/company/coforge-logo.svg"),
+    logoAlt: "Coforge logo"
+  },
+  "Persistent Systems Ltd": {
+    initials: "PS",
+    logoUrl: withBase("/brand/company/persistent-logo.png"),
+    logoAlt: "Persistent Systems logo"
+  }
+};
+
+const credentialCards = certifications.map((item) => ({
+  ...item,
+  score: item.score?.replace(/^.*92%$/, "\u2248 92%")
+}));
 ---
 
-<BaseLayout title="Resume" description={pageDescription} path="/resume" structuredData={structuredData}>
-  <section class="section-band">
-    <div class="shell">
-      <SectionHeader as="h1" eyebrow="Resume" title="Enterprise Appian delivery experience, built for quick recruiter review." copy="A concise view of consulting roles, Appian delivery depth, education, certifications, and research foundation." />
+<BaseLayout title="Resume" description={pageDescription} path="/resume" structuredData={structuredData} hideIdentity>
+  <div class="resume-page resume-page-minimal">
+    <section class="resume-section resume-work-section">
+      <div class="shell">
+        <header class="resume-minimal-header" aria-label="Resume overview">
+          <div class="resume-header-kicker">
+            <span aria-hidden="true"></span>
+            <p>Experience / Education</p>
+          </div>
+          <div class="resume-metric-strip" aria-label="Resume snapshot">
+            {resumeStats.map((stat) => (
+              <span>{stat}</span>
+            ))}
+          </div>
+        </header>
 
-      <div class="mt-8 grid gap-3 sm:grid-cols-3">
-        <div class="proof-tile">
-          <dt>Experience</dt>
-          <dd>6+ years</dd>
+        <div class="resume-section-title">
+          <span aria-hidden="true"><BriefcaseBusiness size={18} strokeWidth={2.2} /></span>
+          <h1>Experience</h1>
         </div>
-        <div class="proof-tile">
-          <dt>Certification</dt>
-          <dd>Appian L3</dd>
-        </div>
-        <div class="proof-tile">
-          <dt>Role</dt>
-          <dd>Solution Architect</dd>
+
+        <div class="resume-experience-stream" aria-label="Work experience timeline">
+          {experience.map((item, index) => {
+            const companyLogo = companyLogos[item.company] ?? {
+              initials: item.company.slice(0, 2).toUpperCase(),
+              logoUrl: "",
+              logoAlt: `${item.company} logo`
+            };
+
+            return (
+              <article class="resume-experience-row" style={`--row-index: ${index}`}>
+                <div class="resume-experience-index" aria-hidden="true">
+                  <span></span>
+                </div>
+                <div class="resume-experience-main">
+                  <span class="resume-company-mark">
+                    {companyLogo.logoUrl && (
+                      <img
+                        src={companyLogo.logoUrl}
+                        alt={companyLogo.logoAlt}
+                        loading="lazy"
+                        decoding="async"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+                      />
+                    )}
+                    <b class:list={["resume-company-fallback", companyLogo.logoUrl && "resume-company-fallback-hidden"]}>
+                      {companyLogo.initials}
+                    </b>
+                  </span>
+                  <div>
+                    <h2>{item.role}</h2>
+                    <p>{item.company}</p>
+                  </div>
+                </div>
+                <time>{item.period}</time>
+              </article>
+            );
+          })}
         </div>
       </div>
+    </section>
 
-      <div class="resume-journey mt-10">
-        {experience.map((item, index) => (
-          <article class="resume-journey-node">
-            <span>{String(index + 1).padStart(2, "0")}</span>
+    <section class="resume-section resume-education-section border-t border-border">
+      <div class="shell">
+        <div class="resume-section-title">
+          <span aria-hidden="true"><GraduationCap size={18} strokeWidth={2.2} /></span>
+          <h2>Education</h2>
+        </div>
+
+        <div class="resume-education-arc" aria-label="Education details">
+          <div class="resume-education-core" aria-hidden="true">
+            <GraduationCap size={30} strokeWidth={2.1} />
+            <strong>CS</strong>
+          </div>
+          <div class="resume-education-lane">
+            {education.map((item, index) => (
+              <article class="resume-education-item" style={`--education-index: ${index}`}>
+                <div class="resume-education-node" aria-hidden="true">
+                  <span>{item.year}</span>
+                </div>
+                <div class="resume-education-card">
+                  <h3>{item.qualification}</h3>
+                  <p>{item.institution}</p>
+                  {item.score && <strong>{item.score}</strong>}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="resume-section resume-credential-section border-t border-border">
+      <div class="shell">
+        <div class="resume-section-title">
+          <span aria-hidden="true"><BadgeCheck size={18} strokeWidth={2.2} /></span>
+          <h2>Credentials</h2>
+        </div>
+
+        <div class="resume-credential-layout">
+          <article class="resume-certification-ribbon">
+            <h3>Certifications</h3>
             <div>
-              <h2>{item.company}</h2>
-              <p>{item.role}</p>
+              {credentialCards.map((item) => (
+                <span>
+                  <i aria-hidden="true"><ShieldCheck size={15} strokeWidth={2.3} /></i>
+                  <strong>{item.title}</strong>
+                  {item.score && <small>{item.score}</small>}
+                </span>
+              ))}
             </div>
-            <strong>{item.period}</strong>
           </article>
-        ))}
-      </div>
-    </div>
-  </section>
 
-  <section class="section-band border-t border-border">
-    <div class="shell">
-      <SectionHeader eyebrow="Education" title="Academic foundation across engineering, higher secondary, and secondary education." />
-      <div class="education-track mt-8">
-        {education.map((item, index) => (
-          <article class="education-card">
-            <span class="education-step">{index + 1}</span>
+          <article class="resume-publication-panel">
+            <span aria-hidden="true"><Newspaper size={20} strokeWidth={2.2} /></span>
             <div>
-              <h2>{item.qualification}</h2>
-              <p>{item.institution}</p>
-              <strong>{item.year} / {item.score}</strong>
+              <h3>Research Publication</h3>
+              <p class="resume-publication-title">{publication.title}</p>
+              <p class="resume-publication-note">{publication.publicNote}</p>
+              <a href={publication.url} target="_blank" rel="noreferrer">
+                View publication
+                <ExternalLink size={14} strokeWidth={2.2} aria-hidden="true" />
+              </a>
             </div>
           </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section-band border-t border-border">
-    <div class="shell grid gap-4 lg:grid-cols-2">
-      <article class="purple-frame rounded-portfolio p-5">
-        <h2 class="text-xl font-semibold text-text">Certifications</h2>
-        <p class="mt-4 text-base font-semibold text-text">Appian Certified Lead Developer / Level 3</p>
-        <div class="mt-4 grid gap-2">
-          {certifications.slice(1).map((item) => (
-            <div class="rounded-portfolio border border-border bg-surface/58 p-3">
-              <p class="text-sm font-semibold text-text">{item.title}</p>
-              {item.score && <p class="mt-1 text-xs font-bold text-accent">{item.score}</p>}
-            </div>
-          ))}
         </div>
-      </article>
-
-      <article class="purple-frame rounded-portfolio p-5">
-        <h2 class="text-xl font-semibold text-text">Publication</h2>
-        <p class="mt-4 text-sm font-semibold leading-6 text-text">{publication.title}</p>
-        <p class="mt-3 text-sm leading-6 text-muted">{publication.websiteCopy}</p>
-        <p class="mt-3 text-xs font-semibold leading-5 text-muted">{publication.publicNote}</p>
-        <a class="publication-link mt-5" href={publication.url} target="_blank" rel="noreferrer">View publication</a>
-      </article>
-    </div>
-  </section>
+      </div>
+    </section>
+  </div>
 </BaseLayout>

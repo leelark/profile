@@ -7,7 +7,7 @@ import { collectionPageStructuredData } from "@/lib/seo";
 
 const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
 const cards = portfolioProjects.map(projectToCard);
-const pageDescription = "Portfolio work across Appian client delivery, plugins, product POCs, and reusable accelerators.";
+const pageDescription = "Selected Appian client delivery, AI workflow concepts, plugins, and reusable accelerators.";
 const structuredData = collectionPageStructuredData({
   name: "Portfolio Work - Leelark Saxena",
   description: pageDescription,
@@ -24,7 +24,12 @@ const structuredData = collectionPageStructuredData({
   <section class="section-band">
     <div class="shell">
       <div class="work-hero-panel">
-        <SectionHeader as="h1" eyebrow="Portfolio" title="My Work" copy="Appian delivery, AI workflow concepts, plugins, and reusable accelerators." />
+        <SectionHeader
+          as="h1"
+          eyebrow="Portfolio"
+          title="Enterprise Appian Work Portfolio"
+          copy="Selected client delivery, AI workflow concepts, plugins, and reusable accelerators, organized for quick portfolio review."
+        />
       </div>
       <div class="mt-10">
         <ProjectExplorer projects={cards} categories={categories} client:load />

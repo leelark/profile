@@ -174,6 +174,8 @@ Integration and Automation:
 
 ### Appian Level 3 / Appian Certified Lead Developer
 
+Score: ≈ 92%
+
 Website Copy:
 
 Appian Certified Lead Developer with advanced Appian delivery experience across enterprise workflows, architecture, process automation, custom plugins, AI-enabled applications, and advisory engagements.

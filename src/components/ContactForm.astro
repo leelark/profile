@@ -1,4 +1,6 @@
 ---
+import { ArrowRight } from "lucide-react";
+
 const redirect = "https://leelark.github.io/profile/thanks/";
 ---
 
@@ -7,6 +9,7 @@ const redirect = "https://leelark.github.io/profile/thanks/";
   <input type="hidden" name="redirect" value={redirect} />
   <input type="hidden" name="subject" value="Portfolio inquiry for Leelark Saxena" />
   <input type="hidden" name="source" value="leelark.github.io/profile/contact" />
+  <input type="hidden" name="inquiry_type" value="General portfolio inquiry" />
   <label class="hidden" aria-hidden="true">
     Leave this field empty
     <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
@@ -23,14 +26,10 @@ const redirect = "https://leelark.github.io/profile/thanks/";
     </label>
   </div>
 
-  <div class="grid gap-5 md:grid-cols-2">
+  <div class="grid gap-5">
     <label class="grid gap-2">
       <span class="text-sm font-semibold text-text">Company or organization</span>
       <input id="contact-company" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="company" autocomplete="organization" maxlength="140" />
-    </label>
-    <label class="grid gap-2">
-      <span class="text-sm font-semibold text-text">Role or context</span>
-      <input id="contact-context" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="context" autocomplete="off" maxlength="140" />
     </label>
   </div>
 
@@ -49,8 +48,12 @@ const redirect = "https://leelark.github.io/profile/thanks/";
     <span id="contact-message-help" class="text-xs leading-5 text-muted">Share the context, project type, or Appian challenge you want to discuss. Maximum 2,000 characters.</span>
   </label>
 
-  <button class="primary-button w-fit" type="submit">
-    Send message
-    <span class="ml-2" aria-hidden="true">-&gt;</span>
-  </button>
+  <div class="contact-submit-row">
+    <button class="contact-submit-button" type="submit">
+      <span>Send message</span>
+      <span class="contact-submit-icon" aria-hidden="true">
+        <ArrowRight size={18} strokeWidth={2.3} />
+      </span>
+    </button>
+  </div>
 </form>

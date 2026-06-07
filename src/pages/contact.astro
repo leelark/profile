@@ -6,6 +6,24 @@ import { contact } from "@/lib/content";
 import { breadcrumbStructuredData, personStructuredData, webPageStructuredData } from "@/lib/seo";
 
 const pageDescription = "Contact Leelark Saxena for Appian solution design, workflow automation, plugin engineering, and enterprise delivery work.";
+const contactSignals = [
+  {
+    title: "Architecture",
+    icon: ["M4 17L17 4", "M14 4h3v3", "M5 7h4", "M5 11h7", "M5 15h4"]
+  },
+  {
+    title: "Automation",
+    icon: ["M4 6h6v6H4z", "M14 12h6v6h-6z", "M10 9h3a3 3 0 0 1 3 3"]
+  },
+  {
+    title: "Plugins and APIs",
+    icon: ["M8 8l-4 4 4 4", "M16 8l4 4-4 4", "M11 18l2-12"]
+  },
+  {
+    title: "Data Modeling and Integration",
+    icon: ["M5 7c0-2 14-2 14 0s-14 2-14 0", "M5 7v10c0 2 14 2 14 0V7", "M5 12c0 2 14 2 14 0"]
+  }
+];
 const structuredData = [
   personStructuredData(),
   webPageStructuredData({
@@ -22,33 +40,49 @@ const structuredData = [
 ---
 
 <BaseLayout title="Contact" description={pageDescription} path="/contact" structuredData={structuredData}>
-  <section class="section-band">
-    <div class="shell grid gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
-      <div>
-        <SectionHeader as="h1" eyebrow="Contact" title="Discuss Appian solution design, workflow automation, or plugin engineering." copy="Share the business context, delivery goal, or Appian challenge. Keep sensitive project data out of the message." />
-        <div class="mt-7 grid gap-3">
-          <div class="rounded-portfolio border border-border bg-surface/72 p-4">
-            <p class="text-xs font-bold uppercase text-muted">Email</p>
-            <a class="mt-2 block text-sm font-semibold text-text hover:text-accent" href={`mailto:${contact.email}`}>{contact.email}</a>
-          </div>
-          <div class="rounded-portfolio border border-border bg-surface/72 p-4">
-            <p class="text-xs font-bold uppercase text-muted">Location</p>
-            <p class="mt-2 text-sm font-semibold text-text">{contact.location}</p>
-          </div>
-          <div class="contact-signal-panel">
-            <span>Workflow automation</span>
-            <span>Appian delivery</span>
-            <span>Custom plugins</span>
-            <span>Data and integration</span>
-          </div>
-        </div>
+  <section class="section-band contact-page-section">
+    <div class="shell contact-page-shell">
+      <div class="contact-page-header">
+        <SectionHeader as="h1" eyebrow="Contact" title="Discuss Appian solution design and delivery." />
       </div>
 
-      <div class="glass-panel p-5 md:p-6">
-        <ContactForm />
-        <p class="mt-5 text-xs leading-5 text-muted">
-          Please avoid sharing confidential client data, credentials, tokens, or sensitive project details in this form.
-        </p>
+      <div class="contact-page-grid">
+        <div class="contact-info-column">
+          <div class="contact-detail-grid">
+            <div class="contact-detail-card">
+              <p class="text-xs font-bold uppercase text-muted">Email</p>
+              <a class="mt-2 block text-sm font-semibold text-text hover:text-accent" href={`mailto:${contact.email}`}>{contact.email}</a>
+            </div>
+            <div class="contact-detail-card">
+              <p class="text-xs font-bold uppercase text-muted">Location</p>
+              <p class="mt-2 text-sm font-semibold text-text">{contact.location}</p>
+            </div>
+            <div class="contact-topic-flow" aria-label="Contact focus areas">
+              <div class="contact-flow-head">
+                <p>Good fit for</p>
+              </div>
+              <ul class="contact-flow-list">
+                {contactSignals.map((signal) => (
+                  <li>
+                    <span class="contact-flow-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        {signal.icon.map((path) => <path d={path} />)}
+                      </svg>
+                    </span>
+                    <strong>{signal.title}</strong>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel contact-form-panel p-5 md:p-6">
+          <ContactForm />
+          <p class="mt-5 text-xs leading-5 text-muted">
+            Please avoid sharing confidential client data, credentials, tokens, or sensitive project details in this form.
+          </p>
+        </div>
       </div>
     </div>
   </section>

@@ -1,0 +1,167 @@
+---
+import FeaturedWorksShowcase from "@/components/FeaturedWorksShowcase";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { allProjects, projectToCard, projects } from "@/lib/content";
+import type { ProjectDetail } from "@/lib/content";
+import { collectionPageStructuredData } from "@/lib/seo";
+
+const isProject = (project: ProjectDetail | undefined): project is ProjectDetail => Boolean(project);
+const projectBySlug = (slug: string) => projects.find((project) => project.slug === slug);
+const anyProjectBySlug = (slug: string) => allProjects.find((project) => project.slug === slug);
+const pluginWorkSlugs = [
+  "locale-date-datetime-picker-plugin",
+  "color-picker-component-plugin",
+  "custom-html-document-viewer-plugin",
+  "document-text-highlighter-plugin",
+  "html-viewer-component-plugin",
+  "html-docx-accessible-pdf-plugin"
+];
+const pluginProjects = pluginWorkSlugs.map(anyProjectBySlug).filter(isProject);
+const keyWorkSlugs = [
+  "field-level-audit-framework",
+  "appian-server-metrics-performance-triage",
+  "no-claim-discount-poc",
+  "knowledge-center-chatbot-docbot"
+];
+const keyProjects = keyWorkSlugs.map(projectBySlug).filter(isProject);
+const uniqueProjects = [...pluginProjects, ...keyProjects].filter(
+  (project, index, list) => list.findIndex((item) => item.slug === project.slug) === index
+);
+const allCards = uniqueProjects.map(projectToCard);
+const pluginCards = pluginProjects.map(projectToCard);
+const pageDescription =
+  "Appian delivery work across component plugins, field-level audit, platform diagnostics, decision flows, and knowledge systems.";
+const structuredData = collectionPageStructuredData({
+  name: "Key Works - Leelark Saxena",
+  description: pageDescription,
+  path: "/key-works",
+  projects: uniqueProjects,
+  breadcrumbs: [
+    { name: "Home", path: "/" },
+    { name: "Key Works", path: "/key-works" }
+  ]
+});
+
+const spotlightItems = [
+  {
+    sourceSlug: "field-level-audit-framework",
+    eyebrow: "Audit framework",
+    label: "Field-Level Audit Framework",
+    summary: "Reusable traceability for sensitive field changes, reviewer context, and governance-ready history.",
+    tone: "green"
+  },
+  {
+    sourceSlug: "appian-server-metrics-performance-triage",
+    eyebrow: "Platform analysis",
+    label: "Server Side Metrics Evaluation",
+    summary: "Health-check data shaped into readable signals for platform triage and remediation planning.",
+    tone: "blue"
+  },
+  {
+    sourceSlug: "no-claim-discount-poc",
+    eyebrow: "Decision flow",
+    label: "No Claim Discount POC",
+    summary: "Insurance decision logic for interpreting claim signals, evidence, and NCD review paths.",
+    tone: "amber"
+  },
+  {
+    sourceSlug: "knowledge-center-chatbot-docbot",
+    eyebrow: "Knowledge system",
+    label: "Knowledge Center Chatbot",
+    summary: "Document-backed question answering with source-aware review and enterprise knowledge discovery.",
+    tone: "green"
+  }
+] as const;
+---
+
+<BaseLayout title="Key Works" description={pageDescription} path="/key-works" structuredData={structuredData}>
+  <section class="section-band key-works-hero">
+    <div class="shell key-works-hero-grid">
+      <div class="key-works-copy">
+        <p class="eyebrow">Enterprise Appian Delivery</p>
+        <h1><span>Key Appian Work</span> Systems</h1>
+        <p>
+          A focused portfolio view of reusable Appian plugins, audit foundations, decision flows, and platform diagnostics shaped into practical delivery systems.
+        </p>
+        <div class="key-works-proof-row" aria-label="Key work focus areas">
+          <span>Plugins</span>
+          <span>Reusable modules</span>
+          <span>Audit & diagnostics</span>
+        </div>
+      </div>
+      <div class="key-works-hero-panel" aria-label="Animated system visual for portfolio work">
+        <div class="key-system-visual" aria-hidden="true">
+          <div class="key-system-header">
+            <span>System map</span>
+            <b>Appian portfolio</b>
+            <i></i>
+            <i></i>
+            <i></i>
+          </div>
+          <span class="key-system-lane key-system-lane-top"></span>
+          <span class="key-system-lane key-system-lane-bottom"></span>
+          <span class="key-system-ring key-system-ring-one"></span>
+          <span class="key-system-ring key-system-ring-two"></span>
+          <span class="key-system-route key-system-route-a"></span>
+          <span class="key-system-route key-system-route-b"></span>
+          <span class="key-system-route key-system-route-c"></span>
+          <span class="key-system-route key-system-route-d"></span>
+          <div class="key-system-core">
+            <span>Portfolio</span>
+            <b>Work Systems</b>
+          </div>
+          <span class="key-system-node key-system-node-plugin">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M9 7V3m6 4V3M8 11h8m-9 0h10v4a5 5 0 0 1-10 0v-4Zm5 9v-3" />
+            </svg>
+            <b>Plugins</b>
+          </span>
+          <span class="key-system-node key-system-node-module">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M5 7.5 12 3l7 4.5v9L12 21l-7-4.5v-9Zm7 4.5 7-4.5M12 12v9M12 12 5 7.5" />
+            </svg>
+            <b>Modules</b>
+          </span>
+          <span class="key-system-node key-system-node-decision">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M6 4h12v5c0 5.2-3.2 9.4-6 11-2.8-1.6-6-5.8-6-11V4Zm4 8 1.5 1.5L15.5 9" />
+            </svg>
+            <b>Decisioning</b>
+          </span>
+          <span class="key-system-node key-system-node-analysis">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M4 19V5m0 14h16M8 16v-5m4 5V8m4 8v-3m-7-5 3-3 4 4 3-5" />
+            </svg>
+            <b>Analysis</b>
+          </span>
+          <span class="key-system-signal key-system-signal-a"></span>
+          <span class="key-system-signal key-system-signal-b"></span>
+          <span class="key-system-signal key-system-signal-c"></span>
+          <span class="key-system-shape key-system-shape-a"></span>
+          <span class="key-system-shape key-system-shape-b"></span>
+          <div class="key-system-stack key-system-stack-left" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="key-system-stack key-system-stack-right" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-band key-works-body">
+    <div class="shell">
+      <FeaturedWorksShowcase
+        projects={allCards}
+        pluginProjects={pluginCards}
+        spotlightItems={spotlightItems}
+        client:load
+      />
+    </div>
+  </section>
+</BaseLayout>

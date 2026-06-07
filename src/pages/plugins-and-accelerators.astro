@@ -1,141 +1,27 @@
 ---
-import ProjectExplorer from "@/components/ProjectExplorer";
-import SectionHeader from "@/components/SectionHeader.astro";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import {
-  categoryLabels,
-  portfolioProjectsByCategory,
-  projectToCard,
-  projects
-} from "@/lib/content";
-import type { ProjectDetail } from "@/lib/content";
-import { withBase } from "@/lib/paths";
-import { collectionPageStructuredData } from "@/lib/seo";
+import { canonicalUrl, withBase } from "@/lib/paths";
 
-const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
-const pluginCards = portfolioProjectsByCategory.plugins.map(projectToCard);
-const reusableAssetSlugs = ["field-level-audit-framework", "formatted-excel-import-export"];
-const isProject = (project: ProjectDetail | undefined): project is ProjectDetail => Boolean(project);
-const reusableAssets = reusableAssetSlugs.map((slug) => projects.find((project) => project.slug === slug)).filter(isProject);
-const reusableAssetCards = reusableAssets.map(projectToCard);
-const pageDescription =
-  "Reusable Appian plugins and focused assets for field-level auditability and formatted Excel import/export workflows.";
-const structuredData = collectionPageStructuredData({
-  name: "Reusable Assets - Leelark Saxena",
-  description: pageDescription,
-  path: "/plugins-and-accelerators",
-  projects: [...portfolioProjectsByCategory.plugins, ...reusableAssets],
-  breadcrumbs: [
-    { name: "Home", path: "/" },
-    { name: "Reusable Assets", path: "/plugins-and-accelerators" }
-  ]
-});
-const pluginPillars = [
-  "Document viewing and HTML rendering inside Appian interfaces",
-  "Evidence highlighting and document intelligence review UX",
-  "Custom component boundaries for event capture and workflow handoff"
-];
-const assetVisuals = [
-  {
-    title: "Field-Level Audit",
-    copy: "Audit-aware workflow pattern for tracking important field changes without turning the user experience into a log viewer.",
-    steps: ["field change", "audit capture", "review trail", "governance view"]
-  },
-  {
-    title: "Import / Export Formatted Excel",
-    copy: "Appian Accelerate Program asset for controlled spreadsheet movement, formatted exports, and operational file automation.",
-    steps: ["template", "validation", "workflow", "formatted output"]
-  }
-];
+const targetPath = "/key-works";
+const targetUrl = withBase(targetPath);
+const canonical = canonicalUrl(targetPath);
 ---
 
-<BaseLayout
-  title="Reusable Assets"
-  description={pageDescription}
-  path="/plugins-and-accelerators"
-  structuredData={structuredData}
->
-  <section class="section-band">
-    <div class="shell grid gap-8 lg:grid-cols-[0.96fr_1.04fr] lg:items-start">
-      <div>
-        <p class="eyebrow mb-4">Reusable Assets</p>
-        <h1 class="text-balance text-4xl font-semibold leading-tight text-text md:text-6xl">
-          Focused Appian assets for plugin extension, auditability, and formatted Excel automation.
-        </h1>
-        <p class="mt-6 text-lg leading-8 text-muted">
-          A simplified asset view: plugin work, Field-Level Audit, and Import / Export Formatted Excel. Appian Accelerate Program workstreams are presented through the Appian Accelerate Program detail view.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a class="quiet-button" href={withBase("/work/plugins")}>Browse plugins</a>
-          <a class="primary-button" href={withBase("/work")}>View work</a>
-        </div>
-      </div>
-
-      <aside class="glass-panel p-6">
-        <p class="eyebrow">Library snapshot</p>
-        <dl class="mt-5 grid gap-3 sm:grid-cols-3">
-          <div class="proof-tile">
-            <dt>Plugins</dt>
-            <dd>{pluginCards.length}</dd>
-          </div>
-          <div class="proof-tile">
-            <dt>Audit Asset</dt>
-            <dd>1</dd>
-          </div>
-          <div class="proof-tile">
-            <dt>Excel Asset</dt>
-            <dd>1</dd>
-          </div>
-        </dl>
-        <p class="mt-6 text-sm leading-7 text-muted">
-          Each item is framed as a portfolio-ready reusable asset without exposing private implementation details.
-        </p>
-      </aside>
-    </div>
-  </section>
-
-  <section class="section-band border-t border-border">
-    <div class="shell">
-      <SectionHeader eyebrow="Plugin library" title="Custom Appian components for document-heavy and interaction-heavy workflow experiences." copy="These plugins frame Leelark as a hands-on component developer who can extend Appian when standard interface patterns are not enough." />
-      <div class="mt-8 grid items-start gap-4 lg:grid-cols-[0.76fr_1.24fr]">
-        <div class="rounded-portfolio border border-border bg-surface/74 p-5">
-          <p class="eyebrow">Reusable plugin value</p>
-          <ul class="mt-4 grid gap-3 text-sm leading-6 text-muted">
-            {pluginPillars.map((pillar) => (
-              <li class="flex gap-2">
-                <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true"></span>
-                <span>{pillar}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <ProjectExplorer projects={pluginCards} categories={categories} showFilters={false} compact client:load />
-      </div>
-    </div>
-  </section>
-
-  <section class="section-band border-t border-border">
-    <div class="shell">
-      <SectionHeader eyebrow="Dedicated assets" title="Two focused assets with clear workflow value." />
-      <div class="asset-feature-grid mt-8">
-        {assetVisuals.map((asset) => (
-          <article class="asset-feature-card">
-            <div class="asset-feature-diagram" aria-hidden="true">
-              {asset.steps.map((step, index) => (
-                <span>
-                  <i>{index + 1}</i>
-                  <b>{step}</b>
-                </span>
-              ))}
-            </div>
-            <h2>{asset.title}</h2>
-            <p>{asset.copy}</p>
-          </article>
-        ))}
-      </div>
-      <div class="mt-8">
-        <ProjectExplorer projects={reusableAssetCards} categories={categories} showFilters={false} compact client:load />
-      </div>
-    </div>
-  </section>
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content={`0; url=${targetUrl}`} />
+    <meta name="robots" content="noindex,follow" />
+    <link rel="canonical" href={canonical} />
+    <title>Redirecting to Key Works | Leelark Saxena</title>
+    <script is:inline define:vars={{ targetUrl }}>
+      window.location.replace(targetUrl);
+    </script>
+  </head>
+  <body>
+    <main>
+      <p>Redirecting to <a href={targetUrl}>Key Works</a>.</p>
+    </main>
+  </body>
+</html>
