@@ -3,12 +3,10 @@ import ProjectExplorer from "@/components/ProjectExplorer";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import {
-  acceleratorSuiteProjects,
   categoryLabels,
   portfolioProjectsByCategory,
   projectToCard,
-  projects,
-  standaloneAccelerators
+  projects
 } from "@/lib/content";
 import type { ProjectDetail } from "@/lib/content";
 import { withBase } from "@/lib/paths";
@@ -16,84 +14,43 @@ import { collectionPageStructuredData } from "@/lib/seo";
 
 const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
 const pluginCards = portfolioProjectsByCategory.plugins.map(projectToCard);
-const standaloneAcceleratorCards = standaloneAccelerators.map(projectToCard);
-const appianAccelerate = projects.find((project) => project.slug === "appian-accelerate-program");
+const reusableAssetSlugs = ["field-level-audit-framework", "formatted-excel-import-export"];
+const isProject = (project: ProjectDetail | undefined): project is ProjectDetail => Boolean(project);
+const reusableAssets = reusableAssetSlugs.map((slug) => projects.find((project) => project.slug === slug)).filter(isProject);
+const reusableAssetCards = reusableAssets.map(projectToCard);
 const pageDescription =
-  "Reusable Appian plugins, component patterns, and accelerator workstreams for workflow automation, document intelligence, integration, and platform governance.";
+  "Reusable Appian plugins and focused assets for field-level auditability and formatted Excel import/export workflows.";
 const structuredData = collectionPageStructuredData({
-  name: "Plugins and Accelerators - Leelark Saxena",
+  name: "Reusable Assets - Leelark Saxena",
   description: pageDescription,
   path: "/plugins-and-accelerators",
-  projects: [...portfolioProjectsByCategory.plugins, ...(appianAccelerate ? [appianAccelerate] : []), ...standaloneAccelerators],
+  projects: [...portfolioProjectsByCategory.plugins, ...reusableAssets],
   breadcrumbs: [
     { name: "Home", path: "/" },
-    { name: "Plugins and Accelerators", path: "/plugins-and-accelerators" }
+    { name: "Reusable Assets", path: "/plugins-and-accelerators" }
   ]
 });
-const acceleratorWorkstreams = [...standaloneAccelerators, ...acceleratorSuiteProjects];
-const isProject = (project: ProjectDetail | undefined): project is ProjectDetail => Boolean(project);
-const acceleratorGroups = [
-  {
-    title: "Enterprise UX and Data Entry",
-    copy: "Grid, paragraph, and hierarchical data-entry patterns for denser Appian workflows.",
-    slugs: ["dynamic-editable-grid-accelerator", "editable-paragraph-grid-accelerator", "hierarchical-data-entry-ux-redesign"]
-  },
-  {
-    title: "Excel, Document, and File Automation",
-    copy: "Reusable patterns for imports, exports, document merge integrity, and viewer compatibility.",
-    slugs: ["formatted-excel-import-export", "excel-merge-large-export", "document-merge-integrity-rca", "pdf-reconciliation-viewer-compatibility-rca"]
-  },
-  {
-    title: "Platform Health, Observability, and Performance",
-    copy: "Health-check, observability, and triage assets for Appian platform reliability reviews.",
-    slugs: ["appian-server-metrics-performance-triage", "appian-monitoring-observability-accelerator", "appian-health-check-risk-review"]
-  },
-  {
-    title: "Integration and Security",
-    copy: "Connectivity, message queue, notification, telemetry, and SQL portability workstreams.",
-    slugs: [
-      "secure-snowflake-connectivity-accelerator",
-      "message-queue-consumption-modernization",
-      "transaction-manager-sql-portability-accelerator",
-      "notification-api-reliability-accelerator",
-      "device-access-audit-accelerator"
-    ]
-  },
-  {
-    title: "Governance, Deployment, and Operating Model",
-    copy: "Dependency review, deployment governance, cloud operating model, and best-practice advisory assets.",
-    slugs: [
-      "appian-dependency-governance-accelerator",
-      "appian-deployment-devops-governance",
-      "appian-cloud-operating-model-advisory",
-      "appian-best-practices-governance-review"
-    ]
-  },
-  {
-    title: "AI, Process Intelligence, and Transition Automation",
-    copy: "AI enablement, process intelligence readiness, chatbot improvement, and transition automation patterns.",
-    slugs: [
-      "appian-ai-document-intelligence-enablement",
-      "process-hq-readiness-accelerator",
-      "enterprise-document-chatbot-improvement-accelerator",
-      "autonomous-client-transition-knowledge-absorption"
-    ]
-  }
-].map((group) => ({
-  ...group,
-  items: group.slugs.map((slug) => acceleratorWorkstreams.find((project) => project.slug === slug)).filter(isProject)
-}));
-
 const pluginPillars = [
   "Document viewing and HTML rendering inside Appian interfaces",
-  "Evidence highlighting, bounding-box review, and document intelligence UX",
-  "Custom component boundaries for event capture and workflow handoff",
-  "Public-safe component positioning that avoids unverified implementation claims"
+  "Evidence highlighting and document intelligence review UX",
+  "Custom component boundaries for event capture and workflow handoff"
+];
+const assetVisuals = [
+  {
+    title: "Field-Level Audit",
+    copy: "Audit-aware workflow pattern for tracking important field changes without turning the user experience into a log viewer.",
+    steps: ["field change", "audit capture", "review trail", "governance view"]
+  },
+  {
+    title: "Import / Export Formatted Excel",
+    copy: "Appian Accelerate Program asset for controlled spreadsheet movement, formatted exports, and operational file automation.",
+    steps: ["template", "validation", "workflow", "formatted output"]
+  }
 ];
 ---
 
 <BaseLayout
-  title="Plugins and Accelerators"
+  title="Reusable Assets"
   description={pageDescription}
   path="/plugins-and-accelerators"
   structuredData={structuredData}
@@ -101,16 +58,16 @@ const pluginPillars = [
   <section class="section-band">
     <div class="shell grid gap-8 lg:grid-cols-[0.96fr_1.04fr] lg:items-start">
       <div>
-        <p class="eyebrow mb-4">Plugins and Accelerators</p>
+        <p class="eyebrow mb-4">Reusable Assets</p>
         <h1 class="text-balance text-4xl font-semibold leading-tight text-text md:text-6xl">
-          Reusable Appian assets for plugins, workflow delivery, and platform acceleration.
+          Focused Appian assets for plugin extension, auditability, and formatted Excel automation.
         </h1>
         <p class="mt-6 text-lg leading-8 text-muted">
-          This page groups productized Appian component work with accelerator patterns. It shows reusable value without exposing private client implementation details.
+          A simplified asset view: plugin work, Field-Level Audit, and Import / Export Formatted Excel. Appian Accelerate Program workstreams are presented through the Appian Accelerate Program detail view.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <a class="quiet-button" href={withBase("/work/plugins")}>Browse plugins</a>
-          <a class="primary-button" href={withBase("/work/accelerators")}>Browse accelerators</a>
+          <a class="primary-button" href={withBase("/work")}>View work</a>
         </div>
       </div>
 
@@ -122,16 +79,16 @@ const pluginPillars = [
             <dd>{pluginCards.length}</dd>
           </div>
           <div class="proof-tile">
-            <dt>Accelerators</dt>
-            <dd>{acceleratorWorkstreams.length}</dd>
+            <dt>Audit Asset</dt>
+            <dd>1</dd>
           </div>
           <div class="proof-tile">
-            <dt>Groups</dt>
-            <dd>{acceleratorGroups.length}</dd>
+            <dt>Excel Asset</dt>
+            <dd>1</dd>
           </div>
         </dl>
         <p class="mt-6 text-sm leading-7 text-muted">
-          Accelerator details are grouped into capability families so platform, delivery, integration, and governance value is easier to scan.
+          Each item is framed as a portfolio-ready reusable asset without exposing private implementation details.
         </p>
       </aside>
     </div>
@@ -159,37 +116,25 @@ const pluginPillars = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Accelerator library" title="Reusable workstreams grouped as one advisory and delivery capability suite." copy="Repeated platform problems become reusable Appian patterns, operating-model guidance, and implementation accelerators." />
-      <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {acceleratorGroups.map((group, index) => (
-          <article class="glass-panel p-5">
-            <p class="text-xs font-bold uppercase text-accent">Group 0{index + 1}</p>
-            <h2 class="mt-4 text-xl font-semibold text-text">{group.title}</h2>
-            <p class="mt-3 text-sm leading-7 text-muted">{group.copy}</p>
-            <ul class="mt-5 grid gap-2 text-sm leading-6 text-muted">
-              {group.items.map((item) => (
-                <li class="flex gap-2">
-                  <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blueSignal" aria-hidden="true"></span>
-                  <span>{item.title}</span>
-                </li>
+      <SectionHeader eyebrow="Dedicated assets" title="Two focused assets with clear workflow value." />
+      <div class="asset-feature-grid mt-8">
+        {assetVisuals.map((asset) => (
+          <article class="asset-feature-card">
+            <div class="asset-feature-diagram" aria-hidden="true">
+              {asset.steps.map((step, index) => (
+                <span>
+                  <i>{index + 1}</i>
+                  <b>{step}</b>
+                </span>
               ))}
-            </ul>
+            </div>
+            <h2>{asset.title}</h2>
+            <p>{asset.copy}</p>
           </article>
         ))}
       </div>
-      <div class="mt-8 rounded-portfolio border border-border bg-surface/74 p-5">
-        <p class="text-sm leading-7 text-muted">
-          The accelerator suite is presented as a portfolio-ready library. Each workstream is framed around the reusable problem it solves, the Appian capability it strengthens, and the operating value it can create.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section-band border-t border-border">
-    <div class="shell">
-      <SectionHeader eyebrow="Standalone accelerator spotlights" title="Platform-health accelerators with distinct architecture and operating-model stories." />
       <div class="mt-8">
-        <ProjectExplorer projects={standaloneAcceleratorCards} categories={categories} showFilters={false} compact client:load />
+        <ProjectExplorer projects={reusableAssetCards} categories={categories} showFilters={false} compact client:load />
       </div>
     </div>
   </section>

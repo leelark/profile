@@ -35,45 +35,20 @@ const structuredData = [
           <dd>Appian L3</dd>
         </div>
         <div class="proof-tile">
-          <dt>Focus</dt>
-          <dd>Solution Design</dd>
+          <dt>Role</dt>
+          <dd>Solution Architect</dd>
         </div>
       </div>
 
-      <div class="mt-10 grid gap-4">
+      <div class="resume-journey mt-10">
         {experience.map((item, index) => (
-          <article class="resume-experience-card">
+          <article class="resume-journey-node">
+            <span>{String(index + 1).padStart(2, "0")}</span>
             <div>
-              <p class="text-xs font-bold uppercase text-accent">0{index + 1}</p>
-              <p class="mt-2 text-sm font-semibold text-muted">{item.period}</p>
+              <h2>{item.company}</h2>
+              <p>{item.role}</p>
             </div>
-            <div>
-              <div class="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
-                <h2 class="text-2xl font-semibold text-text">{item.role}</h2>
-                <p class="text-sm font-bold text-accent">{item.company}</p>
-              </div>
-              <p class="mt-4 max-w-4xl text-sm leading-7 text-muted">{item.positioning || item.resumeCopy}</p>
-              <div class="mt-5 grid gap-4 lg:grid-cols-2">
-                {item.responsibilities.length > 0 && (
-                  <div>
-                    <p class="text-xs font-bold uppercase text-muted">Core responsibility</p>
-                    <ul class="mt-3 grid gap-2 text-sm leading-6 text-muted">
-                      {item.responsibilities.slice(0, 4).map((point) => (
-                        <li class="resume-list-item"><span aria-hidden="true"></span><p>{point}</p></li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {item.representativeWork.length > 0 && (
-                  <div>
-                    <p class="text-xs font-bold uppercase text-muted">Representative work</p>
-                    <div class="mt-3 flex flex-wrap gap-2">
-                      {item.representativeWork.slice(0, 5).map((work) => <span class="chip text-[0.72rem]">{work.replace(/\.$/, "")}</span>)}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            <strong>{item.period}</strong>
           </article>
         ))}
       </div>
@@ -118,6 +93,7 @@ const structuredData = [
         <p class="mt-4 text-sm font-semibold leading-6 text-text">{publication.title}</p>
         <p class="mt-3 text-sm leading-6 text-muted">{publication.websiteCopy}</p>
         <p class="mt-3 text-xs font-semibold leading-5 text-muted">{publication.publicNote}</p>
+        <a class="publication-link mt-5" href={publication.url} target="_blank" rel="noreferrer">View publication</a>
       </article>
     </div>
   </section>

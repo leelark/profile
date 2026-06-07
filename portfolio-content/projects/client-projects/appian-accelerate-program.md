@@ -19,7 +19,7 @@ Evidence Basis: Appian Accelerate deck, Appian Accelerate notes, accelerator dec
 
 ## Hero Summary
 
-Strategic Appian advisory and platform optimization work across architecture, governance, performance, integration reliability, complex UX patterns, reusable accelerators, and platform health.
+Strategic Appian advisory and platform optimization work across architecture, governance, performance, integration reliability, complex UX patterns, Appian Accelerate workstreams, and platform health.
 
 ## Project Context
 
@@ -37,7 +37,7 @@ Enterprise Appian clients often face issues that span multiple layers:
 - integration reliability
 - deployment governance
 - complex UX constraints
-- reusable component gaps
+- Appian Accelerate workstream gaps
 - monitoring visibility
 - client team enablement
 
@@ -52,7 +52,7 @@ Responsibilities included:
 - analyzing client requirements and technical issues
 - preparing accelerator solution approaches
 - reviewing Appian design options
-- designing reusable UI and workflow patterns
+- designing Appian Accelerate UX and workflow patterns
 - contributing to performance and platform-health analysis
 - advising on integration, monitoring, and deployment strategy
 - translating technical limitations into practical recommendations

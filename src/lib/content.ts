@@ -38,6 +38,7 @@ export type ProjectDetail = {
 };
 
 export type ProjectCardPayload = {
+  sourceSlug: string;
   slug: string;
   title: string;
   category: ProjectCategory;
@@ -132,7 +133,7 @@ export const categoryDescriptions: Record<CategorySlug, string> = {
   "client-projects": "Enterprise client delivery, advisory, workflow modernization, and Appian architecture work.",
   plugins: "Custom Appian component and plugin innovation for document, HTML, PDF, and interaction-heavy use cases.",
   "innovative-projects": "Product-style POCs across claims, knowledge discovery, government services, decisioning, and workflow automation.",
-  accelerators: "Reusable Appian patterns, advisory playbooks, performance reviews, grid systems, integration guidance, and platform-health accelerators."
+  accelerators: "Appian Accelerate Program workstreams spanning advisory reviews, platform health, observability, file automation, governance, integration, and AI readiness."
 };
 
 const featuredSlugs = [
@@ -191,7 +192,10 @@ const publicProjectTitles: Record<string, string> = {
   "invesco-aml-change-management": "Investment Management AML and Change Management",
   "invesco-reconciliation-system": "Investment Operations Reconciliation System",
   "carlyle-bridge-module": "Finance Document Bridge Module",
-  "appian-monitoring-observability-accelerator": "Appian Cloud Log Streaming and Observability Accelerator"
+  "field-level-audit-framework": "Field-Level Audit Framework",
+  "appian-server-metrics-performance-triage": "Server Side Metrics Evaluation",
+  "appian-monitoring-observability-accelerator": "Log Streaming",
+  "formatted-excel-import-export": "Import / Export Formatted Excel"
 };
 
 const publicProjectSlugs: Record<string, string> = {
@@ -269,7 +273,7 @@ function slugFromPath(path: string) {
 
 function roleFor(project: { category: ProjectCategory; slug: string; title: string }) {
   if (project.category === "Plugins") return "Plugin Developer and Component Designer";
-  if (project.category === "Accelerators") return "Accelerator Designer and Appian Advisory Contributor";
+  if (project.category === "Accelerators") return "Solution Architect, Appian Accelerate Program";
   if (project.slug.includes("claimroute") || project.slug.includes("knowledge-center")) return "AI Solution Designer and Product Builder";
   if (project.slug.includes("accelerate")) return "Lead Consultant and Appian Accelerate Contributor";
   return "Appian Solution Consultant and Technical Lead";
@@ -282,7 +286,10 @@ function domainFor(project: { category: ProjectCategory; slug: string; secondary
   if (project.slug.includes("invesco")) return "Investment management";
   if (project.slug.includes("hsbc") || project.slug.includes("rapid")) return "Banking and regulatory workflow";
   if (project.category === "Plugins") return "Appian component innovation";
-  if (project.category === "Accelerators") return "Appian platform acceleration";
+  if (project.slug.includes("server-metrics")) return "Appian Accelerate Program";
+  if (project.slug.includes("monitoring") || project.slug.includes("observability")) return "Appian Accelerate Program";
+  if (project.slug.includes("formatted-excel")) return "Appian Accelerate Program";
+  if (project.category === "Accelerators") return "Appian Accelerate Program";
   return project.secondaryCategories[0] ?? "Enterprise workflow automation";
 }
 
@@ -336,7 +343,7 @@ function workflowStepsFor(project: { category: ProjectCategory; slug: string }) 
   }
 
   if (project.category === "Accelerators") {
-    return ["Client pattern", "Reusable design", "Appian implementation", "Governance guide", "Adoption path"];
+    return ["Accelerate intake", "Architect review", "Workstream design", "Client enablement", "Adoption path"];
   }
 
   if (project.category === "Innovative Projects") {
@@ -423,7 +430,7 @@ export const profile: Profile = {
 };
 
 const expertiseAreaOverrides: Record<string, Partial<ExpertiseArea>> = {
-  "Enterprise Solution Design": {
+  "Enterprise Solution Architecture": {
     summary: "I shape Appian solutions around business outcomes, process clarity, data structure, controls, and delivery sequencing.",
     capabilities: ["requirements to solution scope", "process and data architecture", "security and governance model", "delivery roadmap"]
   },
@@ -447,7 +454,7 @@ const expertiseAreaOverrides: Record<string, Partial<ExpertiseArea>> = {
 
 export const expertiseAreas: ExpertiseArea[] = [
   {
-    title: "Enterprise Solution Design",
+    title: "Enterprise Solution Architecture",
     sourceTitle: "Enterprise Appian Architecture"
   },
   {
@@ -522,7 +529,9 @@ export const technicalSkillGroups: TechnicalSkillGroup[] = [
     skills: [
       { name: "JavaScript", note: "components and browser behavior" },
       { name: "Java", note: "plugins and backend logic" },
-      { name: "HTML/CSS", note: "interface implementation" },
+      { name: "HTML", note: "semantic interface structure" },
+      { name: "CSS", note: "responsive interface styling" },
+      { name: "Python", note: "analysis and automation tooling" },
       { name: "Node.js", note: "tooling and services" },
       { name: "PHP", note: "web application foundation" },
       { name: "Spring", note: "Java service framework" },
@@ -535,7 +544,7 @@ export const technicalSkillGroups: TechnicalSkillGroup[] = [
     summary: "Enterprise data access, file automation, API connectivity, document processing, and operational reporting.",
     skills: [
       { name: "SQL", note: "queries and data operations" },
-      { name: "MS SQL Server", note: "enterprise relational database" },
+      { name: "MS SQL", note: "enterprise relational database" },
       { name: "MySQL", note: "database-backed Appian work" },
       { name: "REST APIs", note: "system connectivity" },
       { name: "Web APIs", note: "Appian service exposure" },
@@ -548,8 +557,8 @@ export const technicalSkillGroups: TechnicalSkillGroup[] = [
     title: "Delivery and Governance",
     summary: "Requirements, testing, performance review, deployment control, platform health, and reusable accelerator design.",
     skills: [
-      { name: "Requirement Analysis", note: "scope and process clarity" },
-      { name: "Solution Design", note: "architecture and delivery model" },
+      { name: "Architecture Discovery", note: "scope and process clarity" },
+      { name: "Solution Architecture", note: "architecture and delivery model" },
       { name: "Testing", note: "validation and quality control" },
       { name: "Performance Review", note: "logs, metrics, triage" },
       { name: "Governance", note: "dependencies and standards" },
@@ -606,9 +615,26 @@ export const publication = {
   title: field(headingSection(expertiseRaw, "Research Publication"), "Title"),
   publication: field(headingSection(expertiseRaw, "Research Publication"), "Publication"),
   websiteCopy: labelBlock(headingSection(expertiseRaw, "Research Publication"), "Website Copy"),
-  publicNote: "Published research foundation in web application security; formal citation details are being verified before adding a source link.",
+  publicNote: "International Journal of Computer Applications, Volume 181, Number 22, October 2018, pages 44-50.",
+  citation: "Leelark Sharan Saxena. Effective Penetration Testing Approach for Modern Web Application Vulnerabilities. International Journal of Computer Applications 181(22), 44-50, October 2018.",
+  doi: "10.5120/ijca2018917958",
+  url: "https://www.ijcaonline.org/archives/volume181/number22/30021-2018917958/",
   detailsNeeded: splitBullets(headingSection(headingSection(expertiseRaw, "Research Publication"), "Publication Details Needed Before Website Launch"))
 };
+
+export const clientShowcase = ["Invesco", "Carlyle", "HSBC", "KPMG", "EBRD", "Genpact"];
+
+export const appianCapabilityShowcase: TechnicalSkill[] = [
+  { name: "Process Design", note: "workflow structure" },
+  { name: "SAIL UI Interfaces", note: "user experience" },
+  { name: "Records", note: "data-backed views" },
+  { name: "Integrations", note: "system connectivity" },
+  { name: "Web APIs", note: "service exposure" },
+  { name: "Appian AI Skills", note: "classification and extraction" },
+  { name: "Appian AI Agents", note: "reasoning workflows" },
+  { name: "SAIL Component Plugin Development", note: "custom interface extension" },
+  { name: "Smart Service Plugin Development", note: "process extension" }
+];
 
 export const contact = {
   phone: field(headingSection(contactRaw, "Contact Details"), "Phone"),
@@ -660,6 +686,7 @@ export function projectToCard(project: ProjectDetail): ProjectCardPayload {
   const plainSection = (title: string) => stripMarkdown(project.sections.find((section) => section.title === title)?.body ?? "");
 
   return {
+    sourceSlug: project.slug,
     slug: project.publicSlug,
     title: project.title,
     category: project.category,
@@ -673,7 +700,7 @@ export function projectToCard(project: ProjectDetail): ProjectCardPayload {
     workflowSteps: workflowStepsFor(project),
     acceleratorHighlights:
       project.slug === "appian-accelerate-program"
-        ? acceleratorSuiteProjects.slice(0, 9).map((item) => item.title)
+        ? [...standaloneAccelerators, ...acceleratorSuiteProjects].slice(0, 12).map((item) => item.title)
         : [],
     keyFeatures: project.keyFeatures.slice(0, 6),
     businessValue: project.businessValue.slice(0, 5),

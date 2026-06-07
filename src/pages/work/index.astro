@@ -8,6 +8,12 @@ import { collectionPageStructuredData } from "@/lib/seo";
 const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
 const cards = portfolioProjects.map(projectToCard);
 const pageDescription = "Portfolio work across Appian client delivery, plugins, product POCs, and reusable accelerators.";
+const categorySignals = [
+  { title: "Client Projects", label: "Enterprise delivery" },
+  { title: "Plugins", label: "Appian extension" },
+  { title: "Innovative Projects", label: "AI product thinking" },
+  { title: "Accelerators", label: "Appian Accelerate Program" }
+];
 const structuredData = collectionPageStructuredData({
   name: "Portfolio Work - Leelark Saxena",
   description: pageDescription,
@@ -23,7 +29,20 @@ const structuredData = collectionPageStructuredData({
 <BaseLayout title="Work" description={pageDescription} path="/work" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Work" title="Appian solution design, workflow automation, plugins, and reusable accelerator work." copy="A curated view of enterprise delivery, custom Appian extensions, product-style POCs, and platform improvement patterns." />
+      <div class="work-hero-panel">
+        <div>
+          <SectionHeader as="h1" eyebrow="Work" title="Architecture-led work across enterprise Appian, AI workflows, plugins, and Appian Accelerate." copy="A category-driven portfolio view with less metadata, stronger visual markers, and concise project snapshots." />
+        </div>
+        <div class="work-category-compass" aria-label="Work categories">
+          {categorySignals.map((item, index) => (
+            <span>
+              <i>{String(index + 1).padStart(2, "0")}</i>
+              <b>{item.title}</b>
+              <em>{item.label}</em>
+            </span>
+          ))}
+        </div>
+      </div>
       <div class="mt-10">
         <ProjectExplorer projects={cards} categories={categories} client:load />
       </div>

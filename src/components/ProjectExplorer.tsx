@@ -1,5 +1,6 @@
 import {
   Activity,
+  ArrowUpRight,
   BadgeCheck,
   Bot,
   BrainCircuit,
@@ -17,8 +18,10 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from "react";
 
 type ProjectCardData = {
+  sourceSlug: string;
   slug: string;
   title: string;
   category: string;
@@ -55,7 +58,7 @@ const categoryVisuals: Record<string, { icon: typeof BriefcaseBusiness; label: s
   "client-projects": { icon: BriefcaseBusiness, label: "Enterprise delivery", color: "text-blueSignal", accent: "project-accent-blue" },
   plugins: { icon: Plug, label: "Plugin extension", color: "text-accent", accent: "project-accent-purple" },
   "innovative-projects": { icon: Sparkles, label: "Product concept", color: "text-verified", accent: "project-accent-green" },
-  accelerators: { icon: Workflow, label: "Reusable pattern", color: "text-caution", accent: "project-accent-amber" }
+  accelerators: { icon: Workflow, label: "Appian Accelerate", color: "text-caution", accent: "project-accent-amber" }
 };
 
 const mapIcons = [Database, Workflow, Layers3, BadgeCheck];
@@ -75,14 +78,6 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
   const lastFocusRef = useRef<HTMLElement | null>(null);
   const reduceMotion = useReducedMotion();
 
-  const counts = useMemo(() => {
-    const next: Record<string, number> = { all: projects.length };
-    projects.forEach((project) => {
-      next[project.categorySlug] = (next[project.categorySlug] ?? 0) + 1;
-    });
-    return next;
-  }, [projects]);
-
   const filtered = useMemo(
     () => (active === "all" ? projects : projects.filter((project) => project.categorySlug === active)),
     [active, projects]
@@ -97,6 +92,12 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
     setSelectedSlug(slug);
   }
 
+  function handleCardKey(event: ReactKeyboardEvent<HTMLElement>, slug: string) {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    openProject(slug, event.currentTarget);
+  }
+
   function closeProject() {
     setSelectedSlug(null);
     window.setTimeout(() => lastFocusRef.current?.focus(), 0);
@@ -108,7 +109,7 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
     document.body.style.overflow = "hidden";
     closeRef.current?.focus();
 
-    function handleKeyDown(event: KeyboardEvent) {
+    function handleKeyDown(event: globalThis.KeyboardEvent) {
       if (event.key === "Escape") {
         event.preventDefault();
         closeProject();
@@ -152,11 +153,11 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                 key={category.slug}
                 type="button"
                 aria-pressed={selected}
+                aria-label={`${category.label} work filter`}
                 className={`work-filter-button ${selected ? "work-filter-button-active" : ""}`}
                 onClick={() => setActive(category.slug)}
               >
                 <span>{category.label}</span>
-                <span className="work-filter-count">{counts[category.slug] ?? 0}</span>
               </button>
             );
           })}
@@ -169,48 +170,55 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
             const visual = categoryVisuals[project.categorySlug] ?? categoryVisuals["client-projects"];
             const Icon = visual.icon;
             return (
-              <motion.button
+              <motion.article
                 layout={!reduceMotion}
                 key={project.slug}
-                type="button"
                 initial={false}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: reduceMotion ? 0 : 0.14, delay: compact ? 0 : Math.min(index * 0.01, 0.06) }}
                 className={`project-card group ${visual.accent}`}
+                role="button"
+                tabIndex={0}
                 onClick={(event) => openProject(project.slug, event.currentTarget)}
+                onKeyDown={(event) => handleCardKey(event, project.slug)}
                 aria-label={`Open portfolio snapshot for ${project.title}`}
               >
-                <span className="project-card-top">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-portfolio border border-border bg-elevated/78">
+                <div className="project-card-top">
+                  <span className="domain-marker">
                     <Icon className={visual.color} size={21} aria-hidden="true" />
+                    <span>{compactText(project.domain, 44)}</span>
                   </span>
-                  <span className="project-card-category">{project.category}</span>
-                </span>
+                  <span className="project-category-mark">{visual.label}</span>
+                </div>
 
-                <span className="mt-5 block text-xl font-semibold leading-snug text-text">{project.title}</span>
-                <span className="mt-3 block text-sm leading-7 text-muted">{project.heroExcerpt}</span>
+                <h3 className="mt-6 text-xl font-semibold leading-snug text-text">{project.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-muted">{compactText(project.heroExcerpt, compact ? 148 : 190)}</p>
 
-                <span className="mt-5 grid gap-2 text-left sm:grid-cols-2">
-                  <MetaPill label="Role" value={project.role} />
-                  <MetaPill label="Domain" value={project.domain} />
-                </span>
+                <div className="project-flow-mini" aria-label={`${project.title} delivery flow`}>
+                  {project.workflowSteps.slice(0, 4).map((step) => (
+                    <span key={`${project.slug}-${step}`}>
+                      <i aria-hidden="true" />
+                      <b>{step}</b>
+                    </span>
+                  ))}
+                </div>
 
-                <span className="mt-auto block pt-5">
-                  <span className="mb-5 flex flex-wrap gap-2">
-                    <span className="chip text-[0.72rem]">{evidenceLabels[project.evidenceStatus] ?? project.evidenceStatus}</span>
-                    {project.tags.slice(0, 2).map((tag) => (
-                      <span className="chip text-[0.72rem]" key={tag}>
-                        {tag}
-                      </span>
-                    ))}
-                  </span>
-                  <span className="project-card-action">
-                    <span>Project snapshot</span>
-                    <Layers3 size={16} aria-hidden="true" />
-                  </span>
-                </span>
-              </motion.button>
+                <div className="project-card-action">
+                  <span>{evidenceLabels[project.evidenceStatus] ?? project.evidenceStatus}</span>
+                  <button
+                    type="button"
+                    className="project-detail-button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      openProject(project.slug, event.currentTarget);
+                    }}
+                  >
+                    View Details
+                    <ArrowUpRight size={15} aria-hidden="true" />
+                  </button>
+                </div>
+              </motion.article>
             );
           })}
         </AnimatePresence>
@@ -242,12 +250,12 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
               <div className="project-modal-header">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.08em] text-accent">
-                    {selectedProject.category} / {evidenceLabels[selectedProject.evidenceStatus] ?? selectedProject.evidenceStatus}
+                    {selectedProject.category} / {selectedProject.domain}
                   </p>
                   <h2 id={`project-dialog-${selectedProject.slug}`} className="mt-2 text-2xl font-semibold leading-tight text-text md:text-3xl">
                     {selectedProject.title}
                   </h2>
-                  <p className="mt-2 text-sm font-semibold text-muted">{selectedProject.role}</p>
+                  <p className="mt-2 text-sm font-semibold text-muted">{evidenceLabels[selectedProject.evidenceStatus] ?? selectedProject.evidenceStatus}</p>
                 </div>
                 <button
                   ref={closeRef}
@@ -261,41 +269,12 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
               </div>
 
               <div className="project-modal-body">
-                <div className="grid gap-5">
-                  <ProjectMap project={selectedProject} />
-                  <div className="modal-summary-panel">
-                    <div className="flex items-center gap-3">
-                      <Layers3 className="text-accent" size={22} aria-hidden="true" />
-                      <p className="text-xs font-bold uppercase text-muted">Portfolio context</p>
-                    </div>
-                    <p className="mt-4 text-base leading-7 text-text">{selectedProject.heroSummary || selectedProject.heroExcerpt}</p>
-                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                      <MetaBlock label="Domain" value={selectedProject.domain} />
-                      <MetaBlock label="Evidence" value={evidenceLabels[selectedProject.evidenceStatus] ?? selectedProject.evidenceStatus} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="project-detail-stack">
-                  <DetailBlock title="Problem" text={selectedProject.problem || selectedProject.heroExcerpt} />
-                  <DetailBlock title="Solution" text={selectedProject.solution || selectedProject.heroSummary} />
-                  <DetailBlock title="Architecture" text={selectedProject.architecture} />
-                  <ListBlock title="Key features" items={selectedProject.keyFeatures} />
-                  <ListBlock title="Business value" items={selectedProject.businessValue} />
-                  {selectedProject.acceleratorHighlights.length > 0 && (
-                    <ListBlock title="Accelerator capability groups" items={selectedProject.acceleratorHighlights} />
-                  )}
-                  <div>
-                    <p className="text-xs font-bold uppercase text-muted">Technology and Appian capabilities</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {selectedProject.technologies.slice(0, 10).map((item) => (
-                        <span className="chip" key={item}>
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <ProjectMap project={selectedProject} />
+                {selectedProject.sourceSlug === "appian-accelerate-program" ? (
+                  <AccelerateProgramView project={selectedProject} />
+                ) : (
+                  <ProjectReadout project={selectedProject} />
+                )}
               </div>
             </motion.div>
           </motion.div>
@@ -360,20 +339,88 @@ function ProjectMap({ project }: { project: ProjectCardData }) {
   );
 }
 
-function MetaPill({ label, value }: { label: string; value: string }) {
+function ProjectReadout({ project }: { project: ProjectCardData }) {
   return (
-    <span className="project-meta-pill">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </span>
+    <div className="project-detail-stack">
+      <div className="modal-summary-panel">
+        <div className="flex items-center gap-3">
+          <Layers3 className="text-accent" size={22} aria-hidden="true" />
+          <p className="text-xs font-bold uppercase text-muted">Architect view</p>
+        </div>
+        <p className="mt-4 text-base leading-7 text-text">{compactText(project.heroSummary || project.heroExcerpt, 360)}</p>
+      </div>
+
+      <div className="project-readout-grid">
+        <DetailBlock title="Problem" text={project.problem || project.heroExcerpt} />
+        <DetailBlock title="Solution" text={project.solution || project.heroSummary} />
+        <DetailBlock title="Architecture" text={project.architecture} />
+      </div>
+
+      <div className="project-visual-panels">
+        <ListBlock title="Highlights" items={project.keyFeatures} />
+        <ListBlock title="Business value" items={project.businessValue} />
+      </div>
+
+      <div>
+        <p className="text-xs font-bold uppercase text-muted">Technology and Appian capabilities</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {project.technologies.slice(0, 7).map((item) => (
+            <span className="chip" key={item}>
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
-function MetaBlock({ label, value }: { label: string; value: string }) {
+function AccelerateProgramView({ project }: { project: ProjectCardData }) {
+  const contributionCards = [
+    { title: "Server Side Metrics Evaluation", copy: "Performance and capacity signals translated into an architect review path.", icon: Activity },
+    { title: "Log Streaming", copy: "Operational telemetry framed for observability, triage, and platform stewardship.", icon: Cable },
+    { title: "Import / Export Formatted Excel", copy: "Excel movement patterns shaped for controlled Appian workflow usage.", icon: FileText },
+    { title: "Accelerator Workstreams", copy: "Governance, AI readiness, deployment, integration, and UX patterns grouped under Appian Accelerate.", icon: Workflow }
+  ];
+
   return (
-    <div>
-      <p className="text-xs font-bold uppercase text-muted">{label}</p>
-      <p className="mt-1 text-sm font-semibold text-text">{value}</p>
+    <div className="project-detail-stack accelerate-program-view">
+      <section className="modal-summary-panel">
+        <div className="flex items-center gap-3">
+          <Workflow className="text-caution" size={22} aria-hidden="true" />
+          <p className="text-xs font-bold uppercase text-muted">What is Appian Accelerate Program</p>
+        </div>
+        <p className="mt-4 text-base leading-7 text-text">
+          A focused Appian program for turning recurring client platform, governance, automation, and enablement needs into structured
+          architect-led workstreams.
+        </p>
+      </section>
+
+      <section>
+        <p className="text-xs font-bold uppercase text-muted">Solution Architect Contributions</p>
+        <div className="accelerate-contribution-grid mt-4">
+          {contributionCards.map((item) => {
+            const Icon = item.icon;
+            return (
+              <article className="accelerate-contribution-card" key={item.title}>
+                <span aria-hidden="true">
+                  <Icon size={18} />
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.copy}</p>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="accelerate-workstream-river" aria-label="Appian Accelerate Program workstreams">
+        {project.acceleratorHighlights.slice(0, 12).map((item, index) => (
+          <span key={item} style={{ "--step": index } as CSSProperties}>
+            {item}
+          </span>
+        ))}
+      </section>
     </div>
   );
 }
@@ -383,7 +430,7 @@ function DetailBlock({ title, text }: { title: string; text: string }) {
   return (
     <section className="detail-block">
       <h3>{title}</h3>
-      <p>{text}</p>
+      <p>{compactText(text, 260)}</p>
     </section>
   );
 }
@@ -394,10 +441,10 @@ function ListBlock({ title, items }: { title: string; items: string[] }) {
     <section className="detail-block">
       <h3>{title}</h3>
       <ul className="detail-list">
-        {items.slice(0, 7).map((item) => (
+        {items.slice(0, 4).map((item) => (
           <li key={item}>
             <span aria-hidden="true" />
-            <p>{item}</p>
+            <p>{compactText(item, 130)}</p>
           </li>
         ))}
       </ul>
