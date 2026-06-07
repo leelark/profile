@@ -11,6 +11,8 @@
     "check": "astro check",
     "lint:content": "node scripts/validate-content.mjs",
     "lint:motion": "node scripts/validate-motion-system.mjs",
+    "lint:home-revamp": "node scripts/validate-homepage-revamp.mjs",
+    "lint:work-revamp": "node scripts/validate-work-revamp.mjs",
     "lint:work-ui": "node scripts/validate-work-interactions.mjs"
   },
   "dependencies": {

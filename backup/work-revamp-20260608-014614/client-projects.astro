@@ -1,0 +1,36 @@
+---
+import ProjectExplorer from "@/components/ProjectExplorer";
+import SectionHeader from "@/components/SectionHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { categoryDescriptions, categoryLabels, portfolioProjectsByCategory, projectToCard } from "@/lib/content";
+import { collectionPageStructuredData } from "@/lib/seo";
+
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const categoryProjects = portfolioProjectsByCategory["client-projects"];
+const cards = categoryProjects.map(projectToCard);
+const pageDescription = categoryDescriptions["client-projects"];
+const structuredData = collectionPageStructuredData({
+  name: "Client Projects - Leelark Saxena",
+  description: pageDescription,
+  path: "/work/client-projects",
+  projects: categoryProjects,
+  breadcrumbs: [
+    { name: "Home", path: "/" },
+    { name: "Work", path: "/work" },
+    { name: "Client Projects", path: "/work/client-projects" }
+  ]
+});
+---
+
+<BaseLayout title="Client Projects" description={pageDescription} path="/work/client-projects" structuredData={structuredData}>
+  <section class="section-band">
+    <div class="shell">
+      <div data-reveal="text">
+        <SectionHeader as="h1" eyebrow="Work" title="Client Delivery" copy="Enterprise Appian work across regulated, data-heavy workflows." />
+      </div>
+      <div class="mt-8 md:mt-10">
+        <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,36 @@
+---
+import ProjectExplorer from "@/components/ProjectExplorer";
+import SectionHeader from "@/components/SectionHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { categoryDescriptions, categoryLabels, portfolioProjectsByCategory, projectToCard } from "@/lib/content";
+import { collectionPageStructuredData } from "@/lib/seo";
+
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const categoryProjects = portfolioProjectsByCategory.plugins;
+const cards = categoryProjects.map(projectToCard);
+const pageDescription = categoryDescriptions.plugins;
+const structuredData = collectionPageStructuredData({
+  name: "Appian Plugins - Leelark Saxena",
+  description: pageDescription,
+  path: "/work/plugins",
+  projects: categoryProjects,
+  breadcrumbs: [
+    { name: "Home", path: "/" },
+    { name: "Work", path: "/work" },
+    { name: "Plugins", path: "/work/plugins" }
+  ]
+});
+---
+
+<BaseLayout title="Plugins" description={pageDescription} path="/work/plugins" structuredData={structuredData}>
+  <section class="section-band">
+    <div class="shell">
+      <div data-reveal="text">
+        <SectionHeader as="h1" eyebrow="Work" title="Plugin Builds" copy="Custom Appian extensions for document, HTML, and interaction-heavy use cases." />
+      </div>
+      <div class="mt-8 md:mt-10">
+        <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

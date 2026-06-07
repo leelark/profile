@@ -42,7 +42,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { CSSProperties } from "react";
 
@@ -441,8 +441,6 @@ const projectSummaryOverrides: Record<string, string> = {
 export default function ProjectExplorer({ projects, categories, showFilters = true, compact = false }: Props) {
   const [active, setActive] = useState("all");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
-  const [activeModalSection, setActiveModalSection] = useState("overview");
-  const explorerRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const lastFocusRef = useRef<HTMLElement | null>(null);
@@ -466,31 +464,6 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
     setSelectedSlug(null);
     window.setTimeout(() => lastFocusRef.current?.focus(), 0);
   }
-
-  const scrollProjectSection = useCallback((sectionId: string) => {
-    const section = document.querySelector<HTMLElement>(`[data-project-section="${sectionId}"]`);
-    if (!section) return;
-
-    const container = section.closest("[data-project-scroll-container]") as HTMLElement | null;
-    if (!container) {
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
-      setActiveModalSection(sectionId);
-      return;
-    }
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const header = container.querySelector<HTMLElement>(".project-modal-header");
-    const headerOffset = (header?.offsetHeight ?? 0) + 18;
-    const containerRect = container.getBoundingClientRect();
-    const sectionRect = section.getBoundingClientRect();
-    const targetTop = container.scrollTop + sectionRect.top - containerRect.top - headerOffset;
-
-    container.scrollTo({
-      top: Math.max(0, targetTop),
-      behavior: reduceMotion ? "auto" : "smooth"
-    });
-    setActiveModalSection(sectionId);
-  }, []);
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -536,62 +509,10 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
     };
   }, [selectedProject]);
 
-  useEffect(() => {
-    setActiveModalSection("overview");
-  }, [selectedSlug]);
-
-  useEffect(() => {
-    const cleanups = [
-      setupWorkReveal(explorerRef.current, reduceMotion),
-      setupWorkReveal(modalRef.current, reduceMotion)
-    ];
-
-    return () => {
-      for (const cleanup of cleanups) cleanup();
-    };
-  }, [filtered, selectedProject, reduceMotion]);
-
-  useEffect(() => {
-    if (!selectedProject || !modalRef.current) return;
-
-    const container = modalRef.current.querySelector<HTMLElement>("[data-project-scroll-container]");
-    if (!container) return;
-
-    let frame = 0;
-    const updateActiveSection = () => {
-      frame = 0;
-      const header = container.querySelector<HTMLElement>(".project-modal-header");
-      const anchorTop = container.getBoundingClientRect().top + (header?.offsetHeight ?? 0) + 28;
-      const sections = Array.from(container.querySelectorAll<HTMLElement>("[data-project-section]"));
-      let current = sections[0]?.dataset.projectSection ?? "overview";
-
-      for (const section of sections) {
-        if (section.getBoundingClientRect().top <= anchorTop) {
-          current = section.dataset.projectSection ?? current;
-        }
-      }
-
-      setActiveModalSection(current);
-    };
-
-    const handleScroll = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(updateActiveSection);
-    };
-
-    updateActiveSection();
-    container.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      container.removeEventListener("scroll", handleScroll);
-    };
-  }, [selectedProject]);
-
   const filters = [{ slug: "all", label: "All Work" }, ...categories];
 
   return (
-    <div ref={explorerRef} className={`project-explorer-shell ${compact ? "project-explorer-compact" : ""}`}>
+    <div className={`project-explorer-shell ${compact ? "project-explorer-compact" : ""}`}>
       {showFilters && (
         <div className="work-filter-stage">
           <span className="work-filter-flow" aria-hidden="true" />
@@ -639,7 +560,6 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                 }}
                 className={`project-card group ${visual.accent}`}
                 style={cardStyle}
-                data-work-reveal="card"
               >
                 <span className="project-card-depth-light" aria-hidden="true" />
                 <span className="project-card-gridline" aria-hidden="true" />
@@ -710,8 +630,8 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                     >
                       <span className="project-modal-depth-plane project-modal-depth-plane-a" aria-hidden="true" />
                       <span className="project-modal-depth-plane project-modal-depth-plane-b" aria-hidden="true" />
-                      <ProjectModalNavigationRail activeSection={activeModalSection} onNavigate={scrollProjectSection} />
-                      <div className="project-modal" data-project-scroll-container>
+                      <ProjectModalNavigationRail />
+                      <div className="project-modal">
                         <div className="project-modal-header">
                           <div className="project-modal-utility" aria-hidden="true">
                             <span className="project-modal-utility-line" />
@@ -760,52 +680,9 @@ function orderWorkCards(projects: ProjectCardData[]) {
     .map(({ project }) => project);
 }
 
-function setupWorkReveal(root: HTMLElement | null, reduceMotion: boolean | null) {
-  if (!root || reduceMotion) return () => {};
-
-  const items = Array.from(root.querySelectorAll<HTMLElement>("[data-work-reveal]"));
-  if (items.length === 0) return () => {};
-
-  root.classList.add("work-reveal-ready");
-
-  if (!("IntersectionObserver" in window)) {
-    for (const item of items) item.classList.add("is-visible");
-    return () => root.classList.remove("work-reveal-ready");
-  }
-
-  const scrollContainer = root.querySelector<HTMLElement>("[data-project-scroll-container]");
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }
-    },
-    {
-      root: scrollContainer ?? null,
-      rootMargin: scrollContainer ? "0px 0px -12% 0px" : "0px 0px -8% 0px",
-      threshold: 0.12
-    }
-  );
-
-  for (const item of items) observer.observe(item);
-
-  return () => {
-    observer.disconnect();
-    root.classList.remove("work-reveal-ready");
-  };
-}
-
-export function ProjectModalNavigationRail({
-  activeSection = "overview",
-  onNavigate
-}: {
-  activeSection?: string;
-  onNavigate?: (sectionId: string) => void;
-}) {
-  function fallbackNavigate(sectionId: string) {
-    const section = document.querySelector<HTMLElement>(`[data-project-section="${sectionId}"]`);
+export function ProjectModalNavigationRail() {
+  function scrollToSection(sectionId: string) {
+    const section = document.querySelector(`[data-project-section="${sectionId}"]`);
     if (!section) return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     section.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
@@ -821,11 +698,10 @@ export function ProjectModalNavigationRail({
         {modalRailItems.map((item, index) => (
           <button
             type="button"
-            className={activeSection === item.id ? "is-active" : ""}
+            className={index === 0 ? "is-active" : ""}
             key={item.id}
             aria-label={`Go to ${item.label} section`}
-            aria-current={activeSection === item.id ? "true" : undefined}
-            onClick={() => (onNavigate ?? fallbackNavigate)(item.id)}
+            onClick={() => scrollToSection(item.id)}
           >
             <b>{String(index + 1).padStart(2, "0")}</b>
             <span>{item.label}</span>
@@ -874,7 +750,7 @@ export function ProjectReadout({ project, titleId }: { project: ProjectCardData;
   return (
     <div className={`project-case-layout ${visual.accent} project-category-${project.categorySlug}`}>
       <span className="project-case-depth-line" aria-hidden="true" />
-      <section className="project-case-hero" data-project-section="overview" data-work-reveal="modal-section">
+      <section className="project-case-hero" data-project-section="overview">
         <div className="project-case-hero-copy">
           <span className="project-case-icon" aria-hidden="true">
             <Icon className={visual.color} size={24} />
@@ -894,24 +770,19 @@ export function ProjectReadout({ project, titleId }: { project: ProjectCardData;
         <ProjectVisualStory scene={scene} />
       </section>
 
-      <section
-        className="project-narrative-grid"
-        data-project-section="story"
-        data-work-reveal="modal-section"
-        aria-label={`${project.title} project story`}
-      >
+      <section className="project-narrative-grid" data-project-section="story" aria-label={`${project.title} project story`}>
         <CaseTextBlock icon={Target} label="Problem" title="What needed solving" text={problem} />
         <CaseTextBlock icon={GitBranch} label="Solution" title="What was built" text={solution} />
         <CaseTextBlock icon={BadgeCheck} label="Contribution" title="My role" text={role} />
       </section>
 
-      <div className="project-detail-columns" data-project-section="value" data-work-reveal="modal-section">
+      <div className="project-detail-columns" data-project-section="value">
         <CaseListBlock icon={Sparkles} label="Capabilities" title="What stands out" items={functionality} />
         <CaseListBlock icon={ShieldCheck} label="Portfolio value" title="Why it matters" items={impact} />
         <CaseListBlock icon={Route} label="Design choices" title="How it was shaped" items={decisionItems} />
       </div>
 
-      <section className="project-tech-panel" data-project-section="stack" data-work-reveal="modal-section">
+      <section className="project-tech-panel" data-project-section="stack">
         <div>
           <p className="project-case-eyebrow">Stack</p>
           <h3>Appian delivery capabilities</h3>
@@ -1562,7 +1433,7 @@ function CaseTextBlock({
 }) {
   if (!text) return null;
   return (
-    <section className="project-case-panel" data-work-reveal="modal-card">
+    <section className="project-case-panel">
       <span className="project-case-card-icon" aria-hidden="true">
         <Icon size={18} />
       </span>
@@ -1588,7 +1459,7 @@ function CaseListBlock({
 }) {
   if (items.length === 0) return null;
   return (
-    <section className="project-case-panel project-case-panel-list" data-work-reveal="modal-card">
+    <section className="project-case-panel project-case-panel-list">
       <span className="project-case-card-icon" aria-hidden="true">
         <Icon size={18} />
       </span>

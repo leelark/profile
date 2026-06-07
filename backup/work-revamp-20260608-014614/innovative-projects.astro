@@ -1,0 +1,36 @@
+---
+import ProjectExplorer from "@/components/ProjectExplorer";
+import SectionHeader from "@/components/SectionHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { categoryDescriptions, categoryLabels, portfolioProjectsByCategory, projectToCard } from "@/lib/content";
+import { collectionPageStructuredData } from "@/lib/seo";
+
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const categoryProjects = portfolioProjectsByCategory["innovative-projects"];
+const cards = categoryProjects.map(projectToCard);
+const pageDescription = categoryDescriptions["innovative-projects"];
+const structuredData = collectionPageStructuredData({
+  name: "Innovative Projects - Leelark Saxena",
+  description: pageDescription,
+  path: "/work/innovative-projects",
+  projects: categoryProjects,
+  breadcrumbs: [
+    { name: "Home", path: "/" },
+    { name: "Work", path: "/work" },
+    { name: "Innovative Projects", path: "/work/innovative-projects" }
+  ]
+});
+---
+
+<BaseLayout title="Innovative Projects" description={pageDescription} path="/work/innovative-projects" structuredData={structuredData}>
+  <section class="section-band">
+    <div class="shell">
+      <div data-reveal="text">
+        <SectionHeader as="h1" eyebrow="Work" title="Innovation POCs" copy="Product-style Appian concepts across claims, knowledge, services, and automation." />
+      </div>
+      <div class="mt-8 md:mt-10">
+        <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

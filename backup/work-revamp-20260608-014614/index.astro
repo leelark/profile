@@ -1,0 +1,39 @@
+---
+import ProjectExplorer from "@/components/ProjectExplorer";
+import SectionHeader from "@/components/SectionHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { categoryLabels, portfolioProjects, projectToCard } from "@/lib/content";
+import { collectionPageStructuredData } from "@/lib/seo";
+
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const cards = portfolioProjects.map(projectToCard);
+const pageDescription = "Selected Appian client delivery, AI workflow concepts, plugins, and reusable accelerators.";
+const structuredData = collectionPageStructuredData({
+  name: "Portfolio Work - Leelark Saxena",
+  description: pageDescription,
+  path: "/work",
+  projects: portfolioProjects,
+  breadcrumbs: [
+    { name: "Home", path: "/" },
+    { name: "Work", path: "/work" }
+  ]
+});
+---
+
+<BaseLayout title="Work" description={pageDescription} path="/work" structuredData={structuredData}>
+  <section class="section-band">
+    <div class="shell">
+      <div class="work-hero-panel" data-reveal="panel">
+        <SectionHeader
+          as="h1"
+          eyebrow="Portfolio"
+          title="Enterprise Appian Work Portfolio"
+          copy="Selected client delivery, AI workflow concepts, plugins, and reusable accelerators, organized for quick portfolio review."
+        />
+      </div>
+      <div class="mt-8 md:mt-10">
+        <ProjectExplorer projects={cards} categories={categories} client:load />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

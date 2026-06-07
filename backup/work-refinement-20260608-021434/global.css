@@ -13556,87 +13556,6 @@ textarea:focus-visible {
     transform: translate3d(-50%, -50%, 78px) rotateZ(45deg);
   }
 
-  .work-command-lane {
-    left: 10%;
-    right: 10%;
-    height: 1px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, transparent, rgb(var(--color-blue-signal) / 0.45), rgb(var(--color-accent) / 0.38), transparent);
-    transform-origin: center;
-  }
-
-  .work-command-lane-a {
-    top: 30%;
-    transform: rotate(-10deg) translateZ(6px);
-  }
-
-  .work-command-lane-b {
-    top: 71%;
-    transform: rotate(9deg) translateZ(10px);
-  }
-
-  .work-command-module {
-    width: 78px;
-    height: 44px;
-    border: 1px solid rgb(var(--color-border) / 0.72);
-    border-radius: 16px 6px 16px 6px;
-    background:
-      linear-gradient(145deg, rgb(var(--color-surface) / 0.9), rgb(var(--color-elevated) / 0.58)),
-      linear-gradient(90deg, rgb(var(--module-accent, var(--color-accent)) / 0.16), transparent 72%);
-    box-shadow:
-      0 16px 38px rgb(0 0 0 / 0.18),
-      inset 0 1px 0 rgb(255 255 255 / 0.08);
-  }
-
-  .work-command-module::before,
-  .work-command-module::after {
-    content: "";
-    position: absolute;
-    left: 13px;
-    right: 13px;
-    height: 2px;
-    border-radius: 999px;
-    background: rgb(var(--module-accent, var(--color-accent)) / 0.52);
-  }
-
-  .work-command-module::before {
-    top: 15px;
-  }
-
-  .work-command-module::after {
-    top: 25px;
-    right: 28px;
-    opacity: 0.72;
-  }
-
-  .work-command-module-a {
-    --module-accent: var(--color-blue-signal);
-    left: 11%;
-    top: 13%;
-    transform: translateZ(54px);
-  }
-
-  .work-command-module-b {
-    --module-accent: var(--color-accent);
-    right: 12%;
-    top: 16%;
-    transform: translateZ(38px);
-  }
-
-  .work-command-module-c {
-    --module-accent: var(--color-verified);
-    left: 10%;
-    bottom: 13%;
-    transform: translateZ(42px);
-  }
-
-  .work-command-module-d {
-    --module-accent: var(--color-caution);
-    right: 12%;
-    bottom: 12%;
-    transform: translateZ(56px);
-  }
-
   .work-command-node {
     width: 58px;
     height: 58px;
@@ -13792,19 +13711,13 @@ textarea:focus-visible {
 
   .project-grid {
     gap: clamp(1rem, 2vw, 1.35rem);
-    align-items: stretch;
-    grid-auto-rows: minmax(360px, auto);
     perspective: 1400px;
     transform-style: preserve-3d;
   }
 
   .project-card {
     --project-accent: var(--color-accent);
-    display: grid;
-    height: 100%;
     min-height: 350px;
-    align-content: stretch;
-    grid-template-rows: auto auto minmax(7.25rem, 1fr) auto;
     isolation: isolate;
     border-color: rgb(var(--project-accent) / 0.22);
     border-radius: 30px 8px 30px 8px;
@@ -13947,35 +13860,6 @@ textarea:focus-visible {
     transform: translateZ(22px);
   }
 
-  .project-card-top {
-    min-height: 46px;
-  }
-
-  .project-card-heading {
-    min-height: 78px;
-    align-items: flex-start;
-  }
-
-  .project-card-heading h3 {
-    display: -webkit-box;
-    min-height: 3.85rem;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-  }
-
-  .project-card-summary {
-    display: -webkit-box;
-    min-height: 7.45rem;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
-  }
-
-  .project-card-action {
-    min-height: 58px;
-  }
-
   .domain-marker {
     border-color: rgb(var(--project-accent, var(--color-border)) / 0.22);
     background:
@@ -14076,37 +13960,6 @@ textarea:focus-visible {
       0 0 64px rgb(var(--color-blue-signal) / 0.08),
       inset 0 1px 0 rgb(255 255 255 / 0.07);
     transform: translateZ(54px);
-    scrollbar-color: rgb(var(--color-accent) / 0.72) rgb(var(--color-elevated) / 0.42);
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
-    scroll-padding-top: 92px;
-    overscroll-behavior: contain;
-  }
-
-  .project-modal-overlay .project-modal::-webkit-scrollbar {
-    width: 11px;
-  }
-
-  .project-modal-overlay .project-modal::-webkit-scrollbar-track {
-    border-left: 1px solid rgb(var(--color-border) / 0.42);
-    background:
-      linear-gradient(180deg, rgb(var(--color-surface) / 0.7), rgb(var(--color-elevated) / 0.42)),
-      linear-gradient(90deg, rgb(var(--color-blue-signal) / 0.08), transparent);
-  }
-
-  .project-modal-overlay .project-modal::-webkit-scrollbar-thumb {
-    border: 3px solid transparent;
-    border-radius: 999px;
-    background:
-      linear-gradient(180deg, rgb(var(--color-accent) / 0.82), rgb(var(--color-blue-signal) / 0.62)) padding-box,
-      rgb(var(--color-border) / 0.42) border-box;
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
-  }
-
-  .project-modal-overlay .project-modal::-webkit-scrollbar-thumb:hover {
-    background:
-      linear-gradient(180deg, rgb(var(--color-accent)), rgb(var(--color-blue-signal) / 0.82)) padding-box,
-      rgb(var(--color-border) / 0.5) border-box;
   }
 
   .project-modal-header {
@@ -14133,7 +13986,6 @@ textarea:focus-visible {
   .project-case-layout > :not(.project-case-depth-line) {
     position: relative;
     z-index: 1;
-    scroll-margin-top: 92px;
   }
 
   .project-case-hero {
@@ -14192,43 +14044,12 @@ textarea:focus-visible {
     transform: translateY(-2px) translateZ(18px);
   }
 
-  .work-reveal-ready [data-work-reveal] {
-    opacity: 0;
-    transform: translate3d(0, 18px, 0) scale(0.985);
-    clip-path: inset(0 0 12% 0);
-    transition:
-      opacity 560ms var(--motion-entrance-ease),
-      transform 560ms var(--motion-entrance-ease),
-      clip-path 560ms var(--motion-entrance-ease);
-    transition-delay: calc(var(--project-index, 0) * 28ms);
-    will-change: opacity, transform, clip-path;
-  }
-
-  .work-reveal-ready [data-work-reveal].is-visible {
-    opacity: 1;
-    transform: translate3d(0, 0, var(--card-depth, 0));
-    clip-path: inset(0 0 0 0);
-    will-change: auto;
-  }
-
-  .work-reveal-ready [data-work-reveal="modal-section"],
-  .work-reveal-ready [data-work-reveal="modal-card"] {
-    transition-delay: 0ms;
-  }
-
-  .work-reveal-ready [data-work-reveal="modal-section"].is-visible .project-case-panel:nth-child(1) {
-    transition-delay: 30ms;
-  }
-
-  .work-reveal-ready [data-work-reveal="modal-section"].is-visible .project-case-panel:nth-child(2) {
-    transition-delay: 85ms;
-  }
-
-  .work-reveal-ready [data-work-reveal="modal-section"].is-visible .project-case-panel:nth-child(3) {
-    transition-delay: 140ms;
-  }
-
   @media (prefers-reduced-motion: no-preference) {
+    .project-card {
+      animation: work-card-scroll-depth 560ms var(--motion-entrance-ease) both;
+      animation-delay: calc(var(--project-index, 0) * 24ms);
+    }
+
     .work-depth-layer-a {
       animation: work-depth-drift 28s ease-in-out infinite alternate;
     }
@@ -14250,7 +14071,6 @@ textarea:focus-visible {
     }
 
     .work-command-core,
-    .work-command-module,
     .work-command-node {
       animation: work-node-float 5.8s ease-in-out infinite;
     }
@@ -14261,18 +14081,6 @@ textarea:focus-visible {
 
     .work-command-node-c {
       animation-delay: -3.2s;
-    }
-
-    .work-command-module-b {
-      animation-delay: -1.2s;
-    }
-
-    .work-command-module-c {
-      animation-delay: -2.1s;
-    }
-
-    .work-command-module-d {
-      animation-delay: -3.4s;
     }
 
     .work-command-stream {
@@ -14445,7 +14253,6 @@ textarea:focus-visible {
     .project-card:nth-child(4n + 3) {
       min-height: auto;
       border-radius: 20px 8px 20px 8px;
-      grid-template-rows: auto;
       transform: none;
     }
 
@@ -14481,11 +14288,6 @@ textarea:focus-visible {
 
     .project-card-hitbox:focus-visible {
       outline-offset: 2px;
-    }
-
-    .project-card-heading,
-    .project-card-summary {
-      min-height: auto;
     }
   }
 }

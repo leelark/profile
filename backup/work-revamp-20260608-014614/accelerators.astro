@@ -1,0 +1,37 @@
+---
+import ProjectExplorer from "@/components/ProjectExplorer";
+import SectionHeader from "@/components/SectionHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { acceleratorSuiteProjects, categoryDescriptions, categoryLabels, projectToCard, standaloneAccelerators } from "@/lib/content";
+import { collectionPageStructuredData } from "@/lib/seo";
+
+const categories = Object.entries(categoryLabels).map(([slug, label]) => ({ slug, label }));
+const formattedExcel = acceleratorSuiteProjects.find((project) => project.slug === "formatted-excel-import-export");
+const visibleAccelerators = [...standaloneAccelerators, ...(formattedExcel ? [formattedExcel] : [])];
+const cards = visibleAccelerators.map(projectToCard);
+const pageDescription = categoryDescriptions.accelerators;
+const structuredData = collectionPageStructuredData({
+  name: "Appian Accelerate Program - Leelark Saxena",
+  description: pageDescription,
+  path: "/work/accelerators",
+  projects: visibleAccelerators,
+  breadcrumbs: [
+    { name: "Home", path: "/" },
+    { name: "Work", path: "/work" },
+    { name: "Appian Accelerate Program", path: "/work/accelerators" }
+  ]
+});
+---
+
+<BaseLayout title="Appian Accelerate Program" description={pageDescription} path="/work/accelerators" structuredData={structuredData}>
+  <section class="section-band">
+    <div class="shell">
+      <div data-reveal="text">
+        <SectionHeader as="h1" eyebrow="Work" title="Appian Accelerators" copy="Reusable Appian workstreams for platform health, governance, automation, and enablement." />
+      </div>
+      <div class="mt-8 md:mt-10">
+        <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
