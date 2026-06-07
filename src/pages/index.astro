@@ -7,7 +7,6 @@ import {
   appianCapabilityShowcase,
   certifications,
   clientShowcase,
-  experience,
   publication,
   technicalSkillGroups
 } from "@/lib/content";
@@ -17,38 +16,66 @@ import { personStructuredData, websiteStructuredData } from "@/lib/seo";
 const structuredData = [personStructuredData(), websiteStructuredData()];
 
 const heroSummary =
-  "Enterprise Appian Solution Architect designing governed workflow platforms, AI-assisted orchestration, integrations, and delivery models for complex business operations.";
-const heroSignals = ["Solution Architecture", "Enterprise Appian Platforms", "AI-Driven Workflows", "Appian Accelerate Program"];
-const automationFlows = [
+  "I lead requirements analysis, solution design, Appian delivery, AI-assisted workflow design, and integrations that connect people, data, records, documents, and enterprise systems.";
+const operatingLayers = [
   {
-    title: "Approvals",
-    path: ["intake", "rules", "decision", "audit"]
+    step: "01",
+    title: "Requirements Discovery",
+    copy: "Clarify business goals, user journeys, data ownership, exception paths, risk, and release constraints before Appian build begins.",
+    signal: "Delivery-ready backlog",
+    tone: "blue"
   },
   {
-    title: "Claims",
-    path: ["evidence", "AI triage", "routing", "review"]
+    step: "02",
+    title: "Solution Architecture",
+    copy: "Shape the Appian application model across records, process models, SAIL interfaces, integrations, security, and reusable patterns.",
+    signal: "Architecture blueprint",
+    tone: "purple"
   },
   {
-    title: "Documents",
-    path: ["extract", "classify", "validate", "store"]
+    step: "03",
+    title: "Lead Appian Build",
+    copy: "Guide implementation with standards for interfaces, data models, expression rules, process orchestration, plugins, testing, and code quality.",
+    signal: "Governed delivery",
+    tone: "green"
   },
   {
-    title: "Exceptions",
-    path: ["detect", "escalate", "resolve", "learn"]
+    step: "04",
+    title: "AI and Integration Design",
+    copy: "Embed AI-assisted workflow support, document intelligence, decision support, APIs, service exposure, and operational data flows where they add value.",
+    signal: "Connected automation",
+    tone: "amber"
   },
   {
-    title: "Operations",
-    path: ["monitor", "measure", "optimize", "scale"]
+    step: "05",
+    title: "Validation and Readiness",
+    copy: "Review user experience, performance, logs, dependencies, release readiness, production risk, and support handover before rollout.",
+    signal: "Release confidence",
+    tone: "blue"
+  },
+  {
+    step: "06",
+    title: "Operate and Improve",
+    copy: "Use platform health, metrics, feedback, governance review, and accelerator reuse to improve Appian delivery after launch.",
+    signal: "Continuous improvement",
+    tone: "neutral"
   }
 ];
-const operatingLayers = [
-  { title: "Impact Framing", items: ["goals", "risk", "value"], tone: "blue" },
-  { title: "Co-Creation", items: ["users", "prototype", "feedback"], tone: "purple" },
-  { title: "Appian Build", items: ["SAIL", "records", "process"], tone: "green" },
-  { title: "AI + Integration", items: ["skills", "agents", "APIs"], tone: "amber" },
-  { title: "Readiness Review", items: ["standards", "quality", "release"], tone: "blue" },
-  { title: "Operate + Improve", items: ["logs", "metrics", "governance"], tone: "neutral" }
-];
+const clientCards = clientShowcase.map((client) => {
+  const metadata: Record<string, { initials: string; sector: string; focus: string }> = {
+    Invesco: { initials: "IV", sector: "Investment management", focus: "AML, reconciliation, change delivery" },
+    Carlyle: { initials: "CL", sector: "Alternative investments", focus: "Bridge module and workflow delivery" },
+    HSBC: { initials: "HS", sector: "Banking", focus: "Horizon scanning and regulatory workflows" },
+    KPMG: { initials: "KP", sector: "Advisory", focus: "Enterprise transformation programs" },
+    EBRD: { initials: "EB", sector: "Development finance", focus: "ASB modernization and delivery support" },
+    Genpact: { initials: "GP", sector: "Digital operations", focus: "Workflow modernization and automation" }
+  };
+
+  return {
+    name: client,
+    ...(metadata[client] ?? { initials: client.slice(0, 2).toUpperCase(), sector: "Enterprise", focus: "Appian delivery" })
+  };
+});
 const domainCards = [
   { title: "Banking", code: "BK", focus: ["Regulatory workflow", "Auditability"] },
   { title: "Investment Management", code: "IM", focus: ["AML", "Reconciliation"] },
@@ -69,7 +96,7 @@ const domainCards = [
           Leelark Saxena
         </h1>
         <p class="mt-5 text-balance text-2xl font-semibold leading-tight text-text/94 md:text-3xl">
-          Solution Architect for enterprise Appian platforms and intelligent workflow automation.
+          Solution Architect and Lead Appian Developer for enterprise Appian delivery, AI-assisted workflows, and integration-led platforms.
         </p>
         <p class="mt-6 max-w-2xl text-base leading-8 text-muted md:text-lg">
           {heroSummary}
@@ -78,9 +105,6 @@ const domainCards = [
           <a class="primary-button" href={withBase("/work")}>Explore work</a>
           <a class="quiet-button" href={withBase("/contact")}>Start a conversation</a>
         </div>
-        <div class="hero-proof-ribbon mt-8" aria-label="Portfolio focus areas">
-          {heroSignals.map((signal) => <span>{signal}</span>)}
-        </div>
       </div>
       <div class="reveal-up reveal-delay-2">
         <HeroVisual />
@@ -88,44 +112,26 @@ const domainCards = [
     </div>
   </section>
 
-  <section class="section-band workflow-intelligence-section border-t border-border">
-    <div class="shell">
-      <SectionHeader eyebrow="Intelligent workflow automation" title="AI-assisted orchestration for approvals, claims, documents, exceptions, and operations." copy="The portfolio centers on workflows where Appian coordinates people, records, decisions, integrations, and AI support inside governed enterprise processes." />
-      <div class="workflow-river mt-9" aria-label="Intelligent workflow automation map">
-        {automationFlows.map((item, index) => (
-          <article class="workflow-river-node">
-            <div class="workflow-river-medallion">{String(index + 1).padStart(2, "0")}</div>
-            <h2>{item.title}</h2>
-            <div>
-              {item.path.map((step) => <span>{step}</span>)}
-            </div>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <section class="section-band border-t border-border">
     <div class="shell">
       <div>
-        <SectionHeader eyebrow="Appian operating model" title="From impact framing to governed operation." copy="The model reflects Appian delivery principles: fast value delivery, design for impact, co-creation, user-centered design, lightweight readiness checks, and governance through program ownership and architecture review." />
+        <SectionHeader eyebrow="Appian delivery model" title="From requirements analysis to governed Appian operation." copy="A practical operating model for Appian programs: understand the requirement, design the solution, lead the build, connect AI and integrations, validate readiness, and improve after launch." />
       </div>
       <div class="operating-model mt-9">
-        <div class="operating-model-rail" aria-hidden="true">
-          <span>01</span>
-          <span>02</span>
-          <span>03</span>
-          <span>04</span>
-          <span>05</span>
-          <span>06</span>
+        <div class="operating-model-summary">
+          <span aria-hidden="true">APN</span>
+          <div>
+            <h2>Architecture-led delivery for Appian teams</h2>
+            <p>Each stage keeps business value, user experience, data design, workflow governance, and platform reliability connected.</p>
+          </div>
         </div>
         <div class="operating-model-grid">
           {operatingLayers.map((layer) => (
             <article class:list={["operating-layer", `operating-layer-${layer.tone}`]}>
+              <span class="operating-step">{layer.step}</span>
               <h2>{layer.title}</h2>
-              <div>
-                {layer.items.map((item) => <span>{item}</span>)}
-              </div>
+              <p>{layer.copy}</p>
+              <strong>{layer.signal}</strong>
             </article>
           ))}
         </div>
@@ -136,7 +142,7 @@ const domainCards = [
   <section class="section-band border-t border-border">
     <div class="shell">
       <div>
-        <SectionHeader eyebrow="Technical skills" title="Technology depth with a focused Appian capability layer." />
+        <SectionHeader eyebrow="Technical skills" title="Appian-first technical depth for architecture, delivery, AI, and integrations." copy="The skill set is organized around what Appian delivery needs in practice: platform design, lead development, data modeling, APIs, AI-assisted workflows, testing, governance, and reusable accelerators." />
         <div class="mt-8">
           <TechnicalSkillGrid groups={technicalSkillGroups} appianCapabilities={appianCapabilityShowcase} />
         </div>
@@ -191,27 +197,20 @@ const domainCards = [
 
   <section class="section-band client-showcase-section border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Client showcase" title="Enterprise names across banking, investment, advisory, and transformation programs." />
-      <div class="client-marquee mt-8" aria-label="Client showcase">
+      <SectionHeader eyebrow="Enterprise delivery footprint" title="Appian delivery exposure across regulated clients, advisory programs, and transformation teams." copy="A public-safe client and program view, presented as portfolio context rather than confidential delivery detail." />
+      <div class="client-marquee mt-8" aria-label="Enterprise delivery footprint">
         <div>
-          {[...clientShowcase, ...clientShowcase].map((client) => <span>{client}</span>)}
+          {[...clientCards, ...clientCards].map((client) => (
+            <article>
+              <span aria-hidden="true">{client.initials}</span>
+              <div>
+                <h2>{client.name}</h2>
+                <p>{client.sector}</p>
+                <strong>{client.focus}</strong>
+              </div>
+            </article>
+          ))}
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section-band career-journey-section border-t border-border">
-    <div class="shell">
-      <SectionHeader eyebrow="Career journey" title="A concise architecture-led progression." />
-      <div class="career-journey mt-8">
-        {experience.map((item, index) => (
-          <article class="career-node">
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <h2>{item.company}</h2>
-            <p>{item.role}</p>
-            <strong>{item.period}</strong>
-          </article>
-        ))}
       </div>
     </div>
   </section>
@@ -219,9 +218,17 @@ const domainCards = [
   <section class="section-band border-t border-border">
     <div class="shell">
       <div class="contact-cta-band">
-        <p class="eyebrow">Next conversation</p>
-        <h2>Need a Solution Architect for Appian delivery, AI workflows, or Appian Accelerate work?</h2>
-        <a class="primary-button" href={withBase("/contact")}>Contact Leelark</a>
+        <div>
+          <p class="eyebrow">Next conversation</p>
+          <h2>Need a Solution Architect for Appian delivery, AI workflows, or Appian Accelerate work?</h2>
+          <p>Bring me in for requirements analysis, Appian solution design, lead development, AI-assisted workflow discovery, integration architecture, or delivery governance.</p>
+        </div>
+        <div class="contact-cta-actions">
+          <span>Architecture review</span>
+          <span>Appian delivery</span>
+          <span>AI workflow design</span>
+          <a class="primary-button" href={withBase("/contact")}>Contact Leelark</a>
+        </div>
       </div>
     </div>
   </section>

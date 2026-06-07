@@ -482,13 +482,13 @@ export const expertiseAreas: ExpertiseArea[] = [
     return {
       title,
       summary:
-        "I connect Appian records, database design, APIs, SFTP, SQL, reporting, and operational data flows into reliable enterprise systems.",
+        "I connect Appian records, database design, APIs, SQL, reporting, integrations, and operational data flows into reliable enterprise systems.",
       capabilities: [
         "data modeling",
         "record-centric design",
         "SQL and stored procedures",
         "REST and Web APIs",
-        "SFTP and file automation",
+        "integration design",
         "reporting and reconciliation"
       ]
     };
@@ -541,16 +541,13 @@ export const technicalSkillGroups: TechnicalSkillGroup[] = [
   },
   {
     title: "Data and Integration",
-    summary: "Enterprise data access, file automation, API connectivity, document processing, and operational reporting.",
+    summary: "Enterprise data access, API connectivity, Appian service exposure, reporting, and operational data design.",
     skills: [
       { name: "SQL", note: "queries and data operations" },
       { name: "MS SQL", note: "enterprise relational database" },
       { name: "MySQL", note: "database-backed Appian work" },
       { name: "REST APIs", note: "system connectivity" },
-      { name: "Web APIs", note: "Appian service exposure" },
-      { name: "SFTP", note: "managed file exchange" },
-      { name: "Excel/CSV Automation", note: "import and export flows" },
-      { name: "PDF Processing", note: "document workflows" }
+      { name: "Web APIs", note: "Appian service exposure" }
     ]
   },
   {

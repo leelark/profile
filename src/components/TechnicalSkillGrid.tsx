@@ -10,8 +10,6 @@ import {
   Code2,
   Cpu,
   Database,
-  FileSpreadsheet,
-  FileText,
   Gauge,
   Layers3,
   MonitorCog,
@@ -20,7 +18,6 @@ import {
   Rows3,
   SearchCheck,
   Server,
-  ShieldCheck,
   Workflow
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -55,9 +52,6 @@ const skillIcons: Record<string, LucideIcon> = {
   MySQL: Database,
   "REST APIs": Cable,
   "Web APIs": Cable,
-  SFTP: ShieldCheck,
-  "Excel/CSV Automation": FileSpreadsheet,
-  "PDF Processing": FileText,
   "Architecture Discovery": SearchCheck,
   "Solution Architecture": Layers3,
   Testing: ClipboardCheck,
@@ -76,31 +70,10 @@ const skillIcons: Record<string, LucideIcon> = {
 
 export default function TechnicalSkillGrid({ groups, appianCapabilities = [], compact = false }: Props) {
   if (!compact) {
-    const seen = new Set<string>();
-    const technologyItems = groups
-      .filter((group) => group.title !== "Delivery and Governance")
-      .flatMap((group) => group.skills)
-      .filter((skill) => {
-        const key = skill.name.toLowerCase();
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
+    const visibleGroups = groups.filter((group) => group.skills.length > 0);
 
     return (
       <div className="technology-showcase">
-        <div className="technology-cloud" aria-label="Technology showcase">
-          {technologyItems.map((skill, index) => {
-            const Icon = skillIcons[skill.name] ?? Code2;
-            return (
-              <span className="technology-token" key={skill.name} style={{ "--index": index } as CSSProperties}>
-                <Icon size={16} strokeWidth={2} aria-hidden="true" />
-                <span>{skill.name}</span>
-              </span>
-            );
-          })}
-        </div>
-
         {appianCapabilities.length > 0 && (
           <section className="appian-capability-showcase" aria-label="Appian-specific capabilities">
             <div className="appian-capability-orbit" aria-hidden="true">
@@ -109,7 +82,11 @@ export default function TechnicalSkillGrid({ groups, appianCapabilities = [], co
               <span></span>
             </div>
             <div>
-              <p className="eyebrow">Appian-Specific Capabilities</p>
+              <p className="eyebrow">Appian-specific capabilities</p>
+              <h3>Solution design, lead development, workflow orchestration, and platform extension.</h3>
+              <p>
+                Core delivery strengths across SAIL, records, process design, integrations, AI skills, AI agents, and custom plugin patterns.
+              </p>
               <div className="appian-capability-grid">
                 {appianCapabilities.map((skill) => {
                   const Icon = skillIcons[skill.name] ?? Workflow;
@@ -124,6 +101,31 @@ export default function TechnicalSkillGrid({ groups, appianCapabilities = [], co
             </div>
           </section>
         )}
+
+        <div className="technology-group-grid" aria-label="Technical skill groups">
+          {visibleGroups.map((group) => (
+            <section className="technology-group-card" key={group.title}>
+              <div className="technology-group-head">
+                <h3>{group.title}</h3>
+                <p>{group.summary}</p>
+              </div>
+              <div className="technology-token-list">
+                {group.skills.map((skill, index) => {
+                  const Icon = skillIcons[skill.name] ?? Code2;
+                  return (
+                    <span className="technology-token" key={skill.name} style={{ "--index": index } as CSSProperties}>
+                      <Icon size={16} strokeWidth={2} aria-hidden="true" />
+                      <span>
+                        <strong>{skill.name}</strong>
+                        <small>{skill.note}</small>
+                      </span>
+                    </span>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
+        </div>
       </div>
     );
   }
