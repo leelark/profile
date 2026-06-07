@@ -41,7 +41,10 @@ const navLinks = [
   href: withBase(link.path),
   current: link.path === "/" ? currentPath === "/" : currentPath === link.path || currentPath.startsWith(`${link.path}/`)
 }));
-const showFloatingContact = currentPath !== "/contact";
+const hideFloatingContactRoutes = ["/contact", "/work", "/key-works", "/resume", "/thanks"];
+const showFloatingContact = !hideFloatingContactRoutes.some((route) => (
+  route === "/" ? currentPath === "/" : currentPath === route || currentPath.startsWith(`${route}/`)
+));
 const hideFloatingContactAtHomeCta = currentPath === "/";
 ---
 
@@ -73,6 +76,67 @@ const hideFloatingContactAtHomeCta = currentPath === "/";
       document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dark";
     </script>
     <script is:inline>
+      (() => {
+        const revealSelector = "[data-reveal], [data-home-reveal], [data-reveal-group]";
+        const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+        if (!reduceMotionQuery.matches) {
+          document.documentElement.classList.add("motion-ready");
+        }
+
+        const showReveal = (element) => {
+          element.classList.add("is-visible");
+        };
+
+        const initPortfolioMotion = () => {
+          const revealItems = Array.from(document.querySelectorAll(revealSelector));
+
+          if (revealItems.length === 0) {
+            return;
+          }
+
+          if (reduceMotionQuery.matches || !("IntersectionObserver" in window)) {
+            revealItems.forEach(showReveal);
+            return;
+          }
+
+          const revealObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) {
+                  return;
+                }
+
+                showReveal(entry.target);
+                revealObserver.unobserve(entry.target);
+              });
+            },
+            { rootMargin: "0px 0px -10% 0px", threshold: 0.01 }
+          );
+
+          revealItems.forEach((item, index) => {
+            if (item instanceof HTMLElement && !item.style.getPropertyValue("--reveal-index")) {
+              item.style.setProperty("--reveal-index", String(index % 8));
+            }
+
+            revealObserver.observe(item);
+          });
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initPortfolioMotion, { once: true });
+        } else {
+          initPortfolioMotion();
+        }
+
+        window.addEventListener("pageshow", (event) => {
+          if (event.persisted) {
+            initPortfolioMotion();
+          }
+        });
+      })();
+    </script>
+    <script is:inline>
       const setHeaderState = () => {
         document.documentElement.dataset.navState = window.scrollY > 16 ? "scrolled" : "top";
       };
@@ -83,12 +147,16 @@ const hideFloatingContactAtHomeCta = currentPath === "/";
       <script is:inline>
         const setFloatingContactState = () => {
           const bar = document.querySelector("[data-floating-contact]");
+          const heroSection = document.querySelector(".hero-section");
           const contactSection = document.querySelector("#next-conversation");
           if (!bar || !contactSection) return;
 
+          const heroRect = heroSection?.getBoundingClientRect();
           const sectionRect = contactSection.getBoundingClientRect();
           const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-          const shouldHide = sectionRect.top < viewportHeight * 0.82 && sectionRect.bottom > viewportHeight * 0.2;
+          const heroIsActive = heroRect ? heroRect.bottom > viewportHeight * 0.42 : false;
+          const finalCtaIsActive = sectionRect.top < viewportHeight * 0.82 && sectionRect.bottom > viewportHeight * 0.2;
+          const shouldHide = heroIsActive || finalCtaIsActive;
           bar.dataset.state = shouldHide ? "hidden" : "visible";
         };
 
@@ -100,9 +168,11 @@ const hideFloatingContactAtHomeCta = currentPath === "/";
     {structuredData && (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}
+    <script is:inline defer src={withBase("/global-three-background.js")}></script>
   </head>
   <body>
     <div class="site-background-field" aria-hidden="true">
+      <canvas class="site-background-three" data-three-background aria-hidden="true"></canvas>
       <span class="site-background-layer site-background-depth"></span>
       <span class="site-background-layer site-background-structure"></span>
       <span class="site-background-layer site-background-signal"></span>
@@ -144,7 +214,7 @@ const hideFloatingContactAtHomeCta = currentPath === "/";
     </main>
 
     {showFloatingContact && (
-      <aside class="floating-contact-bar" data-floating-contact data-state="visible" aria-label="Contact shortcut">
+      <aside class="floating-contact-bar" data-floating-contact data-state={hideFloatingContactAtHomeCta ? "hidden" : "visible"} aria-label="Contact shortcut">
         <div class="floating-contact-copy">
           <span>Available for Appian architecture, AI workflow, and plugin delivery.</span>
         </div>

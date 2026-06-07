@@ -1,24 +1,59 @@
 .resume-page-minimal .resume-section {
+  --resume-flow-a: var(--color-blue-signal);
+  --resume-flow-b: var(--color-accent);
+  --resume-flow-c: var(--color-verified);
+  --resume-flow-angle: 104deg;
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   padding-block: clamp(42px, 6vw, 70px);
 }
 
-.resume-page-minimal .resume-section::before {
+.resume-page-minimal .resume-section::before,
+.resume-page-minimal .resume-section::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
+}
+
+.resume-page-minimal .resume-section::before {
   background:
-    linear-gradient(90deg, rgb(var(--color-border) / 0.06) 1px, transparent 1px),
-    linear-gradient(rgb(var(--color-border) / 0.045) 1px, transparent 1px);
-  background-size: 58px 58px;
-  mask-image: linear-gradient(180deg, black, transparent 82%);
+    linear-gradient(var(--resume-flow-angle), transparent 0 22%, rgb(var(--resume-flow-a) / 0.11) 22.08% 22.18%, transparent 22.34% 66%, rgb(var(--resume-flow-b) / 0.08) 66.08% 66.2%, transparent 66.34%),
+    linear-gradient(90deg, rgb(var(--color-border) / 0.038) 1px, transparent 1px),
+    linear-gradient(rgb(var(--color-border) / 0.028) 1px, transparent 1px);
+  background-size: 100% 100%, 84px 84px, 84px 84px;
+  mask-image: linear-gradient(180deg, transparent, rgb(0 0 0 / 0.72) 16%, rgb(0 0 0 / 0.48) 82%, transparent);
+  opacity: 0.42;
+}
+
+.resume-page-minimal .resume-section::after {
+  background:
+    repeating-linear-gradient(calc(var(--resume-flow-angle) - 34deg), transparent 0 96px, rgb(var(--resume-flow-c) / 0.044) 96px 97px, transparent 97px 220px),
+    radial-gradient(ellipse at 82% 34%, rgb(var(--resume-flow-a) / 0.075), transparent 34%);
+  mask-image: linear-gradient(90deg, transparent, rgb(0 0 0 / 0.5) 18%, rgb(0 0 0 / 0.46) 84%, transparent);
+  mix-blend-mode: screen;
+  opacity: 0.5;
 }
 
 .resume-page-minimal .shell {
   position: relative;
   z-index: 1;
+}
+
+.resume-page-minimal .resume-section:nth-child(2) {
+  --resume-flow-a: var(--color-accent);
+  --resume-flow-b: var(--color-blue-signal);
+  --resume-flow-c: var(--color-caution);
+  --resume-flow-angle: 68deg;
+}
+
+.resume-page-minimal .resume-section:nth-child(3) {
+  --resume-flow-a: var(--color-verified);
+  --resume-flow-b: var(--color-blue-signal);
+  --resume-flow-c: var(--color-accent);
+  --resume-flow-angle: 136deg;
 }
 
 .resume-minimal-header {
@@ -790,19 +825,17 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .resume-minimal-header,
-  .resume-section-title,
-  .resume-experience-row,
-  .resume-education-core,
-  .resume-education-item,
-  .resume-certification-ribbon,
-  .resume-publication-panel {
-    animation: resume-minimal-rise 420ms ease both;
+  .motion-ready .resume-page-minimal .resume-section::before {
+    animation: resume-section-flow-drift 36s ease-in-out infinite alternate;
   }
 
-  .resume-experience-row,
-  .resume-education-item {
-    animation-delay: calc(var(--row-index, var(--education-index, 0)) * 70ms);
+  .motion-ready .resume-page-minimal .resume-section::after {
+    animation: resume-section-rail-sweep 44s linear infinite;
+  }
+
+  .motion-ready .resume-page-minimal .resume-section:nth-child(2)::before {
+    animation-direction: alternate-reverse;
+    animation-duration: 42s;
   }
 
   .resume-metric-strip::after {
@@ -827,14 +860,21 @@
   }
 }
 
-@keyframes resume-minimal-rise {
+@keyframes resume-section-flow-drift {
   from {
-    opacity: 0;
-    transform: translateY(8px);
+    transform: translate3d(-0.8vw, -0.4vh, 0) rotate(-2deg) scale(1.02);
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(1vw, 0.7vh, 0) rotate(2deg) scale(1.045);
+  }
+}
+
+@keyframes resume-section-rail-sweep {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 280px 0, -140px 0;
   }
 }
 
@@ -894,6 +934,14 @@
     box-shadow:
       0 0 0 10px rgb(var(--color-verified) / 0.11),
       0 0 26px rgb(var(--color-verified) / 0.34);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resume-page-minimal .resume-section::before,
+  .resume-page-minimal .resume-section::after {
+    animation: none !important;
+    transform: none !important;
   }
 }
 

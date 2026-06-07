@@ -26,8 +26,10 @@ const structuredData = collectionPageStructuredData({
 <BaseLayout title="Appian Accelerate Program" description={pageDescription} path="/work/accelerators" structuredData={structuredData}>
   <section class="section-band">
     <div class="shell">
-      <SectionHeader as="h1" eyebrow="Work" title="Appian Accelerators" copy="Reusable Appian workstreams for platform health, governance, automation, and enablement." />
-      <div class="mt-10">
+      <div data-reveal="text">
+        <SectionHeader as="h1" eyebrow="Work" title="Appian Accelerators" copy="Reusable Appian workstreams for platform health, governance, automation, and enablement." />
+      </div>
+      <div class="mt-8 md:mt-10">
         <ProjectExplorer projects={cards} categories={categories} showFilters={false} client:load />
       </div>
     </div>

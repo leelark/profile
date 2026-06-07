@@ -77,7 +77,7 @@ const spotlightItems = [
 <BaseLayout title="Key Works" description={pageDescription} path="/key-works" structuredData={structuredData}>
   <section class="section-band key-works-hero">
     <div class="shell key-works-hero-grid">
-      <div class="key-works-copy">
+      <div class="key-works-copy" data-reveal="text" style="--reveal-delay: 35ms">
         <p class="eyebrow">Enterprise Appian Delivery</p>
         <h1><span>Key Appian Work</span> Systems</h1>
         <p>
@@ -89,7 +89,7 @@ const spotlightItems = [
           <span>Audit & diagnostics</span>
         </div>
       </div>
-      <div class="key-works-hero-panel" aria-label="Animated system visual for portfolio work">
+      <div class="key-works-hero-panel" data-reveal="media" style="--reveal-delay: 130ms" aria-label="Animated system visual for portfolio work">
         <div class="key-system-visual" aria-hidden="true">
           <div class="key-system-header">
             <span>System map</span>
@@ -156,12 +156,14 @@ const spotlightItems = [
 
   <section class="section-band key-works-body">
     <div class="shell">
-      <FeaturedWorksShowcase
-        projects={allCards}
-        pluginProjects={pluginCards}
-        spotlightItems={spotlightItems}
-        client:load
-      />
+      <div>
+        <FeaturedWorksShowcase
+          projects={allCards}
+          pluginProjects={pluginCards}
+          spotlightItems={spotlightItems}
+          client:load
+        />
+      </div>
     </div>
   </section>
 </BaseLayout>

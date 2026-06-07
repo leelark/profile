@@ -17,11 +17,11 @@ import { personStructuredData, websiteStructuredData } from "@/lib/seo";
 const structuredData = [personStructuredData(), websiteStructuredData()];
 
 const heroSummary =
-  "I lead requirements analysis, solution design, Appian delivery, AI-assisted workflow design, and integrations that connect people, data, records, documents, and enterprise systems.";
+  "I lead requirements analysis, solution design, Appian delivery, AI-assisted workflow design, and integrations that connect users, data, records, documents, and enterprise systems.";
 const heroRoles = [
   { label: "Solution Architect", tone: "blue" },
   { label: "Lead Appian Developer", tone: "green" },
-  { label: "Consultant", tone: "amber" }
+  { label: "Senior Appian Consultant", tone: "amber" }
 ];
 const operatingLayers = [
   {
@@ -125,7 +125,7 @@ const domainCards = [
 <BaseLayout title="Leelark Saxena - Appian Solution Architect and Developer" description={heroSummary} path="/" structuredData={structuredData}>
   <section class="section-band hero-section pt-10 md:pt-14">
     <div class="shell grid gap-9 lg:grid-cols-[1.12fr_0.88fr] lg:items-center">
-      <div class="max-w-3xl reveal-up">
+      <div class="max-w-3xl" data-reveal="text" style="--reveal-delay: 35ms">
         <p class="eyebrow mb-4">Enterprise Appian Architecture</p>
         <h1 class="text-balance text-4xl font-semibold leading-[1.04] text-text md:text-6xl">
           Leelark Saxena
@@ -149,7 +149,7 @@ const domainCards = [
           <a class="quiet-button" href={withBase("/contact")}>Start a conversation</a>
         </div>
       </div>
-      <div class="reveal-up reveal-delay-2">
+      <div data-reveal="media" style="--reveal-delay: 130ms">
         <HeroVisual />
       </div>
     </div>
@@ -157,14 +157,14 @@ const domainCards = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <div>
+      <div data-reveal="text">
         <SectionHeader
           eyebrow="Delivery contribution"
           title="A clearer path from Appian idea to governed release."
           copy="A compact operating model for Appian work: scope the process, blueprint the solution, lead the build, connect AI and integrations, validate readiness, and improve after launch."
         />
       </div>
-      <div class="operating-model mt-8" data-operating-model aria-label="What I bring to Appian programs">
+      <div class="operating-model mt-8" data-operating-model data-reveal="panel" style="--reveal-delay: 90ms" aria-label="What I bring to Appian programs">
         <div class="operating-model-header" aria-hidden="true">
           <span>Process control board</span>
           <b>Scope to release</b>
@@ -217,8 +217,10 @@ const domainCards = [
   <section id="technical-skills" class="section-band border-t border-border">
     <div class="shell">
       <div>
-        <SectionHeader eyebrow="Technical skills" title="Appian technical depth for delivery." copy="Focused skills across solution design, lead development, database, AI workflows, testing, and governance." />
-        <div class="mt-8">
+        <div data-reveal="text">
+          <SectionHeader eyebrow="Technical skills" title="Appian technical depth for delivery." copy="Focused skills across solution design, lead development, database delivery, AI workflows, testing, and governance." />
+        </div>
+        <div class="mt-8" data-reveal="section" style="--reveal-delay: 90ms">
           <TechnicalSkillGrid groups={technicalSkillGroups} appianCapabilities={appianCapabilityShowcase} />
         </div>
       </div>
@@ -227,8 +229,10 @@ const domainCards = [
 
   <section class="section-band credential-section border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Credentials" title="Certification and research foundation." />
-      <div class="credential-stage mt-8">
+      <div data-reveal="text">
+        <SectionHeader eyebrow="Credentials" title="Certification and research foundation." />
+      </div>
+      <div class="credential-stage mt-8" data-reveal-group style="--reveal-delay: 90ms">
         <article class="credential-card credential-card-certifications">
           <h2 class="text-xl font-semibold text-text">Certifications</h2>
           <div class="mt-4 space-y-3">
@@ -266,8 +270,10 @@ const domainCards = [
 
   <section class="section-band border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Domains" title="Enterprise contexts where the Appian delivery model applies." />
-      <div class="domain-constellation mt-8">
+      <div data-reveal="text">
+        <SectionHeader eyebrow="Domains" title="Enterprise contexts where Appian delivery patterns apply." />
+      </div>
+      <div class="domain-constellation mt-8" data-reveal-group style="--reveal-delay: 90ms">
         {domainCards.map((domain) => (
           <article class="domain-card">
             <span>{domain.code}</span>
@@ -283,8 +289,10 @@ const domainCards = [
 
   <section id="enterprise-delivery-footprint" class="section-band client-showcase-section border-t border-border">
     <div class="shell">
-      <SectionHeader eyebrow="Enterprise client experience" title="Appian delivery across respected organizations." copy="A public-safe snapshot of enterprise teams and programs where I contributed to Appian solution design, workflow delivery, and execution support." />
-      <div class="client-marquee mt-8" aria-label="Enterprise client experience">
+      <div data-reveal="text">
+        <SectionHeader eyebrow="Enterprise client experience" title="Appian delivery across respected organizations." copy="A public-safe snapshot of enterprise teams and programs where I contributed to Appian solution design, workflow delivery, and execution support." />
+      </div>
+      <div class="client-marquee mt-8" data-reveal="section" style="--reveal-delay: 90ms" aria-label="Enterprise client experience">
         <div class="client-marquee-track">
           {[...clientCards, ...clientCards].map((client) => (
             <article style={`--client-color: ${client.color}; --client-color-2: ${client.color2};`}>
@@ -304,11 +312,11 @@ const domainCards = [
 
   <section id="next-conversation" class="section-band border-t border-border">
     <div class="shell">
-      <div class="contact-cta-band">
+      <div class="contact-cta-band" data-reveal="panel">
         <div class="contact-cta-copy">
           <p class="eyebrow">Next conversation</p>
           <h2>Bring clarity to your next Appian delivery.</h2>
-          <p>For teams that need clearer workflows, stronger delivery rhythm, AI Assisted Workflows, or Appian Accelerate support.</p>
+          <p>For teams that need clearer workflows, stronger delivery rhythm, AI-assisted automation, or Appian accelerator support.</p>
         </div>
         <div class="contact-cta-actions">
           <a class="primary-button" href={withBase("/contact")}>Start a conversation</a>
@@ -370,5 +378,6 @@ const domainCards = [
 
     rotator.setAttribute("data-role-rotator-timer", String(roleTimer));
   });
+
 </script>
 </BaseLayout>

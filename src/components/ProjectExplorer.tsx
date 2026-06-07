@@ -43,6 +43,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from "react";
 
 export type ProjectCardData = {
@@ -136,12 +137,12 @@ const categoryVisuals: Record<string, { icon: LucideIcon; label: string; color: 
 const focusIcons = [Database, Workflow, BrainCircuit, GitBranch, Activity, Cpu, FileText, Bot, Cable];
 
 const workPriorityOrder = [
-  "claimroute-iq",
-  "knowledge-center-chatbot-docbot",
   "appian-accelerate-program",
+  "knowledge-center-chatbot-docbot",
+  "appian-server-metrics-performance-triage",
   "ebrd-asb-modernization",
-  "custom-html-document-viewer-plugin",
-  "appian-server-metrics-performance-triage"
+  "no-claim-discount-poc",
+  "html-viewer-component-plugin"
 ];
 
 const workPriorityRank = new Map(workPriorityOrder.map((slug, index) => [slug, index]));
@@ -461,9 +462,11 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
   );
   const filterCounts = useMemo(() => {
     const counts = new Map<string, number>([["all", projects.length]]);
+
     for (const category of categories) {
       counts.set(category.slug, projects.filter((project) => project.categorySlug === category.slug).length);
     }
+
     return counts;
   }, [categories, projects]);
 
@@ -565,9 +568,13 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                 layout={!reduceMotion}
                 key={project.slug}
                 initial={false}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: reduceMotion ? 0 : 0.14, delay: compact ? 0 : Math.min(index * 0.01, 0.06) }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{
+                  duration: reduceMotion ? 0 : 0.22,
+                  ease: [0.19, 1, 0.22, 1],
+                  delay: compact ? 0 : Math.min(index * 0.015, 0.08)
+                }}
                 className={`project-card group ${visual.accent}`}
                 role="button"
                 tabIndex={0}
@@ -621,62 +628,66 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
         </AnimatePresence>
       </motion.div>
 
-      <AnimatePresence>
-        {selectedProject && (
-          (() => {
-            const titleId = `project-dialog-${selectedProject.slug}`;
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {selectedProject && (
+              (() => {
+                const titleId = `project-dialog-${selectedProject.slug}`;
 
-            return (
-          <motion.div
-            className="project-modal-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.14 }}
-            onMouseDown={(event) => {
-              if (event.target === event.currentTarget) closeProject();
-            }}
-          >
-            <motion.div
-              ref={modalRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={`project-dialog-${selectedProject.slug}`}
-              className="project-modal-system"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: reduceMotion ? 0 : 0.16 }}
-            >
-              <ProjectModalNavigationRail />
-              <div className="project-modal">
-                <div className="project-modal-header">
-                  <div className="project-modal-utility" aria-hidden="true">
-                    <span className="project-modal-utility-line" />
-                    <span>Portfolio detail</span>
-                  </div>
-                  <button
-                    ref={closeRef}
-                    type="button"
-                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-portfolio border border-border bg-elevated text-text hover:border-accent"
-                    onClick={closeProject}
-                    aria-label="Close project snapshot"
+                return (
+                  <motion.div
+                    className="project-modal-overlay"
+                    initial={false}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: reduceMotion ? 0 : 0.14 }}
+                    onMouseDown={(event) => {
+                      if (event.target === event.currentTarget) closeProject();
+                    }}
                   >
-                    <X size={18} aria-hidden="true" />
-                  </button>
-                </div>
+                    <motion.div
+                      ref={modalRef}
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby={`project-dialog-${selectedProject.slug}`}
+                      className="project-modal-system"
+                      initial={false}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: reduceMotion ? 0 : 0.16 }}
+                    >
+                      <ProjectModalNavigationRail />
+                      <div className="project-modal">
+                        <div className="project-modal-header">
+                          <div className="project-modal-utility" aria-hidden="true">
+                            <span className="project-modal-utility-line" />
+                            <span>Portfolio detail</span>
+                          </div>
+                          <button
+                            ref={closeRef}
+                            type="button"
+                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-portfolio border border-border bg-elevated text-text hover:border-accent"
+                            onClick={closeProject}
+                            aria-label="Close project snapshot"
+                          >
+                            <X size={18} aria-hidden="true" />
+                          </button>
+                        </div>
 
-                <div className="project-modal-body">
-                  <ProjectReadout project={selectedProject} titleId={titleId} />
-                </div>
-              </div>
-              <ProjectModalContactRail />
-            </motion.div>
-          </motion.div>
-            );
-          })()
+                        <div className="project-modal-body">
+                          <ProjectReadout project={selectedProject} titleId={titleId} />
+                        </div>
+                      </div>
+                      <ProjectModalContactRail />
+                    </motion.div>
+                  </motion.div>
+                );
+              })()
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </div>
   );
 }

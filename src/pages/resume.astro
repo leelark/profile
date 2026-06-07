@@ -52,7 +52,7 @@ const credentialCards = certifications.map((item) => ({
   <div class="resume-page resume-page-minimal">
     <section class="resume-section resume-work-section">
       <div class="shell">
-        <header class="resume-minimal-header" aria-label="Resume overview">
+        <header class="resume-minimal-header" data-reveal="text" aria-label="Resume overview">
           <div class="resume-header-kicker">
             <span aria-hidden="true"></span>
             <p>Experience / Education</p>
@@ -64,12 +64,12 @@ const credentialCards = certifications.map((item) => ({
           </div>
         </header>
 
-        <div class="resume-section-title">
+        <div class="resume-section-title" data-reveal="text" style="--reveal-delay: 70ms">
           <span aria-hidden="true"><BriefcaseBusiness size={18} strokeWidth={2.2} /></span>
           <h1>Experience</h1>
         </div>
 
-        <div class="resume-experience-stream" aria-label="Work experience timeline">
+        <div class="resume-experience-stream" data-reveal-group style="--reveal-delay: 120ms" aria-label="Work experience timeline">
           {experience.map((item, index) => {
             const companyLogo = companyLogos[item.company] ?? {
               initials: item.company.slice(0, 2).toUpperCase(),
@@ -112,17 +112,17 @@ const credentialCards = certifications.map((item) => ({
 
     <section class="resume-section resume-education-section border-t border-border">
       <div class="shell">
-        <div class="resume-section-title">
+        <div class="resume-section-title" data-reveal="text">
           <span aria-hidden="true"><GraduationCap size={18} strokeWidth={2.2} /></span>
           <h2>Education</h2>
         </div>
 
-        <div class="resume-education-arc" aria-label="Education details">
+        <div class="resume-education-arc" data-reveal="section" style="--reveal-delay: 70ms" aria-label="Education details">
           <div class="resume-education-core" aria-hidden="true">
             <GraduationCap size={30} strokeWidth={2.1} />
             <strong>CS</strong>
           </div>
-          <div class="resume-education-lane">
+          <div class="resume-education-lane" data-reveal-group style="--reveal-delay: 120ms">
             {education.map((item, index) => (
               <article class="resume-education-item" style={`--education-index: ${index}`}>
                 <div class="resume-education-node" aria-hidden="true">
@@ -142,12 +142,12 @@ const credentialCards = certifications.map((item) => ({
 
     <section class="resume-section resume-credential-section border-t border-border">
       <div class="shell">
-        <div class="resume-section-title">
+        <div class="resume-section-title" data-reveal="text">
           <span aria-hidden="true"><BadgeCheck size={18} strokeWidth={2.2} /></span>
           <h2>Credentials</h2>
         </div>
 
-        <div class="resume-credential-layout">
+        <div class="resume-credential-layout" data-reveal-group style="--reveal-delay: 90ms">
           <article class="resume-certification-ribbon">
             <h3>Certifications</h3>
             <div>

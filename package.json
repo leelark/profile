@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
-    "build": "astro check && astro build",
+    "build": "npm run build:background && astro check && astro build",
+    "build:background": "esbuild src/scripts/global-three-background.ts --bundle --format=iife --target=es2020 --minify --outfile=public/global-three-background.js",
     "preview": "astro preview --host 127.0.0.1",
     "check": "astro check",
-    "lint:content": "node scripts/validate-content.mjs"
+    "lint:content": "node scripts/validate-content.mjs",
+    "lint:motion": "node scripts/validate-motion-system.mjs",
+    "lint:work-ui": "node scripts/validate-work-interactions.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",

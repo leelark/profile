@@ -17,6 +17,7 @@ import type { LucideIcon } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   ProjectModalContactRail,
   ProjectModalNavigationRail,
@@ -316,9 +317,12 @@ export default function FeaturedWorksShowcase({
                 className={`key-work-strip key-tone-${item.tone}`}
                 initial={false}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: reduceMotion ? 0 : 0.18, delay: reduceMotion ? 0 : index * 0.035 }}
+                transition={{
+                  duration: reduceMotion ? 0 : 0.22,
+                  ease: [0.19, 1, 0.22, 1],
+                  delay: reduceMotion ? 0 : index * 0.015
+                }}
               >
-                <span className="key-work-index">{String(index + 1).padStart(2, "0")}</span>
                 <span className="key-work-icon" aria-hidden="true">
                   <Icon size={18} />
                 </span>
@@ -378,7 +382,11 @@ export default function FeaturedWorksShowcase({
                   initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                  transition={{ duration: reduceMotion ? 0 : 0.18, delay: reduceMotion ? 0 : index * 0.035 }}
+                  transition={{
+                    duration: reduceMotion ? 0 : 0.22,
+                    ease: [0.19, 1, 0.22, 1],
+                    delay: reduceMotion ? 0 : index * 0.015
+                  }}
                   onClick={(event) => openProject(project, event.currentTarget)}
                   aria-label={`View details for ${meta.name}`}
                 >
@@ -390,7 +398,6 @@ export default function FeaturedWorksShowcase({
                       <i></i>
                       <b></b>
                     </span>
-                    <span className="key-plugin-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
                   </span>
                   <span className="key-plugin-copy">
                     <span>{meta.type}</span>
@@ -412,63 +419,67 @@ export default function FeaturedWorksShowcase({
         </div>
       </section>
 
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            className="project-modal-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.14 }}
-            onMouseDown={(event) => {
-              if (event.target === event.currentTarget) closeProject();
-            }}
-          >
-            <motion.div
-              ref={modalRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={`featured-dialog-${selectedProject.slug}`}
-              className="project-modal-system"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: reduceMotion ? 0 : 0.16 }}
-            >
-              <ProjectModalNavigationRail />
-              <div className="project-modal">
-                <div className="project-modal-header">
-                  <div>
-                    <div className="project-modal-kicker">
-                      <span aria-hidden="true">
-                        <BadgeCheck size={16} />
-                      </span>
-                      <p>Featured work / {selectedProject.domain}</p>
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {selectedProject && (
+              <motion.div
+                className="project-modal-overlay"
+                initial={false}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.14 }}
+                onMouseDown={(event) => {
+                  if (event.target === event.currentTarget) closeProject();
+                }}
+              >
+                <motion.div
+                  ref={modalRef}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby={`featured-dialog-${selectedProject.slug}`}
+                  className="project-modal-system"
+                  initial={false}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: reduceMotion ? 0 : 0.16 }}
+                >
+                  <ProjectModalNavigationRail />
+                  <div className="project-modal">
+                    <div className="project-modal-header">
+                      <div>
+                        <div className="project-modal-kicker">
+                          <span aria-hidden="true">
+                            <BadgeCheck size={16} />
+                          </span>
+                          <p>Featured work / {selectedProject.domain}</p>
+                        </div>
+                        <h2 id={`featured-dialog-${selectedProject.slug}`} className="mt-2 text-2xl font-semibold leading-tight text-text md:text-3xl">
+                          {selectedProject.title}
+                        </h2>
+                      </div>
+                      <button
+                        ref={closeRef}
+                        type="button"
+                        className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-portfolio border border-border bg-elevated text-text hover:border-accent"
+                        onClick={closeProject}
+                        aria-label="Close featured work details"
+                      >
+                        <X size={18} aria-hidden="true" />
+                      </button>
                     </div>
-                    <h2 id={`featured-dialog-${selectedProject.slug}`} className="mt-2 text-2xl font-semibold leading-tight text-text md:text-3xl">
-                      {selectedProject.title}
-                    </h2>
-                  </div>
-                  <button
-                    ref={closeRef}
-                    type="button"
-                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-portfolio border border-border bg-elevated text-text hover:border-accent"
-                    onClick={closeProject}
-                    aria-label="Close featured work details"
-                  >
-                    <X size={18} aria-hidden="true" />
-                  </button>
-                </div>
 
-                <div className="project-modal-body">
-                  <ProjectReadout project={selectedProject} />
-                </div>
-              </div>
-              <ProjectModalContactRail />
-            </motion.div>
-          </motion.div>
+                    <div className="project-modal-body">
+                      <ProjectReadout project={selectedProject} />
+                    </div>
+                  </div>
+                  <ProjectModalContactRail />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </>
   );
 }

@@ -42,13 +42,13 @@ const structuredData = [
 <BaseLayout title="Contact" description={pageDescription} path="/contact" structuredData={structuredData}>
   <section class="section-band contact-page-section">
     <div class="shell contact-page-shell">
-      <div class="contact-page-header">
+      <div class="contact-page-header" data-reveal="text">
         <SectionHeader as="h1" eyebrow="Contact" title="Discuss Appian solution design and delivery." />
       </div>
 
       <div class="contact-page-grid">
-        <div class="contact-info-column">
-          <div class="contact-detail-grid">
+        <div class="contact-info-column" data-reveal="section" style="--reveal-delay: 70ms">
+          <div class="contact-detail-grid" data-reveal-group>
             <div class="contact-detail-card">
               <p class="text-xs font-bold uppercase text-muted">Email</p>
               <a class="mt-2 block text-sm font-semibold text-text hover:text-accent" href={`mailto:${contact.email}`}>{contact.email}</a>
@@ -77,7 +77,7 @@ const structuredData = [
           </div>
         </div>
 
-        <div class="glass-panel contact-form-panel p-5 md:p-6">
+        <div class="glass-panel contact-form-panel p-5 md:p-6" data-reveal="panel" style="--reveal-delay: 130ms">
           <ContactForm />
           <p class="mt-5 text-xs leading-5 text-muted">
             Please avoid sharing confidential client data, credentials, tokens, or sensitive project details in this form.
