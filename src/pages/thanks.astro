@@ -1,16 +1,30 @@
 ---
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { withBase } from "@/lib/paths";
 ---
 
-<BaseLayout title="Thanks" description="Thank you for contacting Leelark Saxena." path="/thanks" noindex>
-  <section class="section-band">
-    <div class="shell">
-      <div class="mx-auto max-w-reading rounded-portfolio border border-border bg-surface p-8 text-center" data-reveal="panel">
-        <p class="eyebrow mb-4">Message received</p>
-        <h1 class="text-4xl font-semibold text-text">Thanks for reaching out.</h1>
-        <p class="mt-5 text-muted">I will review your message and respond through the contact details provided.</p>
-        <a class="mt-8 inline-flex min-h-12 items-center rounded-portfolio bg-accent px-5 text-sm font-bold text-white" href={withBase("/")}>Return home</a>
+<BaseLayout title="Message Received" description="Thank you for contacting Leelark Saxena." path="/thanks" noindex hideFooter>
+  <section class="section-band thanks-page-section">
+    <div class="shell thanks-page-shell">
+      <span class="thanks-depth-plane thanks-depth-plane-a" aria-hidden="true"></span>
+      <span class="thanks-depth-plane thanks-depth-plane-b" aria-hidden="true"></span>
+
+      <div class="thanks-success-card" data-reveal="panel">
+        <span class="thanks-status-mark" aria-hidden="true">
+          <CheckCircle2 size={38} strokeWidth={2.3} />
+        </span>
+
+        <p class="eyebrow">Message received</p>
+        <h1>Thank you. Your message is on its way.</h1>
+        <p class="thanks-lead">I will review the details and respond through the email address you provided.</p>
+
+        <div class="thanks-action-row">
+          <a class="thanks-primary-action" href={withBase("/work")}>
+            View portfolio work
+            <ArrowRight size={16} aria-hidden="true" />
+          </a>
+        </div>
       </div>
     </div>
   </section>

@@ -1,18 +1,26 @@
 ---
 import { ArrowRight } from "lucide-react";
+import { withBase } from "@/lib/paths";
 
-const redirect = "https://leelark.github.io/profile/thanks/";
+const fallbackRedirect = "https://leelark.github.io/profile/thanks/";
+const successRedirect = withBase("/thanks/");
 ---
 
-<form class="contact-form-grid grid gap-5" action="https://splitforms.com/api/submit" method="POST">
+<form
+  class="contact-form-grid grid gap-5"
+  action="https://splitforms.com/api/submit"
+  method="POST"
+  data-enhanced-contact-form
+  data-success-redirect={successRedirect}
+>
   <input type="hidden" name="access_key" value="8897600acb7b48f09fb9d1f78895c3b6" />
-  <input type="hidden" name="redirect" value={redirect} />
+  <input type="hidden" name="redirect" value={fallbackRedirect} />
   <input type="hidden" name="subject" value="Portfolio inquiry for Leelark Saxena" />
   <input type="hidden" name="source" value="leelark.github.io/profile/contact" />
   <input type="hidden" name="inquiry_type" value="General portfolio inquiry" />
   <label class="hidden" aria-hidden="true">
     Leave this field empty
-    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+    <input type="text" name="botcheck" tabindex="-1" autocomplete="off" />
   </label>
 
   <div class="contact-form-row grid gap-5 md:grid-cols-2">
@@ -49,11 +57,133 @@ const redirect = "https://leelark.github.io/profile/thanks/";
   </label>
 
   <div class="contact-submit-row">
-    <button class="contact-submit-button" type="submit">
-      <span>Send message</span>
+    <button class="contact-submit-button" type="submit" data-contact-submit>
+      <span data-contact-submit-label>Send message</span>
       <span class="contact-submit-icon" aria-hidden="true">
         <ArrowRight size={18} strokeWidth={2.3} />
       </span>
     </button>
   </div>
+  <p class="contact-form-status" data-contact-form-status aria-live="polite"></p>
 </form>
+
+<script is:inline>
+  (() => {
+    const submittedStorageKey = "leelark-contact-submitted";
+
+    const hasSubmittedInTab = () => {
+      try {
+        return window.sessionStorage?.getItem(submittedStorageKey) === "true";
+      } catch {
+        return false;
+      }
+    };
+
+    const markSubmittedInTab = () => {
+      try {
+        window.sessionStorage?.setItem(submittedStorageKey, "true");
+      } catch {
+        // Session storage can be unavailable in hardened browser settings.
+      }
+    };
+
+    const lockSubmittedForm = (form, button, label, status) => {
+      form.dataset.contactSubmitted = "true";
+
+      if (button instanceof HTMLButtonElement) {
+        button.disabled = true;
+        button.dataset.submissionLocked = "true";
+        button.removeAttribute("aria-busy");
+      }
+
+      if (label) label.textContent = "Message received";
+
+      if (status instanceof HTMLElement) {
+        status.dataset.state = "success";
+        status.textContent = "Your previous message has been received. Please allow some time for a response through the email you shared.";
+      }
+    };
+
+    const initEnhancedContactForms = () => {
+      const forms = document.querySelectorAll("[data-enhanced-contact-form]");
+
+      forms.forEach((form) => {
+        if (!(form instanceof HTMLFormElement) || form.dataset.contactReady === "true") return;
+        form.dataset.contactReady = "true";
+
+        const button = form.querySelector("[data-contact-submit]");
+        const label = form.querySelector("[data-contact-submit-label]");
+        const status = form.querySelector("[data-contact-form-status]");
+        const defaultLabel = label?.textContent || "Send message";
+
+        if (hasSubmittedInTab()) {
+          lockSubmittedForm(form, button, label, status);
+        }
+
+        form.addEventListener("submit", async (event) => {
+          if (hasSubmittedInTab()) {
+            event.preventDefault();
+            lockSubmittedForm(form, button, label, status);
+            return;
+          }
+
+          if (!form.checkValidity()) return;
+
+          event.preventDefault();
+
+          const successRedirect = form.dataset.successRedirect || "/profile/thanks/";
+          const formData = new FormData(form);
+          formData.delete("redirect");
+
+          if (button instanceof HTMLButtonElement) {
+            button.disabled = true;
+            button.setAttribute("aria-busy", "true");
+          }
+          if (label) label.textContent = "Sending...";
+          if (status instanceof HTMLElement) {
+            status.dataset.state = "pending";
+            status.textContent = "Sending your message securely...";
+          }
+
+          try {
+            const response = await fetch(form.action, {
+              method: form.method || "POST",
+              body: formData,
+              mode: "cors"
+            });
+
+            let payload = null;
+            try {
+              payload = await response.clone().json();
+            } catch {
+              payload = null;
+            }
+
+            if (!response.ok || payload?.success === false) {
+              throw new Error(payload?.message || "Submission failed.");
+            }
+
+            markSubmittedInTab();
+            window.location.assign(successRedirect);
+          } catch {
+            if (status instanceof HTMLElement) {
+              status.dataset.state = "error";
+              status.textContent = "The message could not be sent right now. Please try again or use the contact details to email directly.";
+            }
+            if (button instanceof HTMLButtonElement) {
+              button.disabled = false;
+              button.removeAttribute("aria-busy");
+            }
+            if (label) label.textContent = defaultLabel;
+          }
+        });
+      });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initEnhancedContactForms, { once: true });
+    } else {
+      initEnhancedContactForms();
+    }
+  })();
+</script>
