@@ -111,6 +111,7 @@ type VisualSceneVariant =
   | "textHighlighter"
   | "htmlViewer"
   | "accessiblePdf"
+  | "colorPicker"
   | "automobileTrace"
   | "ncdPolicy"
   | "revenueCycle"
@@ -332,7 +333,7 @@ const projectVisualScenes: Record<string, VisualScene> = {
   },
   "color-picker-component-plugin": {
     className: "scene-color-picker",
-    variant: "fallback",
+    variant: "colorPicker",
     kicker: "SAIL color input",
     caption: "Color selection, preview, validation, and Appian value binding for configurable interfaces.",
     nodes: [
@@ -473,22 +474,21 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
 
     const container = section.closest("[data-project-scroll-container]") as HTMLElement | null;
     if (!container) {
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      section.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
       setActiveModalSection(sectionId);
       return;
     }
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const header = container.querySelector<HTMLElement>(".project-modal-header");
     const headerOffset = (header?.offsetHeight ?? 0) + 18;
     const containerRect = container.getBoundingClientRect();
     const sectionRect = section.getBoundingClientRect();
     const targetTop = container.scrollTop + sectionRect.top - containerRect.top - headerOffset;
+    const maxTop = Math.max(0, container.scrollHeight - container.clientHeight);
+    const nextTop = Math.min(maxTop, Math.max(0, targetTop));
 
-    container.scrollTo({
-      top: Math.max(0, targetTop),
-      behavior: reduceMotion ? "auto" : "smooth"
-    });
+    container.scrollTop = nextTop;
     setActiveModalSection(sectionId);
   }, []);
 
@@ -564,6 +564,12 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
       const anchorTop = container.getBoundingClientRect().top + (header?.offsetHeight ?? 0) + 28;
       const sections = Array.from(container.querySelectorAll<HTMLElement>("[data-project-section]"));
       let current = sections[0]?.dataset.projectSection ?? "overview";
+      const isAtModalBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 2;
+
+      if (isAtModalBottom) {
+        setActiveModalSection(sections[sections.length - 1]?.dataset.projectSection ?? current);
+        return;
+      }
 
       for (const section of sections) {
         if (section.getBoundingClientRect().top <= anchorTop) {
@@ -630,7 +636,6 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                 layout={!reduceMotion}
                 key={project.slug}
                 initial={false}
-                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 8 }}
                 transition={{
                   duration: reduceMotion ? 0 : 0.22,
@@ -713,19 +718,21 @@ export default function ProjectExplorer({ projects, categories, showFilters = tr
                       <ProjectModalNavigationRail activeSection={activeModalSection} onNavigate={scrollProjectSection} />
                       <div className="project-modal" data-project-scroll-container>
                         <div className="project-modal-header">
-                          <div className="project-modal-utility" aria-hidden="true">
-                            <span className="project-modal-utility-line" />
-                            <span>Portfolio detail</span>
+                          <div className="project-modal-header-top">
+                            <div className="project-modal-utility" aria-hidden="true">
+                              <span className="project-modal-utility-line" />
+                              <span>Portfolio detail</span>
+                            </div>
+                            <button
+                              ref={closeRef}
+                              type="button"
+                              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-portfolio border border-border bg-elevated text-text hover:border-accent"
+                              onClick={closeProject}
+                              aria-label="Close project snapshot"
+                            >
+                              <X size={18} aria-hidden="true" />
+                            </button>
                           </div>
-                          <button
-                            ref={closeRef}
-                            type="button"
-                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-portfolio border border-border bg-elevated text-text hover:border-accent"
-                            onClick={closeProject}
-                            aria-label="Close project snapshot"
-                          >
-                            <X size={18} aria-hidden="true" />
-                          </button>
                         </div>
 
                         <div className="project-modal-body">
@@ -774,6 +781,16 @@ function setupWorkReveal(root: HTMLElement | null, reduceMotion: boolean | null)
   }
 
   const scrollContainer = root.querySelector<HTMLElement>("[data-project-scroll-container]");
+  const modalRevealRoot = Boolean(scrollContainer);
+
+  if (modalRevealRoot) {
+    for (const item of items) item.classList.add("is-visible");
+    return () => {
+      root.classList.remove("work-reveal-ready");
+      for (const item of items) item.classList.remove("is-visible");
+    };
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
@@ -784,8 +801,8 @@ function setupWorkReveal(root: HTMLElement | null, reduceMotion: boolean | null)
     },
     {
       root: scrollContainer ?? null,
-      rootMargin: scrollContainer ? "0px 0px -12% 0px" : "0px 0px -8% 0px",
-      threshold: 0.12
+      rootMargin: scrollContainer ? "0px 0px -18% 0px" : "0px 0px -16% 0px",
+      threshold: 0.08
     }
   );
 
@@ -935,6 +952,10 @@ export function ProjectReadout({ project, titleId }: { project: ProjectCardData;
 function ProjectVisualStory({ scene }: { scene: VisualScene }) {
   return (
     <div className={`project-visual-story ${scene.className} project-visual-${scene.variant}`} aria-hidden="true">
+      <span className="project-visual-depth-grid" />
+      <span className="project-visual-flow-field project-visual-flow-field-a" />
+      <span className="project-visual-flow-field project-visual-flow-field-b" />
+      <span className="project-visual-scan-sheen" />
       <div className="project-visual-head">
         <strong>{scene.kicker}</strong>
         <span>{scene.caption}</span>
@@ -983,6 +1004,8 @@ function renderProjectVisual(scene: VisualScene) {
       return <HtmlViewerVisual scene={scene} />;
     case "accessiblePdf":
       return <AccessiblePdfVisual scene={scene} />;
+    case "colorPicker":
+      return <ColorPickerVisual scene={scene} />;
     case "automobileTrace":
       return <AutomobileTraceVisual scene={scene} />;
     case "ncdPolicy":
@@ -1433,6 +1456,40 @@ function AccessiblePdfVisual({ scene }: { scene: VisualScene }) {
           { label: "Alt", value: "mapped", tone: "b" }
         ]}
       />
+    </div>
+  );
+}
+
+function ColorPickerVisual({ scene }: { scene: VisualScene }) {
+  return (
+    <div className="visual-color-picker">
+      <div className="visual-swatch-stack">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+      <div className="visual-color-preview">
+        <Palette size={28} />
+        <strong>{metricText(scene, 0, "Hex")}</strong>
+        <small>{metricText(scene, 1, "Preview")}</small>
+      </div>
+      <div className="visual-color-sliders">
+        <span>
+          <b>R</b>
+          <i />
+        </span>
+        <span>
+          <b>G</b>
+          <i />
+        </span>
+        <span>
+          <b>B</b>
+          <i />
+        </span>
+      </div>
+      <SceneBadge scene={scene} index={2} className="visual-color-validation" />
+      <SceneBadge scene={scene} index={3} className="visual-color-output" />
     </div>
   );
 }

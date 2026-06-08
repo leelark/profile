@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 const redirect = "https://leelark.github.io/profile/thanks/";
 ---
 
-<form class="grid gap-5" action="https://splitforms.com/api/submit" method="POST">
+<form class="contact-form-grid grid gap-5" action="https://splitforms.com/api/submit" method="POST">
   <input type="hidden" name="access_key" value="8897600acb7b48f09fb9d1f78895c3b6" />
   <input type="hidden" name="redirect" value={redirect} />
   <input type="hidden" name="subject" value="Portfolio inquiry for Leelark Saxena" />
@@ -15,7 +15,7 @@ const redirect = "https://leelark.github.io/profile/thanks/";
     <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
   </label>
 
-  <div class="grid gap-5 md:grid-cols-2">
+  <div class="contact-form-row grid gap-5 md:grid-cols-2">
     <label class="grid gap-2">
       <span class="text-sm font-semibold text-text">Name <span class="text-accent">(required)</span></span>
       <input id="contact-name" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="name" autocomplete="name" required maxlength="100" />
@@ -26,7 +26,7 @@ const redirect = "https://leelark.github.io/profile/thanks/";
     </label>
   </div>
 
-  <div class="grid gap-5">
+  <div class="contact-form-row contact-form-row-single grid gap-5">
     <label class="grid gap-2">
       <span class="text-sm font-semibold text-text">Company or organization</span>
       <input id="contact-company" class="min-h-12 rounded-portfolio border border-border bg-elevated px-4 text-text" name="company" autocomplete="organization" maxlength="140" />
@@ -37,7 +37,7 @@ const redirect = "https://leelark.github.io/profile/thanks/";
     <span class="text-sm font-semibold text-text">Message <span class="text-accent">(required)</span></span>
     <textarea
       id="contact-message"
-      class="min-h-40 rounded-portfolio border border-border bg-elevated px-4 py-3 text-text"
+      class="contact-message-field min-h-40 rounded-portfolio border border-border bg-elevated px-4 py-3 text-text"
       name="message"
       required
       minlength="20"

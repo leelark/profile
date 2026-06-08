@@ -1,0 +1,219 @@
+<script is:inline>
+  (() => {
+    try {
+      const forceIntro = new URLSearchParams(window.location.search).get("intro") === "1";
+      const hasSeenIntro = window.sessionStorage.getItem("leelarkPortfolioIntroSeen") === "true";
+      if (hasSeenIntro && !forceIntro) {
+        document.documentElement.setAttribute("data-skip-portfolio-intro", "true");
+      }
+    } catch {
+      /* Show the intro when storage is unavailable. */
+    }
+  })();
+</script>
+
+<section class="portfolio-intro" data-portfolio-intro data-state="active" aria-label="Welcome to Leelark Saxena portfolio">
+  <div class="portfolio-intro-scene" aria-hidden="true">
+    <span class="portfolio-intro-lens"></span>
+    <span class="portfolio-intro-aperture portfolio-intro-aperture-a"></span>
+    <span class="portfolio-intro-aperture portfolio-intro-aperture-b"></span>
+    <span class="portfolio-intro-aperture portfolio-intro-aperture-c"></span>
+    <span class="portfolio-intro-depth portfolio-intro-depth-a"></span>
+    <span class="portfolio-intro-depth portfolio-intro-depth-b"></span>
+    <span class="portfolio-intro-depth portfolio-intro-depth-c"></span>
+    <span class="portfolio-intro-veil portfolio-intro-veil-a"></span>
+    <span class="portfolio-intro-veil portfolio-intro-veil-b"></span>
+    <span class="portfolio-intro-rail portfolio-intro-rail-a"></span>
+    <span class="portfolio-intro-rail portfolio-intro-rail-b"></span>
+    <span class="portfolio-intro-rail portfolio-intro-rail-c"></span>
+    <span class="portfolio-intro-horizon"></span>
+    <svg class="portfolio-intro-flow" viewBox="0 0 1000 520" preserveAspectRatio="none" focusable="false">
+      <defs>
+        <linearGradient id="portfolioIntroLine" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stop-color="rgb(23 9 30)" stop-opacity="0" />
+          <stop offset="32%" stop-color="rgb(126 70 192)" stop-opacity="0.8" />
+          <stop offset="58%" stop-color="rgb(202 159 255)" stop-opacity="0.72" />
+          <stop offset="78%" stop-color="rgb(78 34 112)" stop-opacity="0.54" />
+          <stop offset="100%" stop-color="rgb(23 9 30)" stop-opacity="0" />
+        </linearGradient>
+        <linearGradient id="portfolioIntroThread" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stop-color="rgb(42 18 58)" stop-opacity="0" />
+          <stop offset="42%" stop-color="rgb(169 116 239)" stop-opacity="0.62" />
+          <stop offset="64%" stop-color="rgb(118 66 168)" stop-opacity="0.44" />
+          <stop offset="100%" stop-color="rgb(42 18 58)" stop-opacity="0" />
+        </linearGradient>
+        <radialGradient id="portfolioIntroCore" cx="50%" cy="45%" r="62%">
+          <stop offset="0%" stop-color="rgb(248 250 252)" stop-opacity="0.9" />
+          <stop offset="38%" stop-color="rgb(159 102 232)" stop-opacity="0.48" />
+          <stop offset="72%" stop-color="rgb(72 26 103)" stop-opacity="0.28" />
+          <stop offset="100%" stop-color="rgb(20 7 28)" stop-opacity="0.08" />
+        </radialGradient>
+      </defs>
+      <path class="portfolio-intro-ribbon portfolio-intro-ribbon-a" stroke="url(#portfolioIntroLine)" d="M-80 320 C126 176 286 372 472 246 C646 128 736 176 1056 98" />
+      <path class="portfolio-intro-ribbon portfolio-intro-ribbon-b" stroke="url(#portfolioIntroLine)" d="M-54 204 C160 290 282 126 472 224 C634 308 786 368 1068 252" />
+      <path class="portfolio-intro-line portfolio-intro-line-a" stroke="url(#portfolioIntroLine)" d="M-80 320 C126 176 286 372 472 246 C646 128 736 176 1056 98" />
+      <path class="portfolio-intro-line portfolio-intro-line-b" stroke="url(#portfolioIntroLine)" d="M-54 204 C160 290 282 126 472 224 C634 308 786 368 1068 252" />
+      <path class="portfolio-intro-line portfolio-intro-line-c" stroke="url(#portfolioIntroLine)" d="M94 422 C282 302 360 318 506 254 C650 190 726 112 948 120" />
+      <path class="portfolio-intro-thread portfolio-intro-thread-a" stroke="url(#portfolioIntroThread)" d="M-40 388 C162 312 298 392 468 286 C622 190 728 190 1020 172" />
+      <path class="portfolio-intro-thread portfolio-intro-thread-b" stroke="url(#portfolioIntroThread)" d="M-16 132 C168 154 304 116 456 214 C622 320 790 272 1032 388" />
+      <g class="portfolio-intro-node portfolio-intro-node-a" transform="translate(308 228)">
+        <circle r="13"></circle>
+        <circle r="42"></circle>
+      </g>
+      <g class="portfolio-intro-node portfolio-intro-node-b" transform="translate(506 246)">
+        <circle r="20"></circle>
+        <circle r="66"></circle>
+      </g>
+      <g class="portfolio-intro-node portfolio-intro-node-c" transform="translate(724 170)">
+        <circle r="13"></circle>
+        <circle r="46"></circle>
+      </g>
+      <g class="portfolio-intro-node portfolio-intro-node-d" transform="translate(786 316)">
+        <circle r="12"></circle>
+        <circle r="38"></circle>
+      </g>
+    </svg>
+  </div>
+  <div class="portfolio-intro-copy">
+    <span class="portfolio-intro-core" aria-hidden="true">
+      <i class="portfolio-intro-core-shine"></i>
+      <i class="portfolio-intro-core-ring portfolio-intro-core-ring-a"></i>
+      <i class="portfolio-intro-core-ring portfolio-intro-core-ring-b"></i>
+      <span class="portfolio-intro-logo-text">LS</span>
+    </span>
+    <p><span>Welcome</span></p>
+    <h2>
+      <span>Leelark</span>
+      <span>Saxena</span>
+    </h2>
+  </div>
+  <div class="portfolio-intro-status" aria-hidden="true">
+    <span>Loading portfolio<i></i></span>
+    <b><i></i></b>
+  </div>
+  <button class="portfolio-intro-skip" type="button" data-portfolio-intro-skip>
+    Skip
+  </button>
+</section>
+
+<script is:inline>
+  (() => {
+    const intro = document.querySelector("[data-portfolio-intro]");
+    if (!(intro instanceof HTMLElement)) return;
+
+    const skipButton = intro.querySelector("[data-portfolio-intro-skip]");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canUsePointer = !reduceMotion;
+    const seenKey = "leelarkPortfolioIntroSeen";
+    const forceIntro = new URLSearchParams(window.location.search).get("intro") === "1";
+    const getSeenIntro = () => {
+      try {
+        return window.sessionStorage.getItem(seenKey) === "true";
+      } catch {
+        return false;
+      }
+    };
+    const markSeenIntro = () => {
+      try {
+        window.sessionStorage.setItem(seenKey, "true");
+      } catch {
+        /* Keep the intro disposable when storage is unavailable. */
+      }
+    };
+    const hasSeenIntro = getSeenIntro();
+
+    let isFinished = false;
+    let exitTimer;
+    let pointerFrame;
+
+    const setPointerVars = (x, y) => {
+      intro.style.setProperty("--intro-shift-x", `${x * 24}px`);
+      intro.style.setProperty("--intro-shift-y", `${y * 18}px`);
+      intro.style.setProperty("--intro-shift-x-soft", `${x * 12}px`);
+      intro.style.setProperty("--intro-shift-y-soft", `${y * 9}px`);
+      intro.style.setProperty("--intro-shift-x-deep", `${x * -16}px`);
+      intro.style.setProperty("--intro-shift-y-deep", `${y * -12}px`);
+      intro.style.setProperty("--intro-rotate-x", `${y * -5.5}deg`);
+      intro.style.setProperty("--intro-rotate-y", `${x * 7}deg`);
+      intro.style.setProperty("--intro-focus-x", `${50 + x * 8}%`);
+      intro.style.setProperty("--intro-focus-y", `${46 + y * 7}%`);
+    };
+
+    const handlePointerMove = (event) => {
+      if (!canUsePointer) return;
+      window.cancelAnimationFrame(pointerFrame);
+      pointerFrame = window.requestAnimationFrame(() => {
+        const bounds = intro.getBoundingClientRect();
+        const x = ((event.clientX - bounds.left) / bounds.width) - 0.5;
+        const y = ((event.clientY - bounds.top) / bounds.height) - 0.5;
+        setPointerVars(x, y);
+      });
+    };
+
+    const resetPointer = () => {
+      if (!canUsePointer) return;
+      setPointerVars(0, 0);
+    };
+
+    const handleKeydown = (event) => {
+      if (event.key !== "Escape") return;
+      finishIntro();
+    };
+
+    const finishIntro = () => {
+      if (isFinished) return;
+      isFinished = true;
+      window.clearTimeout(exitTimer);
+      window.cancelAnimationFrame(pointerFrame);
+      window.removeEventListener("keydown", handleKeydown);
+      intro.removeEventListener("pointermove", handlePointerMove);
+      intro.removeEventListener("mousemove", handlePointerMove);
+      intro.removeEventListener("pointerleave", resetPointer);
+      intro.removeEventListener("mouseleave", resetPointer);
+      intro.dataset.state = "exiting";
+      document.body.removeAttribute("data-intro-lock");
+      markSeenIntro();
+      window.setTimeout(() => {
+        intro.dataset.state = "hidden";
+        intro.setAttribute("aria-hidden", "true");
+      }, reduceMotion ? 120 : 620);
+    };
+
+    if (hasSeenIntro && !forceIntro) {
+      intro.dataset.state = "hidden";
+      intro.setAttribute("aria-hidden", "true");
+      return;
+    }
+
+    document.documentElement.removeAttribute("data-skip-portfolio-intro");
+    document.body.setAttribute("data-intro-lock", "true");
+    intro.dataset.state = "active";
+
+    const autoDelay = reduceMotion ? 1900 : 5800;
+    let timerStarted = false;
+    const startExitTimer = () => {
+      if (timerStarted || isFinished) return;
+      timerStarted = true;
+      exitTimer = window.setTimeout(finishIntro, autoDelay);
+    };
+
+    if (reduceMotion) {
+      startExitTimer();
+    } else {
+      const fallbackTimer = window.setTimeout(startExitTimer, 360);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          window.clearTimeout(fallbackTimer);
+          startExitTimer();
+        });
+      });
+    }
+
+    skipButton?.addEventListener("click", finishIntro);
+    window.addEventListener("keydown", handleKeydown);
+    intro.addEventListener("pointermove", handlePointerMove);
+    intro.addEventListener("mousemove", handlePointerMove);
+    intro.addEventListener("pointerleave", resetPointer);
+    intro.addEventListener("mouseleave", resetPointer);
+  })();
+</script>

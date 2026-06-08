@@ -1,5 +1,6 @@
 ---
 import NavControls from "@/components/NavControls";
+import PortfolioIntro from "@/components/PortfolioIntro.astro";
 import { profile } from "@/lib/content";
 import { canonicalUrl, withBase } from "@/lib/paths";
 import "@/styles/global.css";
@@ -10,6 +11,7 @@ type Props = {
   path?: string;
   noindex?: boolean;
   hideIdentity?: boolean;
+  hideFooter?: boolean;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
 };
 
@@ -19,6 +21,7 @@ const {
   path = "/",
   noindex = false,
   hideIdentity = false,
+  hideFooter = false,
   structuredData
 } = Astro.props;
 
@@ -41,7 +44,7 @@ const navLinks = [
   href: withBase(link.path),
   current: link.path === "/" ? currentPath === "/" : currentPath === link.path || currentPath.startsWith(`${link.path}/`)
 }));
-const hideFloatingContactRoutes = ["/contact", "/work", "/key-works", "/resume", "/thanks"];
+const hideFloatingContactRoutes = ["/contact", "/thanks", "/resume"];
 const showFloatingContact = !hideFloatingContactRoutes.some((route) => (
   route === "/" ? currentPath === "/" : currentPath === route || currentPath.startsWith(`${route}/`)
 ));
@@ -170,13 +173,14 @@ const hideFloatingContactAtHomeCta = currentPath === "/";
     )}
     <script is:inline defer src={withBase("/global-three-background.js")}></script>
   </head>
-  <body>
+  <body data-route={currentPath}>
     <div class="site-background-field" aria-hidden="true">
       <canvas class="site-background-three" data-three-background aria-hidden="true"></canvas>
       <span class="site-background-layer site-background-depth"></span>
       <span class="site-background-layer site-background-structure"></span>
       <span class="site-background-layer site-background-signal"></span>
     </div>
+    {currentPath === "/" && <PortfolioIntro />}
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="shell site-header-shell">
@@ -224,15 +228,17 @@ const hideFloatingContactAtHomeCta = currentPath === "/";
       </aside>
     )}
 
-    <footer class="border-t border-border py-10">
-      <div class="shell flex flex-col gap-4 text-sm text-muted md:flex-row md:items-center md:justify-between">
-        <p>Leelark Saxena - Solution Architect and Lead Appian Developer.</p>
-        <div class="flex flex-wrap gap-3">
-          <a class="hover:text-text" href={withBase("/work")}>Work</a>
-          <a class="hover:text-text" href={withBase("/contact")}>Contact</a>
-          <a class="hover:text-text" href="mailto:leelarksaxena1997@outlook.com">Email</a>
+    {!hideFooter && (
+      <footer class="border-t border-border py-10">
+        <div class="shell flex flex-col gap-4 text-sm text-muted md:flex-row md:items-center md:justify-between">
+          <p>Leelark Saxena - Solution Architect and Lead Appian Developer.</p>
+          <div class="flex flex-wrap gap-3">
+            <a class="hover:text-text" href={withBase("/work")}>Work</a>
+            <a class="hover:text-text" href={withBase("/contact")}>Contact</a>
+            <a class="hover:text-text" href="mailto:leelarksaxena1997@outlook.com">Email</a>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    )}
   </body>
 </html>

@@ -39,21 +39,80 @@ const structuredData = collectionPageStructuredData({
           />
         </div>
         <div class="work-command-visual" aria-hidden="true">
-          <span class="work-command-grid"></span>
-          <span class="work-command-ring work-command-ring-a"></span>
-          <span class="work-command-ring work-command-ring-b"></span>
-          <span class="work-command-core"></span>
-          <span class="work-command-lane work-command-lane-a"></span>
-          <span class="work-command-lane work-command-lane-b"></span>
-          <span class="work-command-module work-command-module-a"></span>
-          <span class="work-command-module work-command-module-b"></span>
-          <span class="work-command-module work-command-module-c"></span>
-          <span class="work-command-module work-command-module-d"></span>
-          <span class="work-command-node work-command-node-a"></span>
-          <span class="work-command-node work-command-node-b"></span>
-          <span class="work-command-node work-command-node-c"></span>
-          <span class="work-command-stream work-command-stream-a"></span>
-          <span class="work-command-stream work-command-stream-b"></span>
+          <svg class="work-flow-svg" viewBox="0 0 980 460" preserveAspectRatio="none" focusable="false">
+            <defs>
+              <linearGradient id="workFlowRibbon" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0%" stop-color="rgb(28 105 178)" stop-opacity="0" />
+                <stop offset="28%" stop-color="rgb(28 105 178)" stop-opacity="0.72" />
+                <stop offset="55%" stop-color="rgb(91 28 113)" stop-opacity="0.58" />
+                <stop offset="80%" stop-color="rgb(21 128 92)" stop-opacity="0.48" />
+                <stop offset="100%" stop-color="rgb(21 128 92)" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="workFlowFine" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0%" stop-color="rgb(248 250 252)" stop-opacity="0" />
+                <stop offset="34%" stop-color="rgb(96 165 250)" stop-opacity="0.68" />
+                <stop offset="62%" stop-color="rgb(168 85 247)" stop-opacity="0.62" />
+                <stop offset="100%" stop-color="rgb(52 211 153)" stop-opacity="0" />
+              </linearGradient>
+              <radialGradient id="workFlowNode" cx="50%" cy="50%" r="62%">
+                <stop offset="0%" stop-color="rgb(248 250 252)" stop-opacity="0.78" />
+                <stop offset="44%" stop-color="rgb(28 105 178)" stop-opacity="0.5" />
+                <stop offset="100%" stop-color="rgb(91 28 113)" stop-opacity="0.12" />
+              </radialGradient>
+              <filter id="workFlowGlow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="7" result="blur" />
+                <feColorMatrix
+                  in="blur"
+                  type="matrix"
+                  values="0 0 0 0 0.18 0 0 0 0 0.42 0 0 0 0 0.72 0 0 0 0.52 0"
+                  result="glow"
+                />
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <path class="work-flow-ribbon work-flow-ribbon-a" d="M-60 300 C110 190 220 380 392 270 C550 170 655 124 820 205 C900 244 985 240 1040 188" />
+            <path class="work-flow-ribbon work-flow-ribbon-b" d="M-40 190 C160 230 262 136 410 210 C556 282 650 336 826 270 C928 232 1002 264 1052 318" />
+            <path class="work-flow-line work-flow-line-a" d="M-40 306 C120 208 230 372 392 270 C550 170 655 124 820 205 C900 244 985 240 1040 188" />
+            <path class="work-flow-line work-flow-line-b" d="M-36 190 C160 230 262 136 410 210 C556 282 650 336 826 270 C928 232 1002 264 1052 318" />
+            <path class="work-flow-line work-flow-line-c" d="M80 398 C250 296 320 312 456 246 C566 194 695 116 900 96" />
+            <path class="work-flow-hairline" d="M40 252 C228 176 326 190 478 236 C668 294 766 220 954 236" />
+            <path class="work-flow-hairline work-flow-hairline-b" d="M120 116 C278 164 356 124 488 176 C616 226 730 174 912 150" />
+            <g class="work-flow-node work-flow-node-a" transform="translate(254 198)">
+              <circle r="12"></circle>
+              <circle r="30"></circle>
+            </g>
+            <g class="work-flow-node work-flow-node-b" transform="translate(484 244)">
+              <circle r="16"></circle>
+              <circle r="48"></circle>
+            </g>
+            <g class="work-flow-node work-flow-node-c" transform="translate(720 188)">
+              <circle r="11"></circle>
+              <circle r="34"></circle>
+            </g>
+            <g class="work-flow-node work-flow-node-d" transform="translate(804 286)">
+              <circle r="10"></circle>
+              <circle r="28"></circle>
+            </g>
+          </svg>
+          <span class="work-flow-label work-flow-label-a">
+            <small>Client delivery</small>
+            <strong>Case portals</strong>
+          </span>
+          <span class="work-flow-label work-flow-label-b">
+            <small>AI workflow</small>
+            <strong>Document intelligence</strong>
+          </span>
+          <span class="work-flow-label work-flow-label-c">
+            <small>Reusable delivery</small>
+            <strong>Plugins & accelerators</strong>
+          </span>
+          <span class="work-flow-hub">
+            <small>Appian architecture</small>
+            <strong>Delivery flow</strong>
+          </span>
         </div>
       </div>
 

@@ -100,7 +100,11 @@ export default function NavControls({ links }: Props) {
                 className={`mobile-nav-link ${link.current ? "is-current" : ""}`}
                 href={link.href}
                 aria-current={link.current ? "page" : undefined}
-                onClick={() => setMenuOpen(false)}
+                onClick={() => {
+                  if (link.current) {
+                    setMenuOpen(false);
+                  }
+                }}
               >
                 {link.label}
               </a>

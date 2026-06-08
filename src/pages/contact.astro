@@ -39,9 +39,13 @@ const structuredData = [
 ];
 ---
 
-<BaseLayout title="Contact" description={pageDescription} path="/contact" structuredData={structuredData}>
+<BaseLayout title="Contact" description={pageDescription} path="/contact" structuredData={structuredData} hideFooter>
   <section class="section-band contact-page-section">
     <div class="shell contact-page-shell">
+      <span class="contact-depth-plane contact-depth-plane-a" aria-hidden="true"></span>
+      <span class="contact-depth-plane contact-depth-plane-b" aria-hidden="true"></span>
+      <span class="contact-depth-line" aria-hidden="true"></span>
+
       <div class="contact-page-header" data-reveal="text">
         <SectionHeader as="h1" eyebrow="Contact" title="Discuss Appian solution design and delivery." />
       </div>
@@ -79,7 +83,7 @@ const structuredData = [
 
         <div class="glass-panel contact-form-panel p-5 md:p-6" data-reveal="panel" style="--reveal-delay: 130ms">
           <ContactForm />
-          <p class="mt-5 text-xs leading-5 text-muted">
+          <p class="contact-privacy-note mt-5 text-xs leading-5 text-muted">
             Please avoid sharing confidential client data, credentials, tokens, or sensitive project details in this form.
           </p>
         </div>
