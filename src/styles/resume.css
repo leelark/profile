@@ -2453,6 +2453,152 @@
   color: rgb(var(--color-muted));
 }
 
+/* Studio Light resume finish: final layer because resume.css loads after global.css. */
+[data-theme="light"] .resume-page-minimal {
+  --resume-depth-shadow: 0 12px 28px rgb(18 27 45 / 0.052);
+  --resume-depth-border: rgb(var(--studio-light-line) / 0.42);
+  color: rgb(var(--studio-light-ink));
+}
+
+[data-theme="light"] .resume-section {
+  border-color: rgb(var(--studio-light-line) / 0.34);
+  background:
+    linear-gradient(180deg, rgb(var(--studio-light-panel-a) / 0.16), rgb(var(--studio-light-panel-c) / 0.15)),
+    linear-gradient(112deg, rgb(var(--studio-light-lavender) / 0.075), transparent 48%, rgb(var(--studio-light-blue-mist) / 0.09));
+}
+
+[data-theme="light"] .resume-section:nth-child(2) {
+  background:
+    linear-gradient(180deg, rgb(var(--studio-light-blue-mist) / 0.13), rgb(var(--studio-light-panel-a) / 0.12)),
+    linear-gradient(112deg, rgb(var(--studio-light-green-mist) / 0.085), transparent 46%, rgb(var(--studio-light-lavender) / 0.08));
+}
+
+[data-theme="light"] .resume-section:nth-child(3) {
+  background:
+    linear-gradient(180deg, rgb(var(--studio-light-green-mist) / 0.11), rgb(var(--studio-light-panel-b) / 0.12)),
+    linear-gradient(112deg, rgb(var(--studio-light-amber-mist) / 0.075), transparent 48%, rgb(var(--studio-light-lavender) / 0.075));
+}
+
+[data-theme="light"] .resume-section::before,
+[data-theme="light"] .resume-section::after,
+[data-theme="light"] .resume-depth-plane,
+[data-theme="light"] .resume-depth-scan {
+  opacity: 0.08;
+  mix-blend-mode: multiply;
+}
+
+[data-theme="light"] .resume-minimal-header,
+[data-theme="light"] .resume-metric-strip,
+[data-theme="light"] .resume-experience-stream,
+[data-theme="light"] .resume-education-arc,
+[data-theme="light"] .resume-education-core,
+[data-theme="light"] .resume-education-card,
+[data-theme="light"] .resume-education-node span,
+[data-theme="light"] .resume-certification-ribbon,
+[data-theme="light"] .resume-certification-ribbon span,
+[data-theme="light"] .resume-publication-panel,
+[data-theme="light"] .resume-publication-panel a {
+  border-color: var(--resume-depth-border);
+  border-radius: 8px;
+  background:
+    linear-gradient(150deg, rgb(var(--studio-light-panel-a) / 0.74), rgb(var(--studio-light-panel-b) / 0.56)),
+    linear-gradient(112deg, rgb(var(--studio-light-lavender) / 0.12), transparent 52%, rgb(var(--studio-light-blue-mist) / 0.14));
+  box-shadow:
+    var(--resume-depth-shadow),
+    inset 0 1px 0 rgb(var(--studio-light-rim) / 0.44);
+}
+
+[data-theme="light"] .resume-metric-strip span,
+[data-theme="light"] .resume-career-proof span,
+[data-theme="light"] .resume-certification-ribbon span {
+  border-color: rgb(var(--studio-light-line) / 0.42);
+  background:
+    linear-gradient(180deg, rgb(var(--studio-light-field) / 0.68), rgb(var(--studio-light-panel-c) / 0.46)),
+    linear-gradient(90deg, rgb(var(--color-blue-signal) / 0.044), transparent 72%);
+  color: rgb(var(--studio-light-ink));
+  box-shadow: inset 0 1px 0 rgb(var(--studio-light-rim) / 0.4);
+}
+
+[data-theme="light"] .resume-company-mark {
+  border-color: rgb(var(--studio-light-line) / 0.46);
+  background:
+    linear-gradient(145deg, rgb(var(--studio-light-field) / 0.72), rgb(var(--studio-light-blue-mist) / 0.38)),
+    linear-gradient(90deg, rgb(var(--color-accent-soft) / 0.12), transparent);
+  box-shadow:
+    0 7px 16px rgb(var(--studio-light-soft-shadow) / 0.052),
+    inset 0 1px 0 rgb(var(--studio-light-rim) / 0.44);
+}
+
+[data-theme="light"] .resume-experience-row {
+  border-color: rgb(var(--studio-light-line) / 0.28);
+}
+
+[data-theme="light"] .resume-experience-row:hover {
+  background:
+    linear-gradient(90deg, transparent, rgb(var(--color-blue-signal) / 0.04) 17%, rgb(var(--color-accent-soft) / 0.18) 48%, transparent 84%);
+}
+
+[data-theme="light"] .resume-experience-row:hover .resume-company-mark,
+[data-theme="light"] .resume-experience-row:nth-child(2):hover .resume-company-mark {
+  border-color: rgb(var(--color-blue-signal) / 0.3);
+  background:
+    linear-gradient(145deg, rgb(var(--studio-light-blue-mist) / 0.5), rgb(var(--studio-light-panel-a) / 0.62)),
+    linear-gradient(90deg, rgb(var(--color-accent-soft) / 0.18), transparent);
+  box-shadow:
+    0 10px 22px rgb(var(--studio-light-soft-shadow) / 0.074),
+    0 0 12px rgb(var(--color-blue-signal) / 0.052),
+    inset 0 1px 0 rgb(var(--studio-light-rim) / 0.5);
+}
+
+[data-theme="light"] .resume-section-title > span,
+[data-theme="light"] .resume-experience-index span {
+  border-color: rgb(var(--color-blue-signal) / 0.3);
+  background:
+    radial-gradient(circle at 50% 50%, rgb(var(--studio-light-ink)) 0 2px, transparent 3px),
+    linear-gradient(145deg, rgb(var(--studio-light-blue-mist) / 0.5), rgb(var(--studio-light-panel-a) / 0.58));
+  color: rgb(var(--color-blue-signal));
+  box-shadow:
+    0 0 0 6px rgb(var(--color-blue-signal) / 0.052),
+    0 0 14px rgb(var(--color-blue-signal) / 0.12);
+}
+
+[data-theme="light"] .resume-section-title h1,
+[data-theme="light"] .resume-section-title h2,
+[data-theme="light"] .resume-experience-main h2,
+[data-theme="light"] .resume-education-card h3,
+[data-theme="light"] .resume-certification-ribbon h3,
+[data-theme="light"] .resume-publication-title {
+  color: rgb(var(--studio-light-ink));
+}
+
+[data-theme="light"] .resume-header-kicker,
+[data-theme="light"] .resume-experience-main p,
+[data-theme="light"] .resume-experience-period,
+[data-theme="light"] .resume-education-card p,
+[data-theme="light"] .resume-publication-note {
+  color: rgb(var(--color-muted));
+}
+
+[data-theme="light"] .resume-education-lane::before {
+  background: linear-gradient(90deg, transparent, rgb(var(--color-blue-signal) / 0.26), rgb(var(--color-accent) / 0.2), transparent);
+}
+
+[data-theme="light"] .resume-education-card strong,
+[data-theme="light"] .resume-publication-panel a {
+  color: rgb(var(--color-blue-signal));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme="light"].motion-ready .resume-depth-plane,
+  html[data-theme="light"].motion-ready .resume-depth-scan,
+  html[data-theme="light"].motion-ready .resume-section::before,
+  html[data-theme="light"].motion-ready .resume-section::after,
+  html[data-theme="light"].motion-ready .resume-experience-stream::after,
+  html[data-theme="light"].motion-ready .resume-experience-row::after {
+    animation-duration: 150s;
+  }
+}
+
 /* Studio Light resume premium finish: page-local because resume.css loads after global.css. */
 [data-theme="light"] .resume-page-minimal {
   --resume-depth-shadow: 0 14px 34px rgb(17 24 39 / 0.06);

@@ -2,120 +2,119 @@
 
 ## Scope
 
-This report covers a light-theme-only refinement pass for the existing Astro portfolio implementation. The goal is to make Studio Light feel premium, editorial, enterprise-grade, and as intentionally designed as Executive Dark without changing content, routing, form behavior, React interactions, or dark-theme styling.
+This report covers the current Studio Light refinement pass for the Astro portfolio implementation. The work is intentionally light-theme-only: no content changes, no route changes, no contact-form behavior changes, and no dark-theme selector changes.
 
-## Current Implementation Inventory
+## Pages and Sections Audited
 
-Public routes checked:
+Routes checked:
 
-- `/`: hero, operating model, technical skills, credentials, domains, enterprise client experience, contact CTA.
-- `/work`: portfolio hero, animated workflow visual, filterable project explorer, project-card modal.
-- `/work/client-projects`: category header and project explorer without filters.
-- `/work/plugins`: category header and project explorer without filters.
-- `/work/innovative-projects`: category header and project explorer without filters.
-- `/work/accelerators`: category header and project explorer without filters.
-- `/key-works`: key work hero, system visual, featured work strips, plugin filter lab, project modal.
-- `/plugins-and-accelerators`: redirect to `/key-works`.
-- `/resume`: experience, education, certifications, publication.
-- `/contact`: contact header, contact detail cards, contact focus flow, Splitforms contact form, privacy note.
-- `/thanks`: confirmation card and return CTA.
+- `/profile/`: hero, delivery contribution, technical skills, credentials, domains, client footprint, contact CTA.
+- `/profile/work/`: portfolio hero, workflow visual, project filters, project cards, project modal.
+- `/profile/work/client-projects/`: category header and project explorer.
+- `/profile/work/plugins/`: category header and project explorer.
+- `/profile/work/innovative-projects/`: category header and project explorer.
+- `/profile/work/accelerators/`: category header and project explorer.
+- `/profile/key-works/`: key-work hero/system visual, featured strips, plugin tabs/cards, modal.
+- `/profile/resume/`: experience, education, certifications, publication.
+- `/profile/contact/`: contact cards, topic flow, Splitforms contact form, privacy note.
+- `/profile/thanks/`: confirmation card and CTA.
 
-Shared surfaces checked:
+Shared implementation checked:
 
-- `BaseLayout.astro`: theme boot script, header, navigation, floating contact, footer, global background.
-- `NavControls.tsx`: theme toggle, mobile nav, reduced-motion menu animation.
-- `ProjectExplorer.tsx`: filters, project cards, modal, project readout, visual scenes.
-- `FeaturedWorksShowcase.tsx`: key works, plugin tabs, plugin cards, modal.
-- `TechnicalSkillGrid.tsx`: Appian capability and technical skill cards.
-- `ContactForm.astro`: Splitforms POST and client-side progressive enhancement.
-- `global.css` and `resume.css`: global theme tokens, route-specific component styles, Studio Light final cascade.
+- `BaseLayout.astro`: theme boot script, global background, nav, floating contact, footer.
+- `NavControls.tsx`: persisted theme toggle and mobile menu.
+- `ProjectExplorer.tsx`: filters, cards, project modal, project visual scenes.
+- `FeaturedWorksShowcase.tsx`: key-work strips, plugin tabs/cards, modal.
+- `ContactForm.astro`: Splitforms form markup and focusable fields.
+- `global.css` and `resume.css`: token cascade, final light layers, motion, responsive behavior.
 
 ## Research Alignment
 
-External references reviewed:
+Research used for this pass:
 
-- WCAG 2.2 contrast, focus appearance, reflow, and target size: <https://www.w3.org/TR/WCAG22/>
-- WCAG focus appearance explanation: <https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html>
-- Fluent 2 accessibility and color foundations: <https://fluent2.microsoft.design/accessibility>, <https://fluent2.microsoft.design/color>
-- Carbon theme token model: <https://carbondesignsystem.com/elements/themes/overview/>
-- Material Design 3 color role guidance: <https://m3.material.io/styles/color/overview>
-- Nielsen Norman Group visual hierarchy and visual complexity guidance: <https://www.nngroup.com/articles/visual-hierarchy-ux-definition/>, <https://www.nngroup.com/videos/managing-visual-complexity/>
-- Product and portfolio references for restrained light systems: WorkOS, Linear, Retool, Stripe, Work & Co.
-- Appian enterprise positioning references: <https://appian.com/products/platform/total-experience/web-portals>, <https://appian.com/learn/executive-series/architecting-the-modern-enterprise>
+- [Material Design color roles](https://m3.material.io/styles/color/roles): keep color roles semantic instead of page-specific hard-coding.
+- [IBM Carbon themes](https://carbondesignsystem.com/elements/themes/overview/): layer surfaces with clear token roles rather than one flat background.
+- [Microsoft Fluent color](https://fluent2.microsoft.design/color) and [Fluent motion](https://fluent2.microsoft.design/motion): use restrained color, elevation, and motion for hierarchy.
+- [Apple Human Interface Guidelines color](https://developer.apple.com/design/human-interface-guidelines/color): maintain contrast and adapt surfaces between appearances.
+- [WCAG 2.2](https://www.w3.org/TR/WCAG22/) and [Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html): preserve visible focus, readable text, and non-color-only affordances.
 
-Research implications for this portfolio:
+Portfolio-specific interpretation:
 
-- Use semantic role tokens instead of page-by-page hard-coded colors.
-- Keep light mode calm and readable: off-white canvas, white or near-white surfaces, charcoal text, visible borders.
-- Use purple as a precise identity accent, not the dominant background color.
-- Use blue for architecture and integration, green for evidence-backed signals, amber for caution or needs-confirmation.
-- Preserve card affordances but avoid a dashboard-heavy or nested-card feel.
-- Keep motion below the reading threshold: quick state feedback, subtle section reveal, no continuous decorative movement as the main visual personality.
+- Studio Light should not mean pure white everywhere. It should use tinted near-neutral surfaces, soft lavender/blue/green/amber washes, and charcoal text.
+- Purple remains the identity accent for active states, focus, selected tabs, and primary CTAs.
+- Blue supports architecture/integration, green supports validated capability, and amber supports caution/confirmation contexts.
+- Motion should feel quiet and precise; decorative background movement is reduced in light mode because pale surfaces expose motion more strongly.
 
-## Light Theme Diagnosis
+## Diagnosis
 
-Strengths:
+Findings before implementation:
 
-- Dark theme is isolated through default tokens and should remain protected if changes are scoped to `[data-theme="light"]`.
-- Theme toggle is persisted through `localStorage` and does not require functional change.
-- Most component colors already route through CSS variables, so a final light-only token layer can improve multiple pages at once.
-- Focus-visible styles exist globally and can be strengthened for Studio Light.
+- `global.css` had multiple Studio Light layers. The active final token layer was near the end of the file, so earlier edits could be overridden.
+- `resume.css` also had repeated light-theme passes and loads after `global.css`, requiring a final resume-only layer.
+- Light mode was still too close to white in large backgrounds and form/card surfaces.
+- Borders and grid lines were more visible in light mode than intended, especially around repeated cards and major panels.
+- Project-modal side rails stayed visible at a width where the central modal became too narrow; this caused the modal hero copy and visual scene to compete.
+- Project cards parse evidence status data but do not render an evidence badge. This is a separate product-spec gap and was not changed in this light-theme-only pass.
 
-Risks found:
+## Implementation
 
-- Studio Light has multiple cascade layers, including a large existing final override. This makes direct edits inside older blocks brittle.
-- Current light palette is slightly too saturated and mist-heavy, so several sections read as tinted panels rather than editorial portfolio surfaces.
-- Some card and control surfaces share the same visual weight, which weakens hierarchy on pages with many repeated cards.
-- Continuous background, section, and resume motion can feel busier in light mode because pale surfaces reveal movement more strongly.
-- Project modals, contact form fields, key-work strips, plugin tabs, and resume timeline need sharper border and text contrast in light mode.
+Changed files:
 
-## Design Direction
+- `src/styles/global.css`
+- `src/styles/resume.css`
 
-Studio Light should use:
+Implemented:
 
-- Canvas: soft off-white, not gray-blue heavy.
-- Surfaces: white and very light neutral-lavender with clear border separation.
-- Text: charcoal primary, slate secondary, no low-contrast pale gray.
-- Accent: deep purple for focus, active state, selected tabs, and primary CTA.
-- Architecture color: restrained blue.
-- Evidence color: restrained green.
-- Caution color: amber with text labels.
-- Motion: fast, low-amplitude, and reduced further in light mode for decorative background layers.
+- Added a final `Studio Light portfolio finish` layer scoped to `html[data-theme="light"]` and `[data-theme="light"]`.
+- Replaced large pure-white surfaces with tinted light neutrals: soft canvas, panel, field, elevated, rim, line, and shadow tokens.
+- Reduced global grid/background line strength and decorative layer opacity.
+- Normalized shared light surfaces: nav, buttons, cards, project modal, work filters, key-work cards, contact form, thanks card, chips, and project visual scenes.
+- Tightened border/shadow hierarchy so repeated elements remain scannable without harsh outlines.
+- Strengthened light focus states for buttons, links, inputs, selects, and textareas.
+- Added a final resume-only Studio Light layer because `resume.css` loads after global styles.
+- Collapsed project modal side rails earlier in light mode at narrower widths, fixing the modal hero overlap without changing dark mode.
+- Slowed low-value decorative motion in Studio Light while keeping reduced-motion behavior intact.
 
-The intended feel is an enterprise product and architecture portfolio: editorial, polished, readable, and evidence-led.
+## QA Results
 
-## Implementation Plan
+Automated checks:
 
-1. Add a final `Studio Light governance layer` at the end of `src/styles/global.css`.
-2. Override only `[data-theme="light"]` selectors and variables.
-3. Tone down page backgrounds and decorative motion opacity.
-4. Normalize light surfaces for nav, buttons, cards, modals, key works, contact, thanks, and repeated chips.
-5. Strengthen light focus rings, form controls, active filters, and project-card affordances.
-6. Add a final light-only resume layer in `src/styles/resume.css` to align the resume page with the same surface and contrast model.
-7. Do not edit content, React logic, Splitforms behavior, routing, dark selectors, or component structure unless QA exposes a functional issue.
+- `esbuild src/scripts/global-three-background.ts --bundle --format=iife --target=es2020 --minify --outfile=public/global-three-background.js`: passed.
+- `astro check`: 0 errors, 0 warnings, 0 hints.
+- `astro build`: 11 pages built successfully.
+- `npm run lint:motion`: passed.
+- `npm run lint:home-revamp`: passed.
+- `npm run lint:work-revamp`: passed.
+- `npm run lint:work-ui`: passed after production build generated `dist/work/index.html`.
+- `npm run lint:content`: passed with existing evidence-status warnings for four draft items.
 
-## QA Plan
+Browser QA with Codex in-app browser:
 
-Build and static checks:
+- Checked light-mode routes: home, work, key works, resume, contact, thanks.
+- Checked theme toggle: light to dark and back to light.
+- Checked work filter interaction: Plugins filter.
+- Checked project modal: opened HTML Viewer Component Plugin modal and fixed light-mode modal overlap.
+- Checked contact form focus state on the Name field.
+- Checked dark-mode home rendering after the light changes.
 
-- `npm run build`
-- Existing validation scripts where relevant: content, motion, homepage, work UI, work revamp.
+Saved QA screenshots:
 
-Browser QA with light theme enabled:
+- `output/light-theme-qa/home.png`
+- `output/light-theme-qa/work.png`
+- `output/light-theme-qa/key-works.png`
+- `output/light-theme-qa/resume.png`
+- `output/light-theme-qa/contact.png`
+- `output/light-theme-qa/thanks.png`
+- `output/light-theme-qa/work-modal-fixed.png`
+- `output/light-theme-qa/contact-focus.png`
+- `output/light-theme-qa/dark-home-protection.png`
 
-- Routes: `/`, `/work`, `/work/client-projects`, `/work/plugins`, `/work/innovative-projects`, `/work/accelerators`, `/key-works`, `/resume`, `/contact`, `/thanks`.
-- Breakpoints: 390px, 768px, 1280px. Add 320px if overflow appears.
-- Checks: no horizontal overflow, readable text, visible focus, usable nav and filters, cards not visually collapsed, contact form unchanged, modals readable, reduced-motion support intact.
+## Current Status
 
-Dark-theme protection:
+Studio Light is now more balanced, premium, and aligned with the dark theme's enterprise visual language without copying dark mode literally. It uses tinted light surfaces, quieter borders, lower-motion backgrounds, stronger focus states, and more coherent card/modal/form treatment.
 
-- Check at least `/`, `/work`, `/key-works`, `/resume`, and `/contact` in dark after light refinements.
-- Confirm dark theme variables are untouched by searching that new rules are scoped under `[data-theme="light"]`.
+Dark theme remains protected because all new styling is scoped to `[data-theme="light"]` or `html[data-theme="light"]`.
 
-## Acceptance Criteria
+## Remaining Non-Theme Gap
 
-- Light theme looks intentional across all public pages.
-- Dark theme remains visually and functionally unchanged.
-- Project filtering, modals, theme toggle, contact form, floating contact CTA, redirects, and resume layout still work.
-- Body copy, controls, badges, and focus states meet practical WCAG AA expectations.
-- Motion remains restrained and reduced-motion behavior still removes non-essential animation.
+Project cards still do not visibly render an evidence badge even though evidence status is parsed in the data layer. This should be handled as a separate functionality/content-display task because it changes visible content structure, not only Studio Light styling.
