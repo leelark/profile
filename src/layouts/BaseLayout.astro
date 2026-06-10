@@ -76,7 +76,9 @@ const hideFloatingContactAtHomeCta = currentPath === "/";
     <meta name="theme-color" content="#341539" />
     <script is:inline>
       const savedTheme = window.localStorage.getItem("theme");
-      document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dark";
+      const activeTheme = savedTheme === "light" ? "light" : "dark";
+      document.documentElement.dataset.theme = activeTheme;
+      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", activeTheme === "light" ? "#F8FAFC" : "#341539");
     </script>
     <script is:inline>
       (() => {

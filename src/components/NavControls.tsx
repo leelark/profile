@@ -14,7 +14,10 @@ type Props = {
 
 export default function NavControls({ links }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof document === "undefined") return "dark";
+    return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+  });
   const prefersReducedMotion = useReducedMotion();
   const reduceMotion = Boolean(prefersReducedMotion);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -25,6 +28,7 @@ export default function NavControls({ links }: Props) {
     const next = saved === "light" ? "light" : "dark";
     setTheme(next);
     document.documentElement.dataset.theme = next;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "light" ? "#F8FAFC" : "#341539");
   }, []);
 
   function toggleTheme() {
@@ -32,6 +36,7 @@ export default function NavControls({ links }: Props) {
     setTheme(next);
     document.documentElement.dataset.theme = next;
     window.localStorage.setItem("theme", next);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "light" ? "#F8FAFC" : "#341539");
   }
 
   useEffect(() => {
