@@ -8,6 +8,7 @@ import {
   BriefcaseBusiness,
   Building2,
   Cable,
+  CalendarClock,
   Car,
   ClipboardCheck,
   ClipboardList,
@@ -112,6 +113,7 @@ type VisualSceneVariant =
   | "htmlViewer"
   | "accessiblePdf"
   | "colorPicker"
+  | "localeDateTime"
   | "automobileTrace"
   | "ncdPolicy"
   | "revenueCycle"
@@ -330,6 +332,20 @@ const projectVisualScenes: Record<string, VisualScene> = {
     ],
     signals: ["HTML", "Events", "SAIL"],
     metrics: ["HTML", "Click", "saveValue", "SAIL"]
+  },
+  "locale-date-datetime-picker-plugin": {
+    className: "scene-locale-date-time",
+    variant: "localeDateTime",
+    kicker: "Locale date input",
+    caption: "Locale-aware date and date-time selection with validation and Appian value binding.",
+    nodes: [
+      { label: "Locale format", icon: CalendarClock },
+      { label: "Date mode", icon: PanelTop },
+      { label: "Validation", icon: BadgeCheck },
+      { label: "SAIL save", icon: Plug }
+    ],
+    signals: ["Locale", "Date/Time", "SAIL"],
+    metrics: ["en-IN", "dd/MM/yyyy", "09:30", "saveInto"]
   },
   "color-picker-component-plugin": {
     className: "scene-color-picker",
@@ -1004,6 +1020,8 @@ function renderProjectVisual(scene: VisualScene) {
       return <HtmlViewerVisual scene={scene} />;
     case "accessiblePdf":
       return <AccessiblePdfVisual scene={scene} />;
+    case "localeDateTime":
+      return <LocaleDateTimeVisual scene={scene} />;
     case "colorPicker":
       return <ColorPickerVisual scene={scene} />;
     case "automobileTrace":
@@ -1454,6 +1472,56 @@ function AccessiblePdfVisual({ scene }: { scene: VisualScene }) {
         rows={[
           { label: "H1", value: "tagged", tone: "a" },
           { label: "Alt", value: "mapped", tone: "b" }
+        ]}
+      />
+    </div>
+  );
+}
+
+function LocaleDateTimeVisual({ scene }: { scene: VisualScene }) {
+  return (
+    <div className="visual-locale-date-time">
+      <div className="visual-locale-calendar-panel">
+        <div className="visual-locale-calendar-head">
+          <CalendarClock size={20} />
+          <span>{metricText(scene, 0, "en-IN")}</span>
+        </div>
+        <div className="visual-calendar-grid">
+          {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+            <b key={`${day}-${index}`}>{day}</b>
+          ))}
+          {Array.from({ length: 14 }).map((_, index) => (
+            <span
+              className={index === 8 ? "is-selected" : index === 9 ? "is-range" : ""}
+              key={index}
+            >
+              {index + 1}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="visual-locale-input-stack">
+        <span className="visual-locale-field">
+          <b>Date</b>
+          <em>{metricText(scene, 1, "dd/MM/yyyy")}</em>
+        </span>
+        <span className="visual-locale-field">
+          <b>Time</b>
+          <em>{metricText(scene, 2, "09:30")}</em>
+        </span>
+      </div>
+      <div className="visual-locale-flow">
+        <SceneBadge scene={scene} index={2} />
+        <span className="visual-locale-save">
+          <Plug size={18} />
+          <b>{metricText(scene, 3, "saveInto")}</b>
+        </span>
+      </div>
+      <DataRows
+        className="visual-locale-formats"
+        rows={[
+          { label: "US", value: "04/03/2026", tone: "a" },
+          { label: "IN", value: "03/04/2026", tone: "b" }
         ]}
       />
     </div>

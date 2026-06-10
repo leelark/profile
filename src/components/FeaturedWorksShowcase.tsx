@@ -332,7 +332,7 @@ export default function FeaturedWorksShowcase({
               <motion.article
                 key={item.sourceSlug}
                 className={`key-work-strip key-tone-${item.tone}${activeSpotlight?.sourceSlug === item.sourceSlug ? " is-active" : ""}`}
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 22, scale: 0.985 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, amount: 0.32 }}
                 transition={{
@@ -396,21 +396,14 @@ export default function FeaturedWorksShowcase({
 
         <div className="key-plugin-showcase">
           <div className="key-plugin-rack" data-count={filteredPluginProjects.length} data-filter={activePluginFilter} aria-live="polite">
-            {filteredPluginProjects.map((project, index) => {
+            {filteredPluginProjects.map((project) => {
               const meta = pluginMeta(project);
               const Icon = meta.icon;
               return (
-                <motion.button
+                <button
                   type="button"
                   className={`key-plugin-card key-plugin-card-${meta.tone} key-plugin-visual-${meta.glyph}`}
                   key={project.slug}
-                  layout
-                  initial={false}
-                  transition={{
-                    duration: shouldReduceMotion ? 0 : 0.34,
-                    ease: [0.19, 1, 0.22, 1],
-                    delay: shouldReduceMotion ? 0 : index * 0.035
-                  }}
                   onClick={(event) => openProject(project, event.currentTarget)}
                   aria-label={`View details for ${meta.name}`}
                 >
@@ -435,7 +428,7 @@ export default function FeaturedWorksShowcase({
                       <ArrowUpRight size={13} aria-hidden="true" />
                     </span>
                   </span>
-                </motion.button>
+                </button>
               );
             })}
           </div>
@@ -469,26 +462,30 @@ export default function FeaturedWorksShowcase({
               <ProjectModalNavigationRail />
               <div className="project-modal">
                 <div className="project-modal-header">
-                  <div>
-                    <div className="project-modal-kicker">
-                      <span aria-hidden="true">
-                        <BadgeCheck size={16} />
+                  <div className="project-modal-header-top">
+                    <div className="project-modal-titlebar key-featured-titlebar">
+                      <span className="project-modal-symbol" aria-hidden="true">
+                        <BadgeCheck size={18} />
                       </span>
-                      <p>Featured work / {selectedProject.domain}</p>
+                      <div>
+                        <div className="project-modal-kicker">
+                          <p>Featured work / {selectedProject.domain}</p>
+                        </div>
+                        <h2 id={`featured-dialog-${selectedProject.slug}`}>
+                          {selectedProject.title}
+                        </h2>
+                      </div>
                     </div>
-                    <h2 id={`featured-dialog-${selectedProject.slug}`} className="mt-2 text-2xl font-semibold leading-tight text-text md:text-3xl">
-                      {selectedProject.title}
-                    </h2>
+                    <button
+                      ref={closeRef}
+                      type="button"
+                      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-portfolio border border-border bg-elevated text-text hover:border-accent"
+                      onClick={closeProject}
+                      aria-label="Close featured work details"
+                    >
+                      <X size={18} aria-hidden="true" />
+                    </button>
                   </div>
-                  <button
-                    ref={closeRef}
-                    type="button"
-                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-portfolio border border-border bg-elevated text-text hover:border-accent"
-                    onClick={closeProject}
-                    aria-label="Close featured work details"
-                  >
-                    <X size={18} aria-hidden="true" />
-                  </button>
                 </div>
 
                 <div className="project-modal-body">
